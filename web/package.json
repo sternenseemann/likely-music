@@ -1,0 +1,19 @@
+{
+  "scripts": {
+    "build:dev": "cp -R node_modules/vis/dist/{vis.min.css,img} dist; cp source/custom.css dist; cp source/index.html dist; browserify source/main.js -t babelify -d -o dist/main.js",
+    "build:prod": "cp -R node_modules/vis/dist/{vis.min.css,img} dist; cp source/custom.css dist; cp source/index.html dist; cross-env NODE_ENV=production browserify source/main.js -t babelify | uglifyjs -c -m > dist/main.js"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1",
+    "babelify": "^7.3.0",
+    "browserify": "^14.4.0",
+    "cross-env": "^5.0.5",
+    "uglify-js": "^3.0.27"
+  },
+  "dependencies": {
+    "immutable": "^3.8.1",
+    "vis": "^4.20.1"
+  }
+}

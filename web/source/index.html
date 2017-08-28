@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>likely music</title>
+        <link rel="stylesheet" type="text/css" href="custom.css">
+        <link rel="stylesheet" type="text/css" href="vis.min.css">
+        <script src="main.js"></script>
+    </head>
+    <body>
+        <div id="network"></div>
+        <div id="sidebar">
+            <h1>likely music</h1>
+            <p id="graphinfo"></p>
+            <p id="errors"></p>
+        </div>
+        <div id="edge-overlay" class="hidden">
+            <h2><span id="edge-operation"></span> edge</h2>
+            <p>
+                <label for="prob">Probability:</label>
+                <input id="prob" class="smallin" type="number" min="0.0" max="100">%
+            </p>
+            <p>
+                <input type="button" id="edge-save" value="Save">
+                <input type="button" id="edge-cancel" value="Cancel">
+            </p>
+        </div>
+        <div id="node-overlay" class="hidden">
+            <h2><span id="node-operation"></span> node</h2>
+            <p>
+                <label for="pitch">Pitch:</label>
+                <select id="pitch"></select>
+            </p>
+            <p>
+                <label for="octave">Octave (as a number)</label>
+                <input class="smallin" id="octave" type="number" step="1">
+            </p>
+            <p>
+                <label>Duration (e. g. 1/4):</label>
+                <input min="0" class="smallin" id="numerator" type="number" step="1"> /
+                <input min="0" class="smallin" id="denominator" type="number" step="1">
+            </p>
+            <p>
+                <input type="button" id="node-save" value="Save">
+                <input type="button" id="node-cancel" value="Cancel">
+            </p>
+        </div>
+    </body>
+</html>

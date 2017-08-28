@@ -21,3 +21,6 @@ cabal.project.local
 
 default.nix
 likely-music.nix
+
+web/dist
+web/node_modules
