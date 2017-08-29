@@ -84,11 +84,27 @@ class Rational {
     }
 }
 
+function collectGraphData(nodeDate, edgeData) {
+    return {
+        nodes: [... nodeData.values()].map(x => ({
+            id: x.nodeData.id,
+            music: x.music 
+        })),
+        edges: [... edgeData.values()].map(x => ({ 
+            id: x.edgeData.id,
+            from: x.edgeData.from,
+            to: x.edgeData.to,
+            prob: x.prob
+        }))
+    };
+}
+
 // graph code
 
 var nodeData = Map();
 var edgeData = Map();
 var network = null;
+
 
 function showOverlay(id) {
     document.getElementById(id).classList.remove('hidden');
@@ -106,7 +122,7 @@ function genericEditNode(data, callback) {
             document.getElementById('denominator').value);
         var music = new Music(duration, document.getElementById('pitch').value,
             document.getElementById('octave').value);
-        nodeData = nodeData.set(data.id, music);
+        nodeData = nodeData.set(data.id, { music: music, nodeData: data });
         data.label = music.toString();
         clearOverlay();
         callback(data);
@@ -118,8 +134,9 @@ function genericEditNode(data, callback) {
     }
 
     showOverlay('node-overlay');
-    var music = nodeData.get(data.id);
-    if(music !== undefined) {
+    var node = nodeData.get(data.id);
+    if(node !== undefined) {
+        var music = node.music;
         document.getElementById('pitch').value = music.pitch;
         document.getElementById('octave').value = music.octave;
         document.getElementById('numerator').value = music.dur.num;
@@ -148,7 +165,7 @@ function genericEditEdge(data, callback) {
 
         var prob = document.getElementById('prob').value / 100;
         data.label = `${prob * 100}%`;
-        edgeData = edgeData.set(data.id, prob);
+        edgeData = edgeData.set(data.id, { prob: prob, edgeData: data } );
         clearOverlay();
         callback(data);
     }
@@ -159,9 +176,9 @@ function genericEditEdge(data, callback) {
     }
 
     showOverlay('edge-overlay');
-    var prob = edgeData.get(data.id);
-    if(prob !== undefined) {
-        document.getElementById('prob').value = prob * 100;
+    var edge = edgeData.get(data.id);
+    if(edge !== undefined) {
+        document.getElementById('prob').value = edge.prob * 100;
     }
     document.getElementById('edge-save').onclick = saveEdge.bind(this, data, callback);
     document.getElementById('edge-cancel').onclick = discardEdge.bind(this, callback);
@@ -212,6 +229,9 @@ function main() {
         .reduce((acc, v) =>
             acc + v, '');
     document.getElementById('pitch').innerHTML = pitch_selector;
+
+    document.getElementById('gen-midi').onclick = () =>
+        console.log(JSON.stringify(collectGraphData(nodeData, edgeData)));
 }
 
-document.addEventListener('DOMContentLoaded', _ => main());
+document.addEventListener('DOMContentLoaded', () => main());
