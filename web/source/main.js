@@ -121,7 +121,7 @@ function genericEditNode(data, callback) {
         var duration = new Rational(document.getElementById('numerator').value,
             document.getElementById('denominator').value);
         var music = new Music(duration, document.getElementById('pitch').value,
-            document.getElementById('octave').value);
+            Number(document.getElementById('octave').value));
         nodeData = nodeData.set(data.id, { music: music, nodeData: data });
         data.label = music.toString();
         clearOverlay();
@@ -165,9 +165,9 @@ function genericEditEdge(data, callback) {
 
         var prob = document.getElementById('prob').value / 100;
         data.label = `${prob * 100}%`;
-        edgeData = edgeData.set(data.id, { prob: prob, edgeData: data } );
         clearOverlay();
         callback(data);
+        edgeData = edgeData.set(data.id, { prob: prob, edgeData: data } );
     }
 
     function discardEdge(callback) {
