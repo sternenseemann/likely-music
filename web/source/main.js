@@ -1,5 +1,5 @@
 import vis from 'vis';
-import { List, Map } from 'immutable';
+import { Map } from 'immutable';
 // types / internals
 
 const valid_pitches = [
@@ -35,7 +35,7 @@ const display_pitches = [
 function displayPitch(pitch) {
     var i = valid_pitches.indexOf(pitch);
     if(i === -1) {
-        throw "Invalid pitch";
+        throw 'Invalid pitch';
     } else {
         return display_pitches[i];
     }
@@ -47,13 +47,13 @@ class Music {
         if(valid_pitches.indexOf(pitch_class) !== -1) {
             this.pitch = pitch_class;
         } else {
-            throw "Invalid pitch class";
+            throw 'Invalid pitch class';
         }
         this.octave = octave;
     }
 
     toString() {
-        return `${displayPitch(this.pitch)}${this.octave} (${this.dur.toString()})`
+        return `${displayPitch(this.pitch)}${this.octave} (${this.dur.toString()})`;
     }
 }
 
@@ -65,20 +65,14 @@ class Rational {
     }
 
     reduce() {
-        let gcd = function(a, b) {
-            if ( ! b) {
-                return a;
-            }
-            return gcd(b, a % b);
-        }
-
+        let gcd = (a, b) => !b ? a : gcd(b, a % b);
         let div = function(a, b) {
             if(b === 0) {
-                throw "Divide by zero";
+                throw 'Divide by zero';
             } else {
                 return Math.floor(a / b);
             }
-        }
+        };
 
         var d = gcd(this.num, this.den);
         this.num = div(this.num, d);
@@ -86,14 +80,14 @@ class Rational {
     }
     
     toString() {
-        return `${this.num}/${this.den}`
+        return `${this.num}/${this.den}`;
     }
 }
 
 // graph code
 
-var nodeData = new Map();
-var edgeData = new Map();
+var nodeData = Map();
+var edgeData = Map();
 var network = null;
 
 function showOverlay(id) {
@@ -124,6 +118,13 @@ function genericEditNode(data, callback) {
     }
 
     showOverlay('node-overlay');
+    var music = nodeData.get(data.id);
+    if(music !== undefined) {
+        document.getElementById('pitch').value = music.pitch;
+        document.getElementById('octave').value = music.octave;
+        document.getElementById('numerator').value = music.dur.num;
+        document.getElementById('denominator').value = music.dur.den;
+    }
     document.getElementById('node-save').onclick = saveNode.bind(this, data, callback);
     document.getElementById('node-cancel').onclick = discardNode.bind(this, callback);
 }
@@ -136,6 +137,15 @@ function genericEditEdge(data, callback) {
     }
 
     function saveEdge(data, callback) {
+        // for some reason, editWithoutDrag
+        // sets from & to to the node respective
+        // node objects, which results in the edge
+        // disappearing.
+        if (typeof data.to === 'object')
+            data.to = data.to.id
+        if (typeof data.from === 'object')
+            data.from = data.from.id
+
         var prob = document.getElementById('prob').value / 100;
         data.label = `${prob * 100}%`;
         edgeData = edgeData.set(data.id, prob);
@@ -149,6 +159,10 @@ function genericEditEdge(data, callback) {
     }
 
     showOverlay('edge-overlay');
+    var prob = edgeData.get(data.id);
+    if(prob !== undefined) {
+        document.getElementById('prob').value = prob * 100;
+    }
     document.getElementById('edge-save').onclick = saveEdge.bind(this, data, callback);
     document.getElementById('edge-cancel').onclick = discardEdge.bind(this, callback);
 }
@@ -175,34 +189,29 @@ function main() {
                 document.getElementById('node-operation').innerHTML = 'Edit';
                 genericEditNode(nodeData, callback);
             },
-            editEdge: function(edgeData, callback) {
-                document.getElementById('edge-operation').innerHTML = 'Edit';
-                genericEditEdge(edgeData, callback);
+            editEdge: {
+                editWithoutDrag: function(edgeData, callback) {
+                    document.getElementById('edge-operation').innerHTML = 'Edit';
+                    genericEditEdge(edgeData, callback);
+                }
             },
             deleteNode: true,
             deleteEdge: true
         },
         edges: {
             arrows: {
-                to: { enable: true }
+                to: { enabled: true }
             }
         }
     };
 
     network = new vis.Network(container, {}, options);
 
-    network.on("click", function(params) {
-        var infop = document.getElementById('graphinfo');
-        var text = "";
-        // TODO
-        infop.innerHTML = text;
-    });
-
     const pitch_selector = valid_pitches.map((p, i) =>
-            `<option value="${p}">${display_pitches[i]}</option>`)
+        `<option value="${p}">${display_pitches[i]}</option>`)
         .reduce((acc, v) =>
-            acc + v, "");
+            acc + v, '');
     document.getElementById('pitch').innerHTML = pitch_selector;
 }
 
-window.onload = main;
+document.addEventListener('DOMContentLoaded', _ => main());
