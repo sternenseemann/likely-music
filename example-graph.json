@@ -1,0 +1,86 @@
+{
+  "nodes": [
+    {
+      "id": "d3c408d5-1ebb-4787-b510-22af5fe7093a",
+      "music": {
+        "dur": {
+          "num": 2,
+          "den": 3
+        },
+        "pitch": "Cff",
+        "octave": 1
+      }
+    },
+    {
+      "id": "180159e7-527b-4b8a-b9b6-315dddc154d2",
+      "music": {
+        "dur": {
+          "num": 2,
+          "den": 3
+        },
+        "pitch": "C",
+        "octave": 1
+      }
+    },
+    {
+      "id": "02e24c99-780e-45da-bd2f-ea600e4d863f",
+      "music": {
+        "dur": {
+          "num": 1,
+          "den": 1
+        },
+        "pitch": "Rest",
+        "octave": 1
+      }
+    },
+    {
+      "id": "b9cd3f9d-134c-4c51-b325-d209b2529bd6",
+      "music": {
+        "dur": {
+          "num": 1,
+          "den": 8
+        },
+        "pitch": "F",
+        "octave": 1
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "f8d0cb23-00d1-49dd-961a-2114b8a89c1d",
+      "from": "d3c408d5-1ebb-4787-b510-22af5fe7093a",
+      "to": "180159e7-527b-4b8a-b9b6-315dddc154d2",
+      "prob": 1
+    },
+    {
+      "id": "283100d9-42ee-4001-b100-45b8c766cfc5",
+      "from": "b9cd3f9d-134c-4c51-b325-d209b2529bd6",
+      "to": "02e24c99-780e-45da-bd2f-ea600e4d863f",
+      "prob": 0.8
+    },
+    {
+      "id": "e6cceb76-40ed-49ac-8925-4534cf0854de",
+      "from": "02e24c99-780e-45da-bd2f-ea600e4d863f",
+      "to": "d3c408d5-1ebb-4787-b510-22af5fe7093a",
+      "prob": 0.2
+    },
+    {
+      "id": "0045bfda-3cde-4691-81c0-7a967be51e02",
+      "from": "02e24c99-780e-45da-bd2f-ea600e4d863f",
+      "to": "180159e7-527b-4b8a-b9b6-315dddc154d2",
+      "prob": 0.8
+    },
+    {
+      "id": "ec616a31-7fc0-4f27-ae31-79cf0fab224a",
+      "from": "b9cd3f9d-134c-4c51-b325-d209b2529bd6",
+      "to": "180159e7-527b-4b8a-b9b6-315dddc154d2",
+      "prob": 0.2
+    },
+    {
+      "id": "14735fda-b8e5-4567-aa1c-de04cc08ac24",
+      "from": "180159e7-527b-4b8a-b9b6-315dddc154d2",
+      "to": "b9cd3f9d-134c-4c51-b325-d209b2529bd6",
+      "prob": 1
+    }
+  ]
+}
