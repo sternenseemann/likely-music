@@ -22,6 +22,7 @@ library
                      , PortMidi
                      , random
                      , text
+                     , aeson
   hs-source-dirs:      lib
   default-language:    Haskell2010
 
@@ -29,6 +30,7 @@ executable likely-music-backend
   default-language:    Haskell2010
   hs-source-dirs:      backend
   main-is:             Main.hs
+  other-modules:       Api
   build-depends:       base
                      , likely-music
                      , aeson
@@ -36,3 +38,7 @@ executable likely-music-backend
                      , Euterpea
                      , text
                      , bytestring
+                     , servant
+                     , servant-server
+                     , wai
+                     , warp
