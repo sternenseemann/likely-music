@@ -47,13 +47,17 @@ class Music {
         if(valid_pitches.indexOf(pitch_class) !== -1) {
             this.pitch = pitch_class;
         } else {
-            throw 'Invalid pitch class';
+            throw `Invalid pitch class '${pitch_class}'`;
         }
         this.octave = octave;
     }
 
     toString() {
         return `${displayPitch(this.pitch)}${this.octave} (${this.dur.toString()})`;
+    }
+
+    static fromObject(obj) {
+        return new Music(Rational.fromObject(obj.dur), obj.pitch, Number(obj.octave));
     }
 }
 
@@ -78,9 +82,13 @@ class Rational {
         this.num = div(this.num, d);
         this.den = div(this.den, d);
     }
-    
+
     toString() {
         return `${this.num}/${this.den}`;
+    }
+
+    static fromObject(obj) {
+        return new Rational(obj.num, obj.den);
     }
 }
 
@@ -88,15 +96,39 @@ function collectGraphData(nodeDate, edgeData) {
     return {
         nodes: [... nodeData.values()].map(x => ({
             id: x.nodeData.id,
-            music: x.music 
+            music: x.music
         })),
-        edges: [... edgeData.values()].map(x => ({ 
+        edges: [... edgeData.values()].map(x => ({
             id: x.edgeData.id,
             from: x.edgeData.from,
             to: x.edgeData.to,
             prob: x.prob
         }))
     };
+}
+
+function importGraphData(g) {
+    var nodeSet = new vis.DataSet({});
+    var edgeSet = new vis.DataSet({});
+    for(let node of g.nodes) {
+        var music = Music.fromObject(node.music);
+        var data = { id: node.id, label: music };
+        nodeData = nodeData.set(node.id, { nodeData: data, music: node.music });
+        nodeSet.add(data);
+    }
+
+    for(let edge of g.edges) {
+        var data = {
+            id: edge.id,
+            from: edge.from,
+            to: edge.to,
+            label: `${edge.prob * 100}%`
+        };
+        edgeData = edgeData.set(edge.id, { edgeData: data, prob: edge.prob });
+        edgeSet.add(data);
+    }
+
+    network.setData({ nodes: nodeSet, edges: edgeSet });
 }
 
 // helper
@@ -136,10 +168,10 @@ function genericEditNode(data, callback) {
             document.getElementById('denominator').value);
         var music = new Music(duration, document.getElementById('pitch').value,
             Number(document.getElementById('octave').value));
-        nodeData = nodeData.set(data.id, { music: music, nodeData: data });
         data.label = music.toString();
         clearOverlay();
         callback(data);
+        nodeData = nodeData.set(data.id, { music: music, nodeData: data });
     }
 
     function discardNode(callback) {
@@ -246,9 +278,36 @@ function main() {
 
     document.getElementById('gen-midi').onclick = () =>
         console.log(JSON.stringify(collectGraphData(nodeData, edgeData)))
+
     document.getElementById('gen-score').onclick = () =>
-        downloadFile('text/json', 'score.likely.json',
+        downloadFile('application/json', 'score.likely.json',
             JSON.stringify(collectGraphData(nodeData, edgeData)));
+
+    document.getElementById('import-score').onclick = function() {
+        var files = document.getElementById('upload-score').files;
+        if(files.length === 0) {
+            alert("Select a file first!");
+        } else {
+            var file = files[0];
+            var reader = new FileReader();
+            reader.addEventListener("loadend", function() {
+                var parsed = JSON.parse(this.result);
+                if(parsed === undefined) {
+                    alert("Could not parse likely score");
+                } else {
+                    var confirmation = window.confirm("Proceeding will overwrite the current graph. Are you sure?");
+                    if(confirmation) {
+                        try {
+                            importGraphData(parsed);
+                        } catch(e) {
+                            alert(`Could not import likely score, probably the file was malformed. Error: ${e}`);
+                        }
+                    }
+                }
+            });
+            reader.readAsText(file);
+        }
+    };
 }
 
 document.addEventListener('DOMContentLoaded', () => main());
