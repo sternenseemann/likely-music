@@ -63,8 +63,8 @@ class Music {
 
 class Rational {
     constructor(a, b) {
-        this.num = a;
-        this.den = b;
+        this.numerator = a;
+        this.denominator = b;
         this.reduce();
     }
 
@@ -78,17 +78,17 @@ class Rational {
             }
         };
 
-        var d = gcd(this.num, this.den);
-        this.num = div(this.num, d);
-        this.den = div(this.den, d);
+        var d = gcd(this.numerator, this.denominator);
+        this.numerator = div(this.numerator, d);
+        this.denominator = div(this.denominator, d);
     }
 
     toString() {
-        return `${this.num}/${this.den}`;
+        return `${this.numerator}/${this.denominator}`;
     }
 
     static fromObject(obj) {
-        return new Rational(obj.num, obj.den);
+        return new Rational(obj.numerator, obj.denominator);
     }
 }
 
@@ -185,8 +185,8 @@ function genericEditNode(data, callback) {
         var music = node.music;
         document.getElementById('pitch').value = music.pitch;
         document.getElementById('octave').value = music.octave;
-        document.getElementById('numerator').value = music.dur.num;
-        document.getElementById('denominator').value = music.dur.den;
+        document.getElementById('numerator').value = music.dur.numerator;
+        document.getElementById('denominator').value = music.dur.denominator;
     }
     document.getElementById('node-save').onclick = saveNode.bind(this, data, callback);
     document.getElementById('node-cancel').onclick = discardNode.bind(this, callback);
