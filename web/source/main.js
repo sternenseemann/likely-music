@@ -99,6 +99,20 @@ function collectGraphData(nodeDate, edgeData) {
     };
 }
 
+// helper
+
+function downloadFile(content_type, filename, content) {
+    var link = document.createElement('a');
+    var data = `data:${content_type},${encodeURIComponent(content)}`;
+    link.setAttribute('href', data);
+    link.setAttribute('download', filename);
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+
 // graph code
 
 var nodeData = Map();
@@ -231,7 +245,10 @@ function main() {
     document.getElementById('pitch').innerHTML = pitch_selector;
 
     document.getElementById('gen-midi').onclick = () =>
-        console.log(JSON.stringify(collectGraphData(nodeData, edgeData)));
+        console.log(JSON.stringify(collectGraphData(nodeData, edgeData)))
+    document.getElementById('gen-score').onclick = () =>
+        downloadFile('text/json', 'score.likely.json',
+            JSON.stringify(collectGraphData(nodeData, edgeData)));
 }
 
 document.addEventListener('DOMContentLoaded', () => main());

@@ -15,8 +15,17 @@
             <h1>likely music</h1>
             <p id="errors"></p>
             <p>
-                <input type="button" value="Generate MIDI file" id="gen-midi">
-                <input type="button" value="Generate WAV file" id="gen-wav">
+                <label for="hop-count">Maximum interpretation length</label>
+                <input type="number" min="0" id="hop-count">
+            </p>
+            <p>
+                <input type="button" value="Generate MIDI interpretation" id="gen-midi">
+                <input type="button" value="Generate WAV interpretation" id="gen-wav">
+            </p>
+            <p>
+                <input type="button" value="Download Likely Score" id="gen-score"><br>
+                <input type="file" id="upload-score" >
+                <input type="button" id="import-score" value="Upload Likely Score">
             </p>
         </div>
         <div id="edge-overlay" class="hidden">
