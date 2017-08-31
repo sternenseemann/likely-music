@@ -1,25 +1,40 @@
 module Main where
 
 import Api
-import Data.ByteString (ByteString ())
+
+import Codec.Midi (buildMidi)
+import Codec.ByteString.Builder
+import Control.Monad.IO.Class
+import Data.ByteString.Lazy (ByteString ())
+import Euterpea hiding (app)
 import Network.Wai
 import Network.Wai.Handler.Warp
 import Servant
 import Sound.Likely
+import System.Random
 
 api :: Proxy LikelyApi
 api = Proxy
+
+midiString :: ToMusic1 a => Music a -> ByteString
+midiString = toLazyByteString . buildMidi . toMidi . perform
 
 server :: Server LikelyApi
 server = genInterpretation
   where genInterpretation :: OutputFormat -> GraphWithParams -> Handler ByteString
         genInterpretation Midi g = do
-          let hops = pMaxHops . gpParams $ g
-          return undefined
+          randomGen <- liftIO $ getStdGen
+          let maxHops      = fromIntegral . pMaxHops . gpParams $ g
+              startingNode = pStartingNode . gpParams $ g
+              song         = interpretation randomGen (gpGraph g) startingNode
+          case song of
+            Nothing   -> throwError err500
+            Just song -> return . midiString $ takeNotes maxHops song
+        genInterpretation _  _ = throwError err500
 
 
 app :: Application
 app = serve api server
 
 main :: IO ()
-main = run 8081 app
+main = newStdGen >> run 8081 app

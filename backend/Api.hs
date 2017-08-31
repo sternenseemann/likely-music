@@ -5,7 +5,7 @@
 module Api where
 
 import Data.Aeson
-import Data.ByteString (ByteString ())
+import Data.ByteString.Lazy (ByteString ())
 import Data.Monoid ((<>))
 import Data.Ratio
 import Data.Text (Text ())
@@ -37,9 +37,11 @@ instance FromJSON GraphWithParams where
 
 data Params
   = Params
-  { pMaxHops :: Int
+  { pMaxHops      :: Int
+  , pStartingNode :: Node
   } deriving (Show, Eq, Ord)
 
 instance FromJSON Params where
     parseJSON = withObject "Params" $ \v ->
         Params <$> v .: "maxhops"
+               <*> v .: "starting_node"
