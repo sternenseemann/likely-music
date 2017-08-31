@@ -16,9 +16,12 @@
             <p><ul id="errors"></ul></p>
             <p>
                 <label for="hop-count">Maximum interpretation length</label>
-                <input type="number" min="0" id="hop-count">
+                <input type="number" min="0" id="hop-count" class="smallin" value="100">
             </p>
             <p>
+                <input type="button" value="Set starting node" id="set-starting-node">
+                <input type="button" value="Show current starting node" id="show-starting-node">
+            </p>
                 <input type="button" value="Generate MIDI interpretation" id="gen-midi">
                 <input type="button" value="Generate WAV interpretation" id="gen-wav">
             </p>

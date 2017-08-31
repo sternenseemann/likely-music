@@ -16,6 +16,8 @@ import Sound.Likely
 type LikelyApi = "interpretation" :> Capture "format" OutputFormat 
                                   :> ReqBody '[JSON] GraphWithParams
                                   :> Post '[OctetStream] ByteString
+                  :<|> Raw
+
 data OutputFormat = Midi | Wav
     deriving (Show, Eq, Ord)
 

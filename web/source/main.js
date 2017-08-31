@@ -133,15 +133,19 @@ function importGraphData(g) {
 
 // helper
 
-function downloadFile(content_type, filename, content) {
+function download(url, filename) {
     var link = document.createElement('a');
-    var data = `data:${content_type},${encodeURIComponent(content)}`;
-    link.setAttribute('href', data);
+    link.setAttribute('href', url);
     link.setAttribute('download', filename);
     link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+function downloadFile(content_type, filename, content) {
+    var data = `data:${content_type},${encodeURIComponent(content)}`;
+    download(data, filename);
 }
 
 
@@ -150,6 +154,7 @@ function downloadFile(content_type, filename, content) {
 var nodeData = Map();
 var edgeData = Map();
 var network = null;
+var starting_node_id = undefined;
 
 
 function showOverlay(id) {
@@ -235,6 +240,93 @@ function hideOverlay(id) {
     document.getElementById(id).classList.add('hidden');
 }
 
+function handleImport() {
+    var files = document.getElementById('upload-score').files;
+    if(files.length === 0) {
+        alert("Select a file first!");
+    } else {
+        var file = files[0];
+        var reader = new FileReader();
+        reader.addEventListener("loadend", function() {
+            var parsed = JSON.parse(this.result);
+            if(parsed === undefined) {
+                alert("Could not parse likely score");
+            } else {
+                var confirmation = window.confirm("Proceeding will overwrite the current graph. Are you sure?");
+                if(confirmation) {
+                    try {
+                        importGraphData(parsed);
+                    } catch(e) {
+                        alert(`Could not import likely score, probably the file was malformed. Error: ${e}`);
+                    }
+                }
+            }
+        });
+        reader.readAsText(file);
+    }
+}
+
+function showStartingNode() {
+    if(typeof starting_node_id === "string") {
+        network.selectNodes([starting_node_id], false);
+    } else {
+        alert("No starting node selected yet!");
+    }
+}
+
+function setStartingNode() {
+    var selected = network.getSelectedNodes();
+    if(selected.length > 1) {
+        alert("Only select one node!");
+    } else if(selected.length === 0) {
+        alert("Select a node first!");
+    } else {
+        starting_node_id = selected[0];
+    }
+}
+
+function genInterpretation(format) {
+    try {
+        var starting_node_entry = nodeData.get(starting_node_id);
+        var starting_node = {
+            id: starting_node_entry.nodeData.id,
+            music: starting_node_entry.music
+        };
+    } catch(e) {
+        alert('Set a starting node first!');
+        return;
+    }
+
+    try {
+        var maxhops = document.getElementById('hop-count').value;
+
+        var jsonRequest = JSON.stringify({
+            graph: collectGraphData(nodeData, edgeData),
+            params: { maxhops: 100, starting_node: starting_node }
+        });
+
+
+        var myHeaders = new Headers();
+        myHeaders.set('Content-Type', 'application/json');
+
+        var myInit = {
+            method: 'POST',
+            headers: myHeaders,
+            mode: 'cors',
+            body: jsonRequest
+        };
+
+        var myRequest = new Request(`http://localhost:8081/interpretation/${format}`, myInit);
+
+        fetch(myRequest).then(res => res.blob()).then(file => {
+            var url = URL.createObjectURL(file);
+            download(url, 'export.midi');
+        });
+    } catch(e) {
+        alert('An error occured while contacting the API: ' + e);
+    }
+}
+
 function main() {
     var container = document.getElementById('network');
 
@@ -276,38 +368,17 @@ function main() {
             acc + v, '');
     document.getElementById('pitch').innerHTML = pitch_selector;
 
-    document.getElementById('gen-midi').onclick = () =>
-        console.log(JSON.stringify(collectGraphData(nodeData, edgeData)))
+    document.getElementById('gen-midi').onclick =
+        genInterpretation.bind(this, ('midi'));
 
     document.getElementById('gen-score').onclick = () =>
         downloadFile('application/json', 'score.likely.json',
             JSON.stringify(collectGraphData(nodeData, edgeData)));
 
-    document.getElementById('import-score').onclick = function() {
-        var files = document.getElementById('upload-score').files;
-        if(files.length === 0) {
-            alert("Select a file first!");
-        } else {
-            var file = files[0];
-            var reader = new FileReader();
-            reader.addEventListener("loadend", function() {
-                var parsed = JSON.parse(this.result);
-                if(parsed === undefined) {
-                    alert("Could not parse likely score");
-                } else {
-                    var confirmation = window.confirm("Proceeding will overwrite the current graph. Are you sure?");
-                    if(confirmation) {
-                        try {
-                            importGraphData(parsed);
-                        } catch(e) {
-                            alert(`Could not import likely score, probably the file was malformed. Error: ${e}`);
-                        }
-                    }
-                }
-            });
-            reader.readAsText(file);
-        }
-    };
+    document.getElementById('import-score').onclick = handleImport;
+
+    document.getElementById('show-starting-node').onclick = showStartingNode;
+    document.getElementById('set-starting-node').onclick = setStartingNode;
 }
 
 document.addEventListener('DOMContentLoaded', () => main());

@@ -20,7 +20,7 @@ midiString :: ToMusic1 a => Music a -> ByteString
 midiString = toLazyByteString . buildMidi . toMidi . perform
 
 server :: Server LikelyApi
-server = genInterpretation
+server = genInterpretation :<|> serveDirectoryWebApp "web/dist"
   where genInterpretation :: OutputFormat -> GraphWithParams -> Handler ByteString
         genInterpretation Midi g = do
           randomGen <- liftIO $ getStdGen
