@@ -1,6 +1,18 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleInstances #-}
-module Sound.Likely where
+module Sound.Likely
+  ( Probability
+  , ID
+  , Node (..)
+  , Edge (..)
+  , Graph (..)
+  , insertNode
+  , insertEdge
+  , interpretation
+  , takeNotes
+  , emptyMusic
+  , exampleGraph
+  ) where
 
 import Control.Monad
 import Data.Aeson
@@ -13,10 +25,11 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 type Probability = Double
+type ID = Text
 
 data Node
   = Node
-  { nId :: Text
+  { nId :: ID
   , nMusic :: Music Pitch
   } deriving (Show, Eq, Ord)
 
@@ -29,11 +42,58 @@ data Edge
 newtype Graph = Graph { unGraph :: M.Map Node (S.Set Edge) }
   deriving (Show, Eq, Ord)
 
+insertNode :: Node -> Graph -> Graph
+insertNode t = Graph . M.insertWith S.union t S.empty . unGraph
+
+insertEdge :: Node -> Edge -> Graph -> Graph
+insertEdge n e =
+  insertNode n . Graph . M.insertWith S.union n (S.singleton e) . unGraph
+
+interpretation :: RandomGen g => g -> Graph -> Node -> Maybe (Music Pitch)
+interpretation gen graph n = (:+:)
+  <$> Just (nMusic n)
+  <*> fmap recurse (M.lookup n (unGraph graph))
+  where (prob, gen') = randomR (0.0, 1.0) gen
+        recurse edges = if S.null edges
+                          then emptyMusic
+                          else fromMaybe emptyMusic . interpretation gen graph .
+                            eTo . edgeForRoll prob $ edges
+
+edgeForRoll :: Probability -> S.Set Edge -> Edge
+edgeForRoll prob set =
+  let curr = S.elemAt 0 set
+    in if prob <= eProb curr
+         then curr
+         else edgeForRoll (prob - eProb curr) (S.delete curr set)
+
+emptyMusic :: Music a
+emptyMusic = Prim (Rest 0)
+
+exampleGraph :: Graph
+exampleGraph = Graph $ M.fromList
+  [ (Node "bla" (c 4 qn), S.fromList [ Edge (Node "blub" (d 4 qn)) 1 ] )
+  , (Node "blub" (d 4 qn), S.fromList [ ])
+  ]
+
+-- | Take the first @n@ notes of a 'Music'
+takeNotes :: Integer -> Music a -> Music a
+takeNotes _ m@(Prim _) = m
+takeNotes n (Modify c m) = Modify c $ takeNotes n m
+takeNotes _ m@(_ :=: _) = m
+takeNotes n (m1 :+: m2)
+  | n <  1    = emptyMusic
+  | n == 1    = m1
+  | otherwise = m1 :+: takeNotes (n - 1) m2
+
+instance FromJSON Node where
+  parseJSON = withObject "Node" $ \v ->
+    Node <$> v .: "id" <*> (Prim <$> v .: "music")
+
 lookupNode :: Text -> [Object] -> Parser Node
 lookupNode id nodes = do
   matches <- filterM (fmap (== id) . (.: "id")) nodes
   case matches of
-    [node] -> Node <$> node .: "id" <*> (Prim <$> node .: "music")
+    [node] -> parseJSON (Object node)
     _ -> fail "Couldn't match node by id"
 
 buildMap :: [Object] -> [Object] -> Graph -> Parser Graph
@@ -61,44 +121,3 @@ instance FromJSON (Primitive Pitch) where
     case pitchClass of
       "Rest" -> pure $ Rest duration
       p -> pure $ Note duration (read pitchClass, octave)
-
-insertNode :: Node -> Graph -> Graph
-insertNode t = Graph . M.insertWith S.union t S.empty . unGraph
-
-insertEdge :: Node -> Edge -> Graph -> Graph
-insertEdge n e =
-  insertNode n . Graph . M.insertWith S.union n (S.singleton e) . unGraph
-
-interpretation :: RandomGen g => g -> Graph -> Node -> Maybe (Music Pitch)
-interpretation gen graph n = (:+:)
-  <$> Just (nMusic n)
-  <*> fmap recurse (M.lookup n (unGraph graph))
-  where (prob, gen') = randomR (0.0, 1.0) gen
-        recurse edges = if S.null edges
-                          then empty
-                          else fromMaybe empty . interpretation gen graph .
-                            eTo . edgeForRoll prob $ edges
-
-edgeForRoll :: Probability -> S.Set Edge -> Edge
-edgeForRoll prob set =
-  let curr = S.elemAt 0 set
-    in if prob <= eProb curr
-         then curr
-         else edgeForRoll (prob - eProb curr) (S.delete curr set)
-
-empty :: Music a
-empty = Prim (Rest 0)
-
-exampleGraph :: Graph
-exampleGraph = Graph $ M.fromList
-  [ (Node "bla" (c 4 qn), S.fromList [ Edge (Node "blub" (d 4 qn)) 1 ] )
-  , (Node "blub" (d 4 qn), S.fromList [ ])
-  ]
-
--- | Take the first @n@ notes of a 'Music'
-takeNotes :: Integer -> Music a -> Music a
-takeNotes 0 m = m
-takeNotes _ m@(Prim _) = m
-takeNotes n (Modify c m) = Modify c $ takeNotes n m
-takeNotes _ m@(_ :=: _) = m
-takeNotes n (m1 :+: m2) = m1 :+: takeNotes (n - 1) m2
