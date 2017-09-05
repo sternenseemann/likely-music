@@ -53,7 +53,13 @@ class Music {
     }
 
     toString() {
-        return `${displayPitch(this.pitch)}${this.octave} (${this.dur.toString()})`;
+        if(this.pitch === 'Rest') {
+            return `${displayPitch(this.pitch)} for
+${this.dur.toString()}`;
+        } else {
+            return `${this.octave}${displayPitch(this.pitch)} for
+${this.dur.toString()}`;
+        }
     }
 
     static fromObject(obj) {
@@ -243,16 +249,16 @@ function hideOverlay(id) {
 function handleImport() {
     var files = document.getElementById('upload-score').files;
     if(files.length === 0) {
-        alert("Select a file first!");
+        alert('Select a file first!');
     } else {
         var file = files[0];
         var reader = new FileReader();
-        reader.addEventListener("loadend", function() {
+        reader.addEventListener('loadend', function() {
             var parsed = JSON.parse(this.result);
             if(parsed === undefined) {
-                alert("Could not parse likely score");
+                alert('Could not parse likely score');
             } else {
-                var confirmation = window.confirm("Proceeding will overwrite the current graph. Are you sure?");
+                var confirmation = window.confirm('Proceeding will overwrite the current graph. Are you sure?');
                 if(confirmation) {
                     try {
                         importGraphData(parsed);
@@ -267,19 +273,19 @@ function handleImport() {
 }
 
 function showStartingNode() {
-    if(typeof starting_node_id === "string") {
+    if(typeof starting_node_id === 'string') {
         network.selectNodes([starting_node_id], false);
     } else {
-        alert("No starting node selected yet!");
+        alert('No starting node selected yet!');
     }
 }
 
 function setStartingNode() {
     var selected = network.getSelectedNodes();
     if(selected.length > 1) {
-        alert("Only select one node!");
+        alert('Only select one node!');
     } else if(selected.length === 0) {
-        alert("Select a node first!");
+        alert('Select a node first!');
     } else {
         starting_node_id = selected[0];
     }
@@ -351,11 +357,39 @@ function main() {
                 }
             },
             deleteNode: true,
-            deleteEdge: true
+            deleteEdge: true,
+            controlNodeStyle: {
+            }
+        },
+        nodes: {
+            borderWidth: 0,
+            color: {
+                background: '#563d7c',
+                hover: {
+                    background: '#8f14ff'
+                },
+                highlight: {
+                    background: '#8f14ff'
+                }
+            },
+            chosen: true,
+            font: {
+                color: 'white'
+            },
+            shape: 'circle',
         },
         edges: {
             arrows: {
                 to: { enabled: true }
+            },
+            color: {
+                color: '#563d7c',
+                hover: '#563d7c',
+                highlight: '#563d7c',
+            },
+            font: {
+                color: '#ffffff',
+                strokeWidth: 0
             }
         }
     };
@@ -375,7 +409,7 @@ function main() {
         downloadFile('application/json', 'score.likely.json',
             JSON.stringify(collectGraphData(nodeData, edgeData)));
 
-    document.getElementById('import-score').onclick = handleImport;
+    document.getElementById('upload-score').addEventListener('change',handleImport);
 
     document.getElementById('show-starting-node').onclick = showStartingNode;
     document.getElementById('set-starting-node').onclick = setStartingNode;

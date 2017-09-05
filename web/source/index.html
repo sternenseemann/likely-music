@@ -13,23 +13,19 @@
         <div id="network"></div>
         <div id="sidebar">
             <h1>likely music</h1>
-            <p><ul id="errors"></ul></p>
-            <p>
-                <label for="hop-count">Maximum interpretation length</label>
-                <input type="number" min="0" id="hop-count" class="smallin" value="100">
-            </p>
-            <p>
-                <input type="button" value="Set starting node" id="set-starting-node">
-                <input type="button" value="Show current starting node" id="show-starting-node">
-            </p>
-                <input type="button" value="Generate MIDI interpretation" id="gen-midi">
-                <input type="button" value="Generate WAV interpretation" id="gen-wav">
-            </p>
-            <p>
-                <input type="button" value="Download Likely Score" id="gen-score"><br>
+            <input type="number" min="0" id="hop-count" placeholder="Max. song length (in notes)">
+            <h2>General Settings</h2>
+            <button id="set-starting-node">Set starting node</button>
+            <button id="show-starting-node">Show starting node</button>
+            <h2>Generate an interpretation</h2>
+            <button id="gen-midi">MIDI interpretation</button>
+            <button id="gen-wav">WAV interpretation</button>
+            <h2>Load or Save Work</h2>
+            <button id="gen-score">Save</button>
+            <label for="upload-score" class="custom-file">
                 <input type="file" id="upload-score" >
-                <input type="button" id="import-score" value="Upload Likely Score">
-            </p>
+                <span>Load</span>
+            </label>
         </div>
         <div id="edge-overlay" class="hidden">
             <h2><span id="edge-operation"></span> edge</h2>
