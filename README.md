@@ -13,3 +13,4 @@
 - [ ] JS refactoring
 - [ ] switch to SASS or similar
 - [ ] quicksave in localstorage
+- [ ] add help text
