@@ -114,6 +114,8 @@ function collectGraphData(nodeDate, edgeData) {
 }
 
 function importGraphData(g) {
+    nodeData = new Map();
+    edgeData = new Map();
     var nodeSet = new vis.DataSet({});
     var edgeSet = new vis.DataSet({});
     for(let node of g.nodes) {
@@ -241,6 +243,18 @@ function genericEditEdge(data, callback) {
     document.getElementById('edge-cancel').onclick = discardEdge.bind(this, callback);
 }
 
+function deleteFromMap(data, callback) {
+    for(let node of data.nodes) {
+        nodeData = nodeData.delete(node);
+    }
+
+    for(let edge of data.edges) {
+        edgeData = edgeData.delete(edge);
+    }
+
+    callback(data);
+}
+
 
 function hideOverlay(id) {
     document.getElementById(id).classList.add('hidden');
@@ -361,8 +375,8 @@ function init() {
                     genericEditEdge(edgeData, callback);
                 }
             },
-            deleteNode: true,
-            deleteEdge: true,
+            deleteNode: deleteFromMap,
+            deleteEdge: deleteFromMap,
             controlNodeStyle: {
             }
         },
@@ -425,11 +439,13 @@ function init() {
             JSON.stringify(collectGraphData(nodeData, edgeData)));
 
     document.getElementById('upload-score').addEventListener('change',handleImport);
+    document.getElementById('clear-score').onclick = () =>
+        importGraphData({ nodes: [], edges: []});
 
     document.getElementById('show-starting-node').onclick = showStartingNode;
     document.getElementById('set-starting-node').onclick = setStartingNode;
 
-    window.setInterval(saveGraphToLocalStorage, 10000);
+    window.setInterval(saveGraphToLocalStorage, 5000);
 }
 
 document.addEventListener('DOMContentLoaded', () => init());
