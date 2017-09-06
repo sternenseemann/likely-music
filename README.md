@@ -15,3 +15,18 @@
 - [x] quicksave in localstorage
 - [ ] add help text
 - [ ] nice unicode musical symbols
+
+## Setup
+
+```
+cabal sandbox init
+cabal install --only-dependencies
+cabal build
+
+cd web
+yarn install
+yarn run build:dev
+
+cd ..
+cabal run likely-music-backend
+```
