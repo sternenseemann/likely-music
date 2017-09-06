@@ -12,32 +12,12 @@ body {
     border-top: 1px solid #232200;
 }
 
-#node-overlay, #edge-overlay {
-    position: absolute;
-    top: 10%;
-    left: 35%;
-    width: 30%;
-    min-width:500px;
-    padding: 10px;
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 10px;
-}
-
-.hidden {
-    visibility:hidden;
-}
-
-.smallin {
-    width: 3rem;
-}
-
 #sidebar {
     width: 20%;
     float:right;
     color: white;
     background-color: black;
-    box-shadow: -1px -2px 3px #111;
+    box-shadow: 0px 0px 20px #111;
 }
 
 #sidebar > * {
@@ -48,6 +28,10 @@ body {
     padding-right: 0px;
     margin: 0;
     display: inline-block;
+}
+
+#sidebar button, #sidebar input {
+    height: 3rem;
 }
 
 #sidebar *:nth-child(odd) {
@@ -80,22 +64,19 @@ body {
     text-align: center;
 }
 
-#sidebar button {
-    border-bottom: none;
-    border-left: none;
-    border-right: none;
+button {
+    border: none;
     color: white;
-    height: 3rem;
+    background-color:black;
     font-size: 1.2rem;
     margin:0;
     padding:0;
 }
 
-#sidebar input[type="number"] {
-    border-bottom: none;
-    border-left: none;
-    border-right: none;
-    height: 3rem;
+input[type="number"] {
+    background-color: #333;
+    color: white;
+    border: none;
     text-align: center;
     font-size: 1.2rem;
 }
@@ -139,13 +120,79 @@ body {
     padding-bottom: 0.75rem;
 }
 
-.file-action .custom-file {
-    width: 50% !important;
-    float: left;
+.dialog {
+    position: absolute;
+    top: 10%;
+    left: 25%;
+    width: 30%;
+    min-width:500px;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    box-shadow: 0px 0px 10px #111;
 }
 
-.file-action button {
-    width: 50% !important;
-    float: right;
-    border: none;
+.dialog > div {
+    height: 3rem;
+}
+
+.hidden {
+    visibility:hidden;
+}
+
+.dialog > div {
+  width: 100%;
+}
+
+.dialog button {
+    padding: 0.75rem;
+    font-size: 1.5rem;
+}
+
+.dialog button.cancel {
+    background-color: #a23a30;
+}
+
+.dialog button.save {
+    background-color: #0ea92f;
+}
+
+.label-input {
+  display: inline-flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.label-input > * {
+  flex: auto;
+  transition: width 0.7s ease-out;
+}
+
+.label-input label {
+  display: inline-block;
+  background-color: #333;
+  font-size: 1.5rem;
+  padding: 0.75rem;
+}
+
+.label-input input {
+  display: inline-block;
+  color: white;
+  background-color: #111;
+  font-size: 1.5rem;
+  padding: 0.75rem;
+  border: none;
+  min-width: 0px;
+}
+
+.label-input span {
+  display: inline-block;
+  font-size: 1.5rem;
+  padding: 0.75rem;
+  background-color: #222;
+}
+
+.label-input button {
+    font-size: 1.5rem;
+    padding: 0.75rem;
 }

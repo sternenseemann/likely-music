@@ -27,36 +27,38 @@
                 <span>Load</span>
             </label>
         </div>
-        <div id="edge-overlay" class="hidden">
+        <div id="edge-overlay" class="hidden dialog">
             <h2><span id="edge-operation"></span> edge</h2>
-            <p>
+            <div class="label-input">
                 <label for="prob">Probability:</label>
-                <input id="prob" class="smallin" type="number" min="0.0" max="100">%
-            </p>
-            <p>
-                <input type="button" id="edge-save" value="Save">
-                <input type="button" id="edge-cancel" value="Cancel">
-            </p>
+                <input id="prob" type="number" min="0.0" max="100">
+                <span>%</span>
+            </div>
+            <div class="label-input">
+                <button class="save" id="edge-save">Save</button>
+                <button class="cancel" id="edge-cancel">Cancel</button>
+            </div>
         </div>
-        <div id="node-overlay" class="hidden">
+        <div id="node-overlay" class="hidden dialog">
             <h2><span id="node-operation"></span> node</h2>
-            <p>
+            <div class="label-input">
                 <label for="pitch">Pitch:</label>
                 <select id="pitch"></select>
-            </p>
-            <p>
-                <label for="octave">Octave (as a number)</label>
-                <input class="smallin" id="octave" type="number" step="1">
-            </p>
-            <p>
-                <label>Duration (e. g. 1/4):</label>
-                <input min="0" class="smallin" id="numerator" type="number" step="1"> /
-                <input min="0" class="smallin" id="denominator" type="number" step="1">
-            </p>
-            <p>
-                <input type="button" id="node-save" value="Save">
-                <input type="button" id="node-cancel" value="Cancel">
-            </p>
+            </div>
+            <div class="label-input">
+                <label for="octave">Octave:</label>
+                <input id="octave" type="number" step="1">
+            </div>
+            <div class="label-input">
+                <label>Duration:</label>
+                <input min="0" id="numerator" type="number" step="1">
+                <span>/</span>
+                <input min="0" id="denominator" type="number" step="1">
+            </div>
+            <div class="label-input">
+                <button class="save" id="node-save">Save</button>
+                <button class="cancel" id="node-cancel">Cancel</button>
+            </div>
         </div>
     </body>
 </html>

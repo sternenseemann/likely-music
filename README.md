@@ -4,7 +4,7 @@
 
 ## TODO
 
-- [ ] overlay styling
+- [x] overlay styling
 - [ ] graph validation
 - [ ] WAV export (using fluidsynth)
 - [ ] custom manipulation bar style
