@@ -272,6 +272,11 @@ function handleImport() {
     }
 }
 
+function saveGraphToLocalStorage() {
+    const json = JSON.stringify(collectGraphData(nodeData, edgeData));
+    localStorage.setItem("score", json)
+}
+
 function showStartingNode() {
     if(typeof starting_node_id === 'string') {
         network.selectNodes([starting_node_id], false);
@@ -333,7 +338,7 @@ function genInterpretation(format) {
     }
 }
 
-function main() {
+function init() {
     var container = document.getElementById('network');
 
     var options = {
@@ -396,6 +401,16 @@ function main() {
 
     network = new vis.Network(container, {}, options);
 
+    try {
+        const score = localStorage.getItem('score');
+        if(score !== null) {
+            importGraphData(JSON.parse(score));
+        }
+    } catch(e) {
+        localStorage.removeItem('score');
+    }
+
+
     const pitch_selector = valid_pitches.map((p, i) =>
         `<option value="${p}">${display_pitches[i]}</option>`)
         .reduce((acc, v) =>
@@ -413,6 +428,8 @@ function main() {
 
     document.getElementById('show-starting-node').onclick = showStartingNode;
     document.getElementById('set-starting-node').onclick = setStartingNode;
+
+    window.setInterval(saveGraphToLocalStorage, 10000);
 }
 
-document.addEventListener('DOMContentLoaded', () => main());
+document.addEventListener('DOMContentLoaded', () => init());

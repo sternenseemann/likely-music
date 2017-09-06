@@ -12,5 +12,6 @@
   loading using javascript)
 - [ ] JS refactoring
 - [ ] switch to SASS or similar
-- [ ] quicksave in localstorage
+- [x] quicksave in localstorage
 - [ ] add help text
+- [ ] nice unicode musical symbols
