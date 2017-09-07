@@ -9,7 +9,8 @@
 - [ ] WAV export (using fluidsynth)
 - [ ] in browser player (by exporting a mp3 or similar using fluidsynth and
   loading using javascript)
-- [ ] nice unicode musical symbols
+- [x] nice unicode musical symbols
+  - [ ] handle pointed notes
 - [ ] graph validation
 - [ ] add help text
 - [ ] custom manipulation bar style

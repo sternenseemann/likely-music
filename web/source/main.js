@@ -20,16 +20,16 @@ const valid_pitches = [
 const display_pitches = [
     'C♯♯', 'C♯', 'C',
     'D♯♯', 'C♭', 'D♯',
-    'C♭♭', 'D', 'E♯♯',
+    'C𝄫', 'D', 'E♯♯',
     'D♭', 'E♯', 'F♯♯',
-    'D♭♭', 'E', 'F♯',
+    'D𝄫', 'E', 'F♯',
     'E♭', 'F', 'Gff',
-    'E♭♭', 'F♭', 'G♯',
-    'F♭♭', 'G', 'A♯♯',
-    'G♭', 'A♯', 'G♭♭',
+    'E𝄫', 'F♭', 'G♯',
+    'F𝄫', 'G', 'A♯♯',
+    'G♭', 'A♯', 'G𝄫',
     'A', 'B♯♯', 'A♭',
-    'B♯', 'A♭♭', 'B',
-    'B♭', 'B♭♭', 'Rest'
+    'B♯', 'A𝄫', 'B',
+    'B♭', 'B𝄫', 'Rest'
 ];
 
 function displayPitch(pitch) {
@@ -38,6 +38,90 @@ function displayPitch(pitch) {
         throw 'Invalid pitch';
     } else {
         return display_pitches[i];
+    }
+}
+
+function standard_rests(dur) {
+    if(dur.numerator === 1) {
+        switch(dur.denominator) {
+            case 1:
+                return '𝄻';
+                break;
+            case 2:
+                return '𝄼';
+                break;
+            case 4:
+                return '𝄽';
+                break;
+            case 8:
+                return '𝄾';
+                break;
+            case 16:
+                return '𝄿';
+                break;
+            case 32:
+                return '𝅀';
+                break;
+            case 64:
+                return '𝅁'
+                break;
+            case 128:
+                return '𝅂'
+                break;
+            default:
+                return null;
+                break;
+        }
+    } else {
+        return null;
+    }
+}
+
+function standard_notes(dur) {
+    if(dur.numerator === 1) {
+        switch(dur.denominator) {
+            case 1:
+                return '𝅝';
+                break;
+            case 2:
+                return '𝅗𝅥';
+                break;
+            case 4:
+                return '𝅘𝅥';
+                break;
+            case 8:
+                return '𝅘𝅥𝅮';
+                break;
+            case 16:
+                return '𝅘𝅥𝅯';
+                break;
+            case 32:
+                return '𝅘𝅥𝅰';
+                break;
+            case 64:
+                return '𝅘𝅥𝅱'
+                break;
+            case 128:
+                return '𝅘𝅥𝅲'
+                break;
+            default:
+                return null;
+                break;
+        }
+    } else if(dur.numerator === 2 && dur.denominator === 1) {
+        return '𝅜'
+    } else {
+        return null;
+    }
+}
+
+function musical_symbol(lookup, dur) {
+    const dot = '𝅭𝅭 ';
+    var standard_symbol = lookup(dur);
+    if(standard_symbol !== null) {
+        return standard_symbol;
+    } else {
+        return dur.toString();
     }
 }
 
@@ -54,13 +138,21 @@ class Music {
 
     toString() {
         if(this.pitch === 'Rest') {
-            return `${displayPitch(this.pitch)} for
-${this.dur.toString()}`;
+            return `${displayPitch(this.pitch)} for ${this.dur.toString()}`;
         } else {
-            return `${this.octave}${displayPitch(this.pitch)} for
-${this.dur.toString()}`;
+            return `${displayPitch(this.pitch)}${this.octave} for ${this.dur.toString()}`;
         }
     }
+
+    nodeText() {
+        if(this.pitch === 'Rest') {
+            // alignment using a space! #justvisjsthings
+            return ` ${musical_symbol(standard_rests, this.dur)}`;
+        } else {
+            return `${musical_symbol(standard_notes, this.dur)}   ${displayPitch(this.pitch)}${this.octave}`
+        }
+    }
+
 
     static fromObject(obj) {
         return new Music(Rational.fromObject(obj.dur), obj.pitch, Number(obj.octave));
@@ -120,7 +212,7 @@ function importGraphData(g) {
     var edgeSet = new vis.DataSet({});
     for(let node of g.nodes) {
         var music = Music.fromObject(node.music);
-        var data = { id: node.id, label: music };
+        var data = { id: node.id, label: music.nodeText() };
         nodeData = nodeData.set(node.id, { nodeData: data, music: node.music });
         nodeSet.add(data);
     }
@@ -181,7 +273,7 @@ function genericEditNode(data, callback) {
             document.getElementById('denominator').value);
         var music = new Music(duration, document.getElementById('pitch').value,
             Number(document.getElementById('octave').value));
-        data.label = music.toString();
+        data.label = music.nodeText();
         clearOverlay();
         callback(data);
         nodeData = nodeData.set(data.id, { music: music, nodeData: data });
@@ -393,7 +485,9 @@ function init() {
             },
             chosen: true,
             font: {
-                color: 'white'
+                color: 'white',
+                size: 20,
+                align: 'center'
             },
             shape: 'circle',
         },

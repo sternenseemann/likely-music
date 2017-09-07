@@ -7,9 +7,8 @@ body {
 
 #network {
     width: 79%;
-    height: 800px;
     float:left;
-    border-top: 1px solid #232200;
+    height: 100vh;
 }
 
 #sidebar {
