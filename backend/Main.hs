@@ -27,9 +27,7 @@ server = genInterpretation :<|> serveDirectoryWebApp "web/dist"
           let maxHops      = fromIntegral . pMaxHops . gpParams $ g
               startingNode = pStartingNode . gpParams $ g
               song         = interpretation randomGen (gpGraph g) startingNode
-          case song of
-            Nothing   -> throwError err500
-            Just song -> return . midiString $ takeNotes maxHops song
+          return . midiString $ takeNotes maxHops song
         genInterpretation _  _ = throwError err500
 
 

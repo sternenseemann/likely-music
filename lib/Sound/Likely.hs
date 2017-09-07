@@ -49,15 +49,15 @@ insertEdge :: Node -> Edge -> Graph -> Graph
 insertEdge n e =
   insertNode n . Graph . M.insertWith S.union n (S.singleton e) . unGraph
 
-interpretation :: RandomGen g => g -> Graph -> Node -> Maybe (Music Pitch)
-interpretation gen graph n = (:+:)
-  <$> Just (nMusic n)
-  <*> fmap recurse (M.lookup n (unGraph graph))
+interpretation :: RandomGen g => g -> Graph -> Node -> Music Pitch
+interpretation gen graph n = (nMusic n) :+:
+  recurse (fromMaybe S.empty (M.lookup n (unGraph graph)))
   where (prob, gen') = randomR (0.0, 1.0) gen
-        recurse edges = if S.null edges
-                          then emptyMusic
-                          else fromMaybe emptyMusic . interpretation gen graph .
-                            eTo . edgeForRoll prob $ edges
+        recurse edges =
+          if S.null edges
+            then emptyMusic
+            else interpretation gen graph
+                 . eTo . edgeForRoll prob $ edges
 
 edgeForRoll :: Probability -> S.Set Edge -> Edge
 edgeForRoll prob set =
