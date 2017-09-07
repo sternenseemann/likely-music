@@ -5,16 +5,18 @@
 ## TODO
 
 - [x] overlay styling
-- [ ] graph validation
+- [x] quicksave in localstorage
 - [ ] WAV export (using fluidsynth)
-- [ ] custom manipulation bar style
 - [ ] in browser player (by exporting a mp3 or similar using fluidsynth and
   loading using javascript)
+- [ ] nice unicode musical symbols
+- [ ] graph validation
+- [ ] add help text
+- [ ] custom manipulation bar style
 - [ ] JS refactoring
 - [ ] switch to SASS or similar
-- [x] quicksave in localstorage
-- [ ] add help text
-- [ ] nice unicode musical symbols
+- [ ] multiple starting points, parallel graph traversal
+- [ ] support for non-primitive `Music` in frontend
 
 ## Setup
 
