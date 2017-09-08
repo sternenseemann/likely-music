@@ -7,7 +7,7 @@
 - [x] overlay styling
 - [x] quicksave in localstorage
 - [ ] MIDI parameters (instrument, speed)
-- [ ] WAV export (using fluidsynth)
+- [x] WAV export (using fluidsynth)
 - [ ] in browser player (by exporting a mp3 or similar using fluidsynth and
   loading using javascript)
 - [x] nice unicode musical symbols

@@ -45,3 +45,6 @@ executable likely-music-backend
                      , warp
                      , HCodecs
                      , random
+                     , process
+                     , directory
+                     , filepath
