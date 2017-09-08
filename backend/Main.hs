@@ -16,6 +16,7 @@ import Servant
 import Sound.Likely
 import System.Directory
 import System.Exit
+import System.Environment
 import System.FilePath.Posix
 import System.IO
 import System.Process
@@ -44,7 +45,8 @@ tempFile ext = try 0
         try :: Integer -> Handler FilePath
         try n
           | n < maxtries = do
-            let path = "/tmp" </> addExtension ("likely-music-" ++ show n) ext
+            progName <- liftIO $ getProgName
+            let path = "/tmp" </> addExtension (makeValid progName ++ "-" ++ show n) ext
             exists <- liftIO $ doesFileExist path
             if exists
               then try (n + 1)
