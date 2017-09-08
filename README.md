@@ -6,6 +6,7 @@
 
 - [x] overlay styling
 - [x] quicksave in localstorage
+- [ ] MIDI parameters (instrument, speed)
 - [ ] WAV export (using fluidsynth)
 - [ ] in browser player (by exporting a mp3 or similar using fluidsynth and
   loading using javascript)
@@ -14,6 +15,7 @@
 - [ ] graph validation
 - [ ] add help text
 - [ ] custom manipulation bar style
+- [ ] Seed storage / reproducible playback
 - [ ] JS refactoring
 - [ ] switch to SASS or similar
 - [ ] multiple starting points, parallel graph traversal
