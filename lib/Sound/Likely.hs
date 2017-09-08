@@ -56,7 +56,7 @@ interpretation gen graph n = (nMusic n) :+:
         recurse edges =
           if S.null edges
             then emptyMusic
-            else interpretation gen graph
+            else interpretation gen' graph
                  . eTo . edgeForRoll prob $ edges
 
 edgeForRoll :: Probability -> S.Set Edge -> Edge
