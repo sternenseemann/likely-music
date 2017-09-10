@@ -17,6 +17,7 @@ body {
     color: white;
     background-color: black;
     box-shadow: 0px 0px 20px #111;
+    font-size: 1.2rem;
 }
 
 #sidebar > * {
@@ -26,27 +27,15 @@ body {
     padding-left: 0px;
     padding-right: 0px;
     margin: 0;
-    display: inline-block;
 }
 
-#sidebar button, #sidebar input {
-    height: 3rem;
-}
-
-#sidebar *:nth-child(odd) {
-    background-color: #111;
-}
-
-#sidebar ::placeholder {
-    color:#aaa;
-}
-
-#sidebar *:nth-child(even) {
-    background-color: #000;
-}
-
-#sidebar button:hover, #sidebar input:hover, #sidebar .custom-file:hover {
+#sidebar button:hover, #sidebar input:hover,
+#sidebar .custom-file:hover, #sidebar select:hover {
     background-color: #563d7c;
+}
+
+#sidebar button, #sidebar input, #sidebar .custom-file, #sidebar select {
+  background-color: #000;
 }
 
 #sidebar h1 {
@@ -54,6 +43,7 @@ body {
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
     text-align: center;
+    background-color: #111;
 }
 
 #sidebar h2 {
@@ -61,6 +51,15 @@ body {
     padding-top: 0.9rem;
     padding-bottom: 0.9rem;
     text-align: center;
+    background-color: #222;
+}
+
+#sidebar select {
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  font-size: 1.2rem;
+  width: auto;
 }
 
 button {
@@ -69,7 +68,7 @@ button {
     background-color:black;
     font-size: 1.2rem;
     margin:0;
-    padding:0;
+    padding:0.75rem;
 }
 
 input[type="number"] {
@@ -78,6 +77,7 @@ input[type="number"] {
     border: none;
     text-align: center;
     font-size: 1.2rem;
+    padding:0.75rem;
 }
 
 .custom-file {
@@ -87,7 +87,6 @@ input[type="number"] {
     display: inline-block;
     height: 3rem;
 }
-
 
 .custom-file input[type="file"] {
     position: relative;
@@ -103,6 +102,7 @@ input[type="number"] {
 }
 
 .custom-file span {
+    text-align: center;
     position: absolute;
     top: 0;
     left: 0;
@@ -112,7 +112,6 @@ input[type="number"] {
     height: 3rem;
     pointer-events: none;
     background-color: transparent !important;
-    text-align: center;
     font-size: 1.2rem;
     line-height: 1.5rem;
     padding-top: 0.75rem;
@@ -148,50 +147,69 @@ input[type="number"] {
     font-size: 1.5rem;
 }
 
-.dialog button.cancel {
+button.cancel {
     background-color: #a23a30;
 }
 
-.dialog button.save {
+button.save {
     background-color: #0ea92f;
 }
 
-.label-input {
+.dialog .multi-inputs {
+  font-size: 1.5rem;
+}
+
+.multi-inputs {
   display: inline-flex;
   flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: baseline;
   width: 100%;
 }
 
-.label-input > * {
-  flex: auto;
+.multi-inputs > * {
+  flex-grow: 1;
+  flex-basis: auto;
   transition: width 0.7s ease-out;
+  max-height: 100%;
+  text-align: center;
 }
 
-.label-input label {
+.multi-inputs :nth-child(1) {
+  text-align: left;
+}
+
+.multi-inputs label {
   display: inline-block;
   background-color: #333;
-  font-size: 1.5rem;
   padding: 0.75rem;
 }
 
-.label-input input {
+.multi-inputs input {
   display: inline-block;
   color: white;
   background-color: #111;
-  font-size: 1.5rem;
   padding: 0.75rem;
   border: none;
   min-width: 0px;
 }
 
-.label-input span {
+.multi-inputs span {
   display: inline-block;
-  font-size: 1.5rem;
   padding: 0.75rem;
   background-color: #222;
 }
 
-.label-input button {
-    font-size: 1.5rem;
+.multi-inputs button {
     padding: 0.75rem;
+}
+
+#player-container {
+  display: inline-flex;
+  align-items: center;
+}
+
+#player-container > * {
+  flex: auto;
 }

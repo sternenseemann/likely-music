@@ -3,6 +3,7 @@ import { Map } from 'immutable';
 // types / internals
 
 const valid_pitches = [
+    'Rest',
     'Cff', 'Cf', 'C',
     'Dff', 'Cs', 'Df',
     'Css', 'D', 'Eff',
@@ -14,10 +15,11 @@ const valid_pitches = [
     'Gs', 'Af', 'Gss',
     'A', 'Bff', 'As',
     'Bf', 'Ass', 'B',
-    'Bs', 'Bss', 'Rest'
+    'Bs', 'Bss'
 ];
 
 const display_pitches = [
+    'Rest',
     'C♯♯', 'C♯', 'C',
     'D♯♯', 'C♭', 'D♯',
     'C𝄫', 'D', 'E♯♯',
@@ -29,7 +31,7 @@ const display_pitches = [
     'G♭', 'A♯', 'G𝄫',
     'A', 'B♯♯', 'A♭',
     'B♯', 'A𝄫', 'B',
-    'B♭', 'B𝄫', 'Rest'
+    'B♭', 'B𝄫'
 ];
 
 function displayPitch(pitch) {
@@ -254,7 +256,7 @@ function downloadFile(content_type, filename, content) {
 var nodeData = Map();
 var edgeData = Map();
 var network = null;
-var starting_node_id = undefined;
+var starting_node_id = null;
 
 
 function showOverlay(id) {
@@ -378,9 +380,11 @@ function handleImport() {
     }
 }
 
-function saveGraphToLocalStorage() {
+function saveDataToLocalStorage() {
     const json = JSON.stringify(collectGraphData(nodeData, edgeData));
+    const params = JSON.stringify(gatherParams());
     localStorage.setItem("score", json)
+    localStorage.setItem("params", params)
 }
 
 function showStartingNode() {
@@ -402,45 +406,118 @@ function setStartingNode() {
     }
 }
 
-function genInterpretation(format) {
-    try {
-        var starting_node_entry = nodeData.get(starting_node_id);
+function fetchInterpretation(params, format) {
+    var jsonRequest = JSON.stringify({
+        graph: collectGraphData(nodeData, edgeData),
+        params: params
+    });
+
+    var myHeaders = new Headers();
+    myHeaders.set('Content-Type', 'application/json');
+
+    var myInit = {
+        method: 'POST',
+        headers: myHeaders,
+        mode: 'cors',
+        body: jsonRequest
+    };
+
+    var myRequest = new Request(`http://localhost:8081/interpretation/${format}`, myInit);
+
+    return fetch(myRequest).then(res => res.blob());
+}
+
+function gatherParams() {
+    var starting_node_entry = nodeData.get(starting_node_id);
+    if(starting_node_entry !== undefined && starting_node_entry !== null) {
         var starting_node = {
             id: starting_node_entry.nodeData.id,
             music: starting_node_entry.music
         };
-    } catch(e) {
-        alert('Set a starting node first!');
-        return;
+    } else {
+        var starting_node = null
     }
 
-    try {
-        var maxhops = document.getElementById('hop-count').value;
+    var maxhops = document.getElementById('hop-count').value;
+    if(maxhops === "" || Number(maxhops) === NaN) {
+        maxhops = null;
+    } else {
+        maxhops = Number(maxhops);
+    }
 
-        var jsonRequest = JSON.stringify({
-            graph: collectGraphData(nodeData, edgeData),
-            params: { maxhops: 100, starting_node: starting_node }
-        });
+    var seed = document.getElementById('seed').value;
+    if(seed === "" || Number(seed) === NaN) {
+        seed = null;
+    } else {
+        seed = Number(seed);
+    }
 
+    return {
+        maxhops:  maxhops,
+        starting_node: starting_node,
+        seed: seed
+    };
+}
 
-        var myHeaders = new Headers();
-        myHeaders.set('Content-Type', 'application/json');
+function completeGatherParams() {
+    var p = gatherParams();
+    if(p.starting_node === null) {
+        alert('Set a starting node first!');
+        return null;
+    }
 
-        var myInit = {
-            method: 'POST',
-            headers: myHeaders,
-            mode: 'cors',
-            body: jsonRequest
-        };
+    if(p.maxhops === null) {
+        alert('Set the maximum amount of hops to a valid number');
+        return null;
+    }
 
-        var myRequest = new Request(`http://localhost:8081/interpretation/${format}`, myInit);
+    if(p.seed === null) {
+        // TODO auto generate a random one, let the user confirm before
+        alert('Set the seed to a valid number!');
+        return null;
+    }
 
-        fetch(myRequest).then(res => res.blob()).then(file => {
-            var url = URL.createObjectURL(file);
-            download(url, 'export.midi');
-        });
-    } catch(e) {
-        alert('An error occured while contacting the API: ' + e);
+    return p;
+}
+
+function importParams(p) {
+    if(p.starting_node !== null) {
+        starting_node_id = p.starting_node.id;
+    }
+    if(p.seed !== null) {
+        document.getElementById('seed').value = p.seed;
+    }
+    if(p.maxhops !== null) {
+        document.getElementById('hop-count').value = p.maxhops;
+    }
+}
+
+function downloadInterpretation(format) {
+    var params = completeGatherParams();
+    if(params != null) {
+        try {
+            fetchInterpretation(params, format).then(file => {
+                var url = URL.createObjectURL(file);
+                download(url, `export.${format}`);
+            });
+        } catch(e) {
+            alert('An error occured while contacting the API: ' + e);
+        }
+    }
+}
+
+function reloadPlayer() {
+    var params = completeGatherParams();
+    if(params !== null) {
+        document.getElementById('player').src = null;
+        try {
+            fetchInterpretation(params, 'wav').then(file => {
+                var url = URL.createObjectURL(file);
+                document.getElementById('player').src = url;
+            });
+        } catch(e) {
+            alert('An error occured while contacting the API: ' + e);
+        }
     }
 }
 
@@ -518,6 +595,14 @@ function init() {
         localStorage.removeItem('score');
     }
 
+    try {
+        const params = localStorage.getItem('params')
+        if(params !== null) {
+            importParams(JSON.parse(params));
+        }
+    } catch(e) {
+        localStorage.removeItem('params');
+    }
 
     const pitch_selector = valid_pitches.map((p, i) =>
         `<option value="${p}">${display_pitches[i]}</option>`)
@@ -525,21 +610,24 @@ function init() {
             acc + v, '');
     document.getElementById('pitch').innerHTML = pitch_selector;
 
-    document.getElementById('gen-midi').onclick =
-        genInterpretation.bind(this, ('midi'));
+    /* event handling, order as in sidebar */
+    document.getElementById('set-starting-node').onclick = setStartingNode;
+    document.getElementById('show-starting-node').onclick = showStartingNode;
+
+    document.getElementById('reload-player').onclick = reloadPlayer;
+    document.getElementById('download-audio').onclick = () => {
+        var format = document.getElementById('format').value;
+        downloadInterpretation(format);
+    };
 
     document.getElementById('gen-score').onclick = () =>
         downloadFile('application/json', 'score.likely.json',
             JSON.stringify(collectGraphData(nodeData, edgeData)));
-
     document.getElementById('upload-score').addEventListener('change',handleImport);
     document.getElementById('clear-score').onclick = () =>
         importGraphData({ nodes: [], edges: []});
 
-    document.getElementById('show-starting-node').onclick = showStartingNode;
-    document.getElementById('set-starting-node').onclick = setStartingNode;
-
-    window.setInterval(saveGraphToLocalStorage, 5000);
+    window.setInterval(saveDataToLocalStorage, 5000);
 }
 
 document.addEventListener('DOMContentLoaded', () => init());

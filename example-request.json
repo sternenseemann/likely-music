@@ -8,7 +8,8 @@
         },
         "pitch": "Cff",
         "octave": 1
-      } }
+      } },
+     "seed" : 100
   },
   "graph": {
   "nodes": [

@@ -29,30 +29,19 @@ midiString :: ToMusic1 a => Music a -> ByteString
 midiString = toLazyByteString . buildMidi . toMidi . perform
 
 server :: Server LikelyApi
-server = genInterpretation :<|> serveDirectoryWebApp "web/dist"
-  where genInterpretation :: OutputFormat -> GraphWithParams -> Handler ByteString
-        genInterpretation Midi g = do
-          randomGen <- liftIO $ getStdGen
-          let maxHops      = fromIntegral . pMaxHops . gpParams $ g
-              startingNode = pStartingNode . gpParams $ g
-              song         = interpretation randomGen (gpGraph g) startingNode
-          return . midiString $ takeNotes maxHops song
-        genInterpretation Wav g = genInterpretation Midi g >>= synthWav
+server = genInterpretation :<|> randomSeed :<|> serveDirectoryWebApp "web/dist"
 
-tempFile :: String -> Handler FilePath
-tempFile ext = try 0
-  where maxtries = 100
-        try :: Integer -> Handler FilePath
-        try n
-          | n < maxtries = do
-            progName <- liftIO $ getProgName
-            let path = "/tmp" </> addExtension (makeValid progName ++ "-" ++ show n) ext
-            exists <- liftIO $ doesFileExist path
-            if exists
-              then try (n + 1)
-              else pure path
-          | otherwise = throwError err500
+randomSeed :: Handler Int
+randomSeed = liftIO newStdGen >>= return . fst . random
 
+genInterpretation :: OutputFormat -> GraphWithParams -> Handler ByteString
+genInterpretation Midi g = do
+  let params       = gpParams g
+      maxHops      = fromIntegral . pMaxHops $ params
+      randomGen    = mkStdGen $ pSeed params
+      song         = interpretation randomGen (gpGraph g) (pStartingNode params)
+  return . midiString $ takeNotes maxHops song
+genInterpretation Wav g = genInterpretation Midi g >>= synthWav
 
 synthWav :: ByteString -> Handler ByteString
 synthWav midi = do
@@ -76,7 +65,19 @@ synthWav midi = do
       liftIO $ removePathForcibly outName
       return out
 
-
+tempFile :: String -> Handler FilePath
+tempFile ext = try 0
+  where maxtries = 100
+        try :: Integer -> Handler FilePath
+        try n
+          | n < maxtries = do
+            progName <- liftIO $ getProgName
+            let path = "/tmp" </> addExtension (makeValid progName ++ "-" ++ show n) ext
+            exists <- liftIO $ doesFileExist path
+            if exists
+              then try (n + 1)
+              else pure path
+          | otherwise = throwError err500
 app :: Application
 app = serve api server
 

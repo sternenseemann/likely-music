@@ -6,20 +6,23 @@
 
 - [x] overlay styling
 - [x] quicksave in localstorage
-- [ ] MIDI parameters (instrument, speed)
+- [ ] [MIDI parameters](https://hackage.haskell.org/package/Euterpea-2.0.3/docs/Euterpea-Music.html#t:Control) (instrument, speed)
 - [x] WAV export (using fluidsynth)
-- [ ] in browser player (by exporting a mp3 or similar using fluidsynth and
-  loading using javascript)
+- [x] in browser player
 - [x] nice unicode musical symbols
   - [ ] handle pointed notes
 - [ ] graph validation
 - [ ] add help text
 - [ ] custom manipulation bar style
-- [ ] Seed storage / reproducible playback
+- [x] Seed storage / reproducible playback
 - [ ] JS refactoring
-- [ ] switch to SASS or similar
+- [ ] use postcss etc.
 - [ ] multiple starting points, parallel graph traversal
 - [ ] support for non-primitive `Music` in frontend
+
+### Things for later
+
+- [ ] support FLAC, OPUS export etc.
 
 ## Setup
 

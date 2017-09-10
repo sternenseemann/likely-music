@@ -16,15 +16,16 @@ import Sound.Likely
 type LikelyApi = "interpretation" :> Capture "format" OutputFormat 
                                   :> ReqBody '[JSON] GraphWithParams
                                   :> Post '[OctetStream] ByteString
-                  :<|> Raw
+                 :<|> "seed" :> Get '[JSON] Int
+                 :<|> Raw
 
 data OutputFormat = Midi | Wav
-    deriving (Show, Eq, Ord)
+  deriving (Show, Eq, Ord)
 
 instance FromHttpApiData OutputFormat where
-    parseUrlPiece "midi" = Right Midi
-    parseUrlPiece "wav"  = Right Wav
-    parseUrlPiece x      = Left $ "Couldn't match " <> x <> " with {midi, wav}"
+  parseUrlPiece "mid" = Right Midi
+  parseUrlPiece "wav" = Right Wav
+  parseUrlPiece x     = Left $ "Couldn't match " <> x <> " with {mid, wav}"
 
 data GraphWithParams
   = GraphWithParams
@@ -33,17 +34,19 @@ data GraphWithParams
   } deriving (Show, Eq, Ord)
 
 instance FromJSON GraphWithParams where
-    parseJSON = withObject "GraphWithParams" $ \v ->
-        GraphWithParams <$> v .: "params"
-                        <*> v .: "graph"
+  parseJSON = withObject "GraphWithParams" $ \v ->
+    GraphWithParams <$> v .: "params"
+                    <*> v .: "graph"
 
 data Params
   = Params
   { pMaxHops      :: Int
   , pStartingNode :: Node
+  , pSeed         :: Int
   } deriving (Show, Eq, Ord)
 
 instance FromJSON Params where
-    parseJSON = withObject "Params" $ \v ->
-        Params <$> v .: "maxhops"
-               <*> v .: "starting_node"
+  parseJSON = withObject "Params" $ \v ->
+    Params <$> v .: "maxhops"
+           <*> v .: "starting_node"
+           <*> v .: "seed"
