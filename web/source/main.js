@@ -492,6 +492,14 @@ function importParams(p) {
     }
 }
 
+function randomSeed() {
+    if(window.crypto) {
+        var array = new Int32Array(1);
+        window.crypto.getRandomValues(array);
+        document.getElementById('seed').value = array[0];
+    }
+}
+
 function downloadInterpretation(format) {
     var params = completeGatherParams();
     if(params != null) {
@@ -613,6 +621,8 @@ function init() {
     /* event handling, order as in sidebar */
     document.getElementById('set-starting-node').onclick = setStartingNode;
     document.getElementById('show-starting-node').onclick = showStartingNode;
+
+    document.getElementById('random-seed').onclick = randomSeed;
 
     document.getElementById('reload-player').onclick = reloadPlayer;
     document.getElementById('download-audio').onclick = () => {
