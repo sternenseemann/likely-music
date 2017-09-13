@@ -1,0 +1,10 @@
+digraph {
+  rankdir="LR";
+  "E" -> "F" [ label = "30%" ]
+  "E" -> "A" [ label = "70%" ]
+  "F" -> "G" [ label = "89%" ]
+  "F" -> "E" [ label = "11%" ]
+  "G" -> "E" [ label = "44%" ]
+  "G" -> "A" [ label = "56%" ]
+  "A" -> "F" [ label = "99%" ]
+}

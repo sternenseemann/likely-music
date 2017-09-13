@@ -4,6 +4,9 @@
 \setmainlanguage{german}
 
 \usepackage{listings}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{float}
 
 \lstset{breaklines=true}
 
@@ -19,10 +22,11 @@
   \begin{center}
       {\LARGE \sf likely music} \\
       {\large Probabilistische Musiknotation} \\
-      Lukas Epple
+      Lukas Epple \\
+      \today
     \end{center}
     \begin{abstract}
-    likely music ist eine Software, um probabilistiche Musik zu notieren und abzupsielen.
+    {\it likely music} ist eine Software, um probabilistiche Musik zu notieren und abzupsielen.
     Probabilistische Musik heißt in diesem Falle, dass die Interpretation der
     vorliegenden Notation deutlich freier ist als bei herkömmlicher Musik und
     auch die Reihenfolge der Noten betrifft. Um dies zu erreichen wird ein eigenes Modell
@@ -34,27 +38,91 @@
     wird, solche Notationen automatisch zu „interpretieren“ bzw. abzuspielen,
     indem eine Notenabfolge gemäß der Notation ausgewürfelt wird.
 
-    likely music kann also sowohl probabilistische Noten erstellen und
-    editieren, als auch diese mittels MIDI abspielen oder als Audiodateien
-    exportieren
+    {\it likely music} kann also sowohl probabilistische Noten erstellen und
+    editieren, als auch mittels MIDI diese abspielen oder als Audiodateien
+    exportieren.
     \end{abstract}
   \end{@twocolumnfalse}
 ]
 
 \section*{Idee}
 
+Der eigentlichen Idee ging ein mehr oder minder gescheitertes Projekt für diesen
+Wettbewerb vorraus. Im Frühjahr diesen Jahres entschied ich mich dieses, eine
+Demo \cite{wikipedia_demoscene}, abzubrechen, einfach weil ich befürchtete, es nicht bis zur Frist
+fertigstellen zu können. Die Motivation für dieses Projekt speiste sich aus
+meiner Faszination für Demos an sich, denn ich hatte bereits im Vorfeld öfters
+mich mit diesen beschäftigt und beim Ansehen der Einsendung von
+Demo-Wettbewerben ein Bedürfnis entwickelt auch so etwas zu entwickeln. Das neue
+Projekt speiste sich aus einer weiteren Faszination von mir, nämlich einer für
+Kunst, die basierend auf Kunst entsteht. Ich erinnere mich oft besonders an
+Kunstinstallationen, die ihr gestaltendes Element durch Zufall oder einen
+undurchschaubaren oder chaotischen Prozess bezieht. Beim Nachdenken über
+Zwölftonmusik, die -- meiner Meinung nach -- ein wenig jenen Elements hat, kam
+mir die Grundidee -- wie ich mich erinnere -- auf dem Gang zwischen
+zwei Schulstunden für {\it likely music}, nämlich ein Modell, um Musik zu
+beschreiben, die zufällig im Vortrag ist.
+
+Das Modell, das ich übertrieben panisch auf ein Stück Notizblock kritzelte,
+sieht Musik als gerichteten Graphen, wobei die Knoten Musiknoten einer
+bestimmten Länge und die Kanten zwischen ihnen die Wahrscheinlichkeit des
+Wechsel von der einen Note zu anderen. Vorstellen kann man sich es in etwa so:
+
+\begin{figure}[h]
+\includegraphics[width=.5\textwidth]{example-graph}
+%\caption{Beispielgraph: Die Noten E, F, G und A mit gewissen Wahrscheinlichkeiten verbunden}
+\end{figure}
+
+In diesem konkreten Graphen sind die Noten E, F, G und A als Knoten vertreten
+(der Einfachheit halber sind die Notenlängen weggelassen). Beispielsweise vom E
+führen zwei Kanten weg, eine zum F mit dreißigprozentiger Wahrscheinlichkeit und
+eine zum A mit siebzigprozentiger Wahrscheinlichkeit, d. h. nach dem E kommt in
+sieben von zehn Fällen das A und in den drei übrigen das F, analog gilt verhält
+es sich mit den anderen Noten.
+
+Diese Darstellung ist in gewisser Weise auch nur eine ausdrucksstärkere Form
+einer normalen Notation, denn ein Weg durch den obigen
+Graphes könnte so aussehen:
+
+\begin{figure}[h]
+\includegraphics[width=.5\textwidth]{example-graph-interpretation}
+\end{figure}
+
+Diese Interpretation, die eine Wahrscheinlichkeit von ca. 15\% hat aufzutreten,
+entspricht einer einfachen, linearen Notation wie sie in einem Gesangsbuch
+stehen könnte. Wir sehen also, dass solche probabilistiche Noten (wie unser
+Graph von vorhin) durch ein Verfahren, das ich einfach in einer Erweiterung des
+Begriffs als Interpretieren bezeichen, auf eine lineare Notation reduziert
+werden kann, die mit einem Instrument oder vom Computer gespielt werden kann. Es
+ist sogar nicht nur eine lineare Notation, sondern -- je nach vorgegebenen Graph
+-- eine Vielzahl ihrer möglich. Beispielsweise wäre eine weitere:
+
+\begin{figure}[h]
+\includegraphics[width=.5\textwidth]{example-graph-interpretation2}
+\end{figure}
+
+Ähnlich gibt es noch viele weiter Möglichkeiten. Zu beachten ist bei den beiden
+Beispielinterpretationen noch: Sie sind nach vier Noten abgeschnitten, denn, da
+von jedem Knoten mindestens eine Kante ausgeht, könnte man den Graphen
+potentiell unendlich lang ablaufen und würde somit eine unendlich lange
+Interpretation generieren.
+
+Was aus dieser Grundidee zu machen war, schien mir von Anfang an recht klar: Als
+Software implementieren, um ein graphisches Interface bereitzustellen, das es
+erlaubt, probabilistische Notation zu erstellen, zu editieren und abzuspielen.
+
 \section*{Umsetzung}
 
 \subsection*{Lizenzierung}
 
-\subsection*{Benutzung}
+\section*{Benutzung}
 
-\subsection*{Weiterentwicklung}
+\section*{Zukünftige Weiterentwicklung}
 
 \clearpage
 \onecolumn
 
-\section*{Appendix}
+\section*{Anhang}
 \subsection*{Quelltext}
 \subsubsection*{Library}
 \noindent {\bf lib/Sound/Likely.hs}
@@ -71,6 +139,8 @@
 \lstinputlisting{../../web/source/custom.css}
 \noindent {\bf web/source/main.js}
 \lstinputlisting{../../web/source/main.js}
+
+\clearpage
 
 \subsection*{Lizenz}
 
@@ -751,5 +821,12 @@ necessary.  For more information on this, and how to apply and follow
 the GNU AGPL, see \texttt{http://www.gnu.org/licenses/}.
 
 \end{enumerate}
+
+\clearpage
+
+\begin{thebibliography}{9}
+\bibitem{wikipedia_demoscene}
+  \url{https://de.wikipedia.org/wiki/Demoszene}
+\end{thebibliography}
 
 \end{document}

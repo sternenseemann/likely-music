@@ -1,0 +1,6 @@
+digraph {
+  rankdir="LR";
+  "E" -> "A" [ label = "100%" ]
+  "A" -> "F" [ label = "100%" ]
+  "F" -> "G" [ label = "100%" ]
+}
