@@ -24,3 +24,23 @@ likely-music.nix
 
 web/dist
 web/node_modules
+
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+*-converted-to.*
+*.dvi
+*.xdv
+.pdf
+*.nav
+*.pre
+*.snm
+*.vrb
