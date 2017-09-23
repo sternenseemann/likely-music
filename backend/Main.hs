@@ -54,7 +54,7 @@ synthWav midi = do
         [ "-a", "file"
         , "-F", outName
         , "-i"
-        , "/usr/share/sounds/sf2/FluidR3_GM.sf2"
+        , "/usr/share/soundfonts/FluidR3_GM.sf2"
         , inName ])
         { std_in = CreatePipe }
   code <- liftIO $ waitForProcess ph
