@@ -117,11 +117,27 @@ function standard_notes(dur) {
     }
 }
 
+function compute_dot_times(dur, denominator) {
+    let baseLog = (b, x) => Math.log(x) / Math.log(b);
+    let term = (dur.numerator * Math.pow(2, denominator)) / dur.denominator;
+    return baseLog(1.5, term);
+}
+
 function musical_symbol(lookup, dur) {
     const dot = '𝅭𝅭 ';
+    let isNat = n => {
+        if (typeof n !== 'number') 
+            return false;
+        return (n >= 0.0) && (Math.floor(n) === n) && n !== Infinity;
+    };
     var standard_symbol = lookup(dur);
+    var dots = [0, 1, 2, 3, 4, 5, 6, 7 ].map(compute_dot_times.bind(dur)).filter(isNat);
     if(standard_symbol !== null) {
         return standard_symbol;
+    } else if (dots.length !== 0) {
+        for(var i = dots[0]; i > 0; i--) {
+
+        }
     } else {
         return dur.toString();
     }
@@ -422,7 +438,7 @@ function fetchInterpretation(params, format) {
         body: jsonRequest
     };
 
-    var myRequest = new Request(`http://localhost:8081/interpretation/${format}`, myInit);
+    var myRequest = new Request(`/interpretation/${format}`, myInit);
 
     return fetch(myRequest).then(res => res.blob());
 }

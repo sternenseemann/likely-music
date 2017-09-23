@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "build:dev": "cp -R node_modules/vis/dist/{vis.min.css,img} dist; cp source/custom.css dist; cp source/index.html dist; browserify source/main.js -t babelify -d -o dist/main.js",
-    "build:prod": "cp -R node_modules/vis/dist/{vis.min.css,img} dist; cp source/custom.css dist; cp source/index.html dist; cross-env NODE_ENV=production browserify source/main.js -t babelify | uglifyjs -c -m > dist/main.js"
+    "build:dev": "mkdir -p dist; cp -R node_modules/vis/dist/{vis.min.css,img} dist; cp source/custom.css dist; cp source/index.html dist; browserify source/main.js -t babelify -d -o dist/main.js",
+    "build:prod": "mkdir -p dist; cp -R node_modules/vis/dist/{vis.min.css,img} dist; cp source/custom.css dist; cp source/index.html dist; cross-env NODE_ENV=production browserify source/main.js -t babelify | uglifyjs -c -m > dist/main.js"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
