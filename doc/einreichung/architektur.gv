@@ -1,0 +1,7 @@
+digraph {
+  rankdir="LR";
+  "Webapp" -> "Server" [ label = "Noten als Graphen" ]
+  "Server" -> "Webapp" [ label = "MIDI- und Sounddateien" ]
+  "Server" -> "Library"
+  "Library" -> "Server"
+}

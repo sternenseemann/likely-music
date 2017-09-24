@@ -6,5 +6,5 @@ digraph {
   "F" -> "E" [ label = "11%" ]
   "G" -> "E" [ label = "44%" ]
   "G" -> "A" [ label = "56%" ]
-  "A" -> "F" [ label = "99%" ]
+  "A" -> "F" [ label = "100%" ]
 }

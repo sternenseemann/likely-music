@@ -214,7 +214,7 @@ unendlich viel Zeit -- der Interpretationsalgorithmus terminiert also nicht.
 Die einfache Antwort auf dieses Problem ist die Begrenzung der Länge der
 Interpretation auf eine gewisse Anzahl von Noten, was sich dank eines
 Sprachfeatures von Haskell -- Lazy Evaluation \cite{wikipedia_laziness} --
-leicht umsetzen lässt. Denn mit Lazy Evalutation wird nur das berechnet, was im
+leicht umsetzen lässt. Denn mit Lazy Evaluation wird nur das berechnet, was im
 Moment benötigt wird. Somit werden zum Beispiel nur die ersten vier benötigten
 Noten berechnet und nicht die unendlich vielen die eigentlich noch darauf folgen
 würden -- genau dies wird durch die Funktion
@@ -222,8 +222,82 @@ würden -- genau dies wird durch die Funktion
 Abschnitt~\nameref{sec:library}, Zeile 79 - 86) realisiert.
 
 Nun können wir probabilistische Musik in Graphen darstellen, diese automatisch
-interpretieren und dank Euterpea nach MIDI exportieren. Was fehlt ist eine
+interpretieren und dank Euterpea nach MIDI exportieren. Was fehlt, ist eine
 angenehme Benutzerschnittstelle.
+
+Zur Technologie für die Benutzerschnittstelle gab es für mich folgende
+Überlegungen: Zum einen sollte es leicht portabel bzw. auf jedem System laufen
+sowie außerdem einen begrenzten Entwicklungsaufwand mit sich bringen, sodass es
+bis zur Abgabe auch fertig sein würde. Ich selbst entwickle meine Software auf
+GNU/Linux, aber zur Abgabe müsste es auf macOS und / oder Windows laufen. Alle
+größeren Frameworks für Graphische Interfaces für GNU/Linux, wie zum Beispiel Qt
+\cite{qt} oder GTK \cite{gtk}, laufen auch auf den anderen großer
+Betriebssystemen. Allerdings bin ich nicht besonders vertraut mit irgendeinem
+dieser Frameworks, außerdem war ich mir nicht sicher, wie stressfrei die
+Verwendung dieser von Haskell aus sein würde (denn klassischerweise verwendet
+man C oder C++). Also entschied ich mich {\it likely music} als Webapplikation,
+die einfach in gängigen Browsern läuft zu implementieren. Das hat einige
+Vorteile für mich, unter anderem, dass es leicht zu testen ist, weil die Browser
+eigentlich überall gleich sind, und, dass ich schon einige Erfahrung in
+Webentwicklung hatte.
+
+Allerdings hatte ich die Library schon in Haskell implementiert, in Browsern
+läuft aber nur JavaScript (ohne größeren Aufwand zumindest). Also musste also
+ein Zwischenstück her um die Kommunikation zwischen der Library und der
+Webapplikation zu realisieren. Ich entschied mich für eine
+Client-Server-Architektur \cite{wikipedia_client_server}, also einen Server, der
+die Interpretation und den Export von Sounddateien für den Client, also die
+Webapplikation, übernimmt. Der Client wiederum müsste sich ausschließlich um ein
+ansprechendes Interface kümmern. Die ungefähre Gesamtarchitektur sieht also nun
+so aus:
+
+\begin{figure}[h]
+  \includegraphics[width=0.5\textwidth]{architektur}
+\end{figure}
+
+Der Server basiert auf den Libraries servant \cite{servant} als Webframework.
+Wie im Abschnitt~\nameref{sec:Backend} zu sehen, besteht das Serverbackend aus
+zwei Dateien Quelltext: In \lstinline[basicstyle=\ttfamily]|Api.hs| wird die
+Struktur der REST-API \cite{wikipedia_rest} definiert, mittels der die
+Webapplikation mit dem Server kommuniziert. Der Server bietet folgende Funktionalität
+an:
+
+\begin{itemize}
+  \item \lstinline[basicstyle=\ttfamily]|/interpretation/mid| An diesen Endpunkt
+    schickt die Webapplikation einen Graphen plus einiger Parameter in Form von JSON
+    \cite{json} und erhält eine Interpretation auf Basis des Algorithmus als
+    MIDI-Datei zurück.
+  \item \lstinline[basicstyle=\ttfamily]|/interpretation/wav| Gleich wie der
+    obige Endpunkt, allerdings wird vorher
+    noch das MIDI mittels eines MIDI-Synthesizers, fluidsynth \cite{fluidsynth},
+    in eine WAV-Datei konvertiert, sodass man es direkt anhören kann.
+  \item Außerdem liefert er die statischen Dateien der Webapplikation, wie das
+    nötige HTML, JavaScript und CSS.
+\end{itemize}
+
+Die erwähnten Parameter sind nur folgende drei:
+
+\begin{itemize}
+  \item Der Anfangsknoten der Interpretation im Graphen,
+    den der Algorithmus benötigt (wie oben besprochen).
+  \item Die Länge der Interpretation als die maximale Anzahl an Noten in der
+    Interpretation.
+  \item Der Startwert für den Pseudozufallszahlengenerator
+    \cite{wikipedia_prng}, der für die Interpretation verwendet werden soll.
+    Da derselbe Startwert in die selbe Interpretation resultiert, erlaubt dies
+    sich interessante Interpretationen zu merken und zum Beispiel zu einer
+    Interpretation noch die MIDI-Version zusätzlich herunterzuladen.
+\end{itemize}
+
+Dies ist auch schon alles, was das Serverbackend tut, denn es ist nur als
+minimaler Aufsatz auf die Library konzipiert. Das meiste für Benutzer relevante
+passiert in der Webapplikation, die folgendermaßen aussieht:
+
+\begin{figure}[h]
+  \includegraphics[width=.5\textwidth]{screenshots/start.png}
+\end{figure}
+
+
 
 \subsection*{Lizenzierung}
 
@@ -286,6 +360,24 @@ angenehme Benutzerschnittstelle.
 
 \bibitem{wikipedia_laziness}
   \url{https://de.wikipedia.org/wiki/Lazy_Evaluation}
+
+\bibitem{wikipedia_client_server}
+  \url{https://en.wikipedia.org/wiki/Client%E2%80%93server_model}
+
+\bibitem{servant}
+  \url{https://hackage.haskell.org/package/servant}
+
+\bibitem{wikipedia_rest}
+  \url{https://de.wikipedia.org/wiki/Representational_State_Transfer}
+
+\bibitem{json}
+  \url{http://json.org/}
+
+\bibitem{qt}
+  \url{https://www.qt.io/}
+
+\bibitem{gtk}
+  \url{https://www.gtk.org/}
 \end{thebibliography}
 
 \clearpage
