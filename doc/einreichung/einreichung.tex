@@ -8,7 +8,8 @@
 \usepackage{graphicx}
 \usepackage{float}
 
-\lstset{breaklines=true}
+\lstset{breaklines=true,
+        numbers=left}
 
 \title{likely music}
 \author{Lukas Epple}
@@ -113,11 +114,179 @@ erlaubt, probabilistische Notation zu erstellen, zu editieren und abzuspielen.
 
 \section*{Umsetzung}
 
+Gleich zu Beginn war klar, dass Haskell die Programmiersprache der Wahl werden
+sollte. Sie ist die Sprache, die ich in den letzten Jahren am aktivsten
+verwendet habe und mir einiges bietet, statische Typisierung, um Fehler
+vorzubeugen, ein expressives Typsystem, das es erlaubt, Daten besser zu
+strukturieren, und funktionale Programmierparadigmen, die mir persönlich sehr
+gut taugen, um mal einige zu nennen.
+
+Zunächst konzentrierte ich mich darauf, den Graphen und den
+Interpretationsalgorithmus als Bibliothek zu implementieren. In der ersten
+Iteration dieser Bibliothek, noch {\it probable music} genannt, begann ich auch
+einen eigenen Softwaresynthesizer zu implementieren, der flexibel auf
+verschiedenen Plattformen und zu verschiedenen Zwecken verwendet werden kann.
+Der Synthesizer konnte -- gegeben ein Algorithmus dafür -- jegliche Daten in
+Töne umwandeln, was interessante Möglichkeiten ergab, sich außerhalb des
+Zwölftonsystems zu bewegen. Die Tonerzeugung basierte dann auf einer freien
+Monade \cite{free_monad}, die die Instruktionen ›Warten‹ und ›Abspielen‹ kannte.
+Indem man diese Instruktionen für verschiedene Audiosystem, wie SDL \cite{sdl},
+Jack \cite{jack} oder auch Audiodateien wie WAV \cite{wav}, implementierte,
+konnte man verschiedene Plattformen unterstützen. Allerdings gestaltete es sich
+schwierig, einen gut klingenden Synthesizer zu schreiben schwierig, denn die
+Messlatte ist im Vergleich zu realen Instrumenten hoch. Hinzu kamen noch einige
+Performance-Probleme mit meinem macschinennahem Audio-Code.
+
+Also entschied ich mich, die Library vor allem auf den Graphen und die
+dazugehörigen Algorithmen zu fokusieren und zur Tonerzeugung eine geeignete
+Abstraktion zu verwenden, die diese zu vereinfachern. Ich habe hierfür MIDI
+gewählt, eine Technologie, die schon lang in allen Arten von Software und
+Hardware zur Musikproduktion verwendet wird, entschieden. MIDI basiert auf einer
+Abfolge von zeitlich abgestimmten Nachrichten, wie zum Beispiel ›Note C an‹ oder
+›Note C aus‹. Aufgrund dieser Nachrichten kann man die Erzeugung und das
+Abspielen von Musik zwischen mehreren Programmen aufteilen, außerdem erlaubt es
+die bereits existierende Infrastruktur für MIDI-Verarbeitung zu verwenden, die
+sehr beachtlich ist. Für MIDI verwendet {\it likely music} die
+Open-Source-Bibliothek Euterpea\footnote{Ich musste allerdings aufgrund von
+Inkompatibilitäten mit den aktuellen Haskell-Paketen diese selbst beheben
+\cite{euterpea_fork}. Diese Änderung wartet \cite{euterpea_issue} aktuell (Stand
+23.09.2017) darauf vom Hauptentwickler
+in den Code von Euterpea übernommen zu werden.}
+\cite{euterpea}, die unter anderem eine kleine Abstraktion über MIDI enthält.
+Sie erlaubt es, in einem internen Format Musik zu
+konstruieren und anschließend als MIDI zu exportieren bzw. an ein anderes
+Programm zur Weiterverarbeitung zu schicken.
+
+Bei der Darstellung des Graphen habe ich mich vor allem darauf konzentriert,
+dass der Interpretationsalgorithmus, also das (zufällige) Ablaufen des Graphen,
+möglichst effizient zu machen. Da es sich um einen gerichten Graphen handelt,
+ist es besonders wichtig zu wissen, wohin man von einem gegebenen Knoten aus
+gelangen kann bzw. welche Kanten von einem Knoten weggehen. So gelangt man in unserem Beispiel
+aus dem vorherigen Kapitel vom Knoten mit dem E zu den Knoten mit F und
+A. Es muss also möglichst effizient sein, die Kanten nachzuschlagen, die von
+einem Knoten {\it wegführen}. Mit der Datenstruktur {\it Map} \cite{map} (im
+deutschen Sprachgebrauch typischerweise {\it assoziative Datenfeld} bzw. {\it
+assoziatives Array}) kann
+man genau das sehr leicht realisieren, indem man die Knoten als Schlüssel und
+eine Liste von Kanten, die vom Schlüssel weggehen, als Elemente verwendet. Wenn
+der Algorithmus nun einen Knoten nachschlägt, erhält er direkt die Kanten, die
+von diesem Knoten weggehen und somit auch die nächsten möglichen Knoten. Dies
+ist die einzige Information, die in jedem Schritt benötigt wird. Die Operation
+des Nachschlagen hat in einem {\it Map} die Komplexität $O(\log n)$
+\cite{map_lookup}, d. h. die Zeit, die benötigt wird, um ein Element
+nachzuschlagen, steigt mit dem Wachsen der Datenstruktur logarithmisch
+(d. h. weniger starkes Wachstum als linear!), wodurch auch das Interpretieren 
+großer Graphen ziemlich schnell bleibt. Der Code für die Datenstruktur findet
+sich im Abschnitt~\nameref{sec:library}, Zeile 30 bis 43.
+
+Der Interpretationsalgorithmus selbst ist rekursiv \cite{wikipedia_rekursion} gestaltet und findet sich in
+der Funktion \lstinline[basicstyle=\ttfamily]|interpretation|, siehe
+Abschnitt~\nameref{sec:library}, Zeile 52 bis 60. Diese Funktion benötigt
+einen intialisierten Pseudozufallszahlengenerator
+\cite{random_random_gen,wikipedia_prng}, den
+zu interpretierenden Graphen in der eben besprochenen Datenstruktur und einen
+Startknoten und gibt die resultierende Interpretation im MIDI-Format von
+Euterpea \cite{euterpea} zurück. Zunächst wird der Startknoten im Graphen
+nachgeschlagen, so werden die Kanten bzw. die nächsten möglichen Knoten
+erhalten. Nun gibt es zwei Möglichkeiten für den weiteren Verlauf:
+\begin{enumerate}
+  \item Es gibt keine Kanten, die von diesem Knoten ausgehen. Also wird die
+    bisher generierte Interpretation einfach zurückgegeben, die Funktion
+    terminiert.
+  \item Wenn es eine oder mehr Kanten vom Knoten aus gibt, wird eine (reelle) Zufallszahl
+    zwischen $0$ und $1$ berechnet und mittels der Hilfsfunktion \lstinline[basicstyle=\ttfamily]|edgeForRoll|
+    (siehe Abschnitt~\nameref{sec:library}, Zeile 62 - 67) die
+    Kante erhalten, die gemäß des zufälligen Ergebnis als nächstes abgelaufen werden
+    soll. Nun ergibt sich das gleiche Problem wie zu Beginn der
+    Interpretation: Man kennt einen Knoten und will wissen wie es weitergeht. Also
+    wird nach der Ermittlung des zweiten Knotens die MIDI-Nachrichten aus dem
+    Startknoten extrahiert und dann der Interpretationsalgorithmus nochmal bzw.
+    rekursiv aufgerufen -- nur mit dem Folgeknoten als Startknoten -- dessen
+    Ergebnis wird an die aktuellen MIDI-Nachrichten angehängt, was jener Aufruf auch
+    seinerseits wieder macht. So entsteht rekursiv eine (potentiell unendliche)
+    Verkettung von MIDI-Nachrichten, die letztlich die finale Interpretation ergeben.
+\end{enumerate}
+
+Da die meisten Graphen vermutlich vollständig untereinander verbunden sein
+werden wie zum Beispiel der Beispielgraph im ersten Abschnitt, entstehen unendlich
+lange Interpretationen. Diese zu erstellen benötigt natürgemäß natürlich auch
+unendlich viel Zeit -- der Interpretationsalgorithmus terminiert also nicht.
+Die einfache Antwort auf dieses Problem ist die Begrenzung der Länge der
+Interpretation auf eine gewisse Anzahl von Noten, was sich dank eines
+Sprachfeatures von Haskell -- Lazy Evaluation \cite{wikipedia_laziness} --
+leicht umsetzen lässt. Denn mit Lazy Evalutation wird nur das berechnet, was im
+Moment benötigt wird. Somit werden zum Beispiel nur die ersten vier benötigten
+Noten berechnet und nicht die unendlich vielen die eigentlich noch darauf folgen
+würden -- genau dies wird durch die Funktion
+\lstinline[basicstyle=\ttfamily]|takeNotes| (siehe
+Abschnitt~\nameref{sec:library}, Zeile 79 - 86) realisiert.
+
+Nun können wir probabilistische Musik in Graphen darstellen, diese automatisch
+interpretieren und dank Euterpea nach MIDI exportieren. Was fehlt ist eine
+angenehme Benutzerschnittstelle.
+
 \subsection*{Lizenzierung}
 
 \section*{Benutzung}
 
 \section*{Zukünftige Weiterentwicklung}
+
+\section*{Links}
+
+\begin{itemize}
+\item Der gesamte Quelltext \url{https://github.com/sternenseemann/likely-music}
+\item Eine laufende Instanz von {\it likely music} \url{https://likely.sternen.space}
+\end{itemize}
+
+\begin{thebibliography}{9}
+\bibitem{wikipedia_demoscene}
+  \url{https://de.wikipedia.org/wiki/Demoszene}
+
+\bibitem{free_monad}
+  \url{http://www.haskellforall.com/2012/07/purify-code-using-free-monads.html}
+
+\bibitem{jack}
+  \url{http://www.jackaudio.org/}
+
+\bibitem{sdl}
+  \url{https://www.libsdl.org/index.php}
+
+\bibitem{wav}
+  \url{https://de.wikipedia.org/wiki/RIFF_WAVE}
+
+\bibitem{midi}
+  \url{https://www.midi.org/}
+
+\bibitem{wikipedia_midi}
+  \url{https://de.wikipedia.org/wiki/Musical_Instrument_Digital_Interface}
+
+\bibitem{euterpea}
+  \url{https://hackage.haskell.org/package/Euterpea}
+
+\bibitem{euterpea_fork}
+  \url{https://github.com/sternenseemann/Euterpea2}
+
+\bibitem{euterpea_issue}
+  \url{https://github.com/Euterpea/Euterpea2/issues/16}
+
+\bibitem{map}
+  \url{https://hackage.haskell.org/package/containers-0.5.10.2/docs/Data-Map-Lazy.html#t:Map}
+
+\bibitem{map_lookup}
+  \url{https://hackage.haskell.org/package/containers-0.5.10.2/docs/Data-Map-Lazy.html#v:lookup}
+
+\bibitem{random_random_gen}
+  \url{https://hackage.haskell.org/package/random-1.1/docs/System-Random.html#t:RandomGen}
+
+\bibitem{wikipedia_prng}
+  \url{https://en.wikipedia.org/wiki/Pseudorandom_number_generator}
+
+\bibitem{wikipedia_rekursion}
+  \url{https://de.wikipedia.org/wiki/Rekursion}
+
+\bibitem{wikipedia_laziness}
+  \url{https://de.wikipedia.org/wiki/Lazy_Evaluation}
+\end{thebibliography}
 
 \clearpage
 \onecolumn
@@ -125,18 +294,24 @@ erlaubt, probabilistische Notation zu erstellen, zu editieren und abzuspielen.
 \section*{Anhang}
 \subsection*{Quelltext}
 \subsubsection*{Library}
+\label{sec:library}
 \noindent {\bf lib/Sound/Likely.hs}
 \lstinputlisting[language=haskell]{../../lib/Sound/Likely.hs}
+\clearpage
 \subsubsection*{Backend}
 \noindent {\bf backend/Api.hs}
 \lstinputlisting[language=haskell]{../../backend/Api.hs}
+\vspace{20pt}
 \noindent {\bf backend/Main.hs}
 \lstinputlisting[language=haskell]{../../backend/Main.hs}
+\clearpage
 \subsubsection*{Web}
 \noindent {\bf web/source/index.html}
 \lstinputlisting[language=html]{../../web/source/index.html}
+\clearpage
 \noindent {\bf web/source/custom.css}
 \lstinputlisting{../../web/source/custom.css}
+\clearpage
 \noindent {\bf web/source/main.js}
 \lstinputlisting{../../web/source/main.js}
 
@@ -821,12 +996,5 @@ necessary.  For more information on this, and how to apply and follow
 the GNU AGPL, see \texttt{http://www.gnu.org/licenses/}.
 
 \end{enumerate}
-
-\clearpage
-
-\begin{thebibliography}{9}
-\bibitem{wikipedia_demoscene}
-  \url{https://de.wikipedia.org/wiki/Demoszene}
-\end{thebibliography}
 
 \end{document}
