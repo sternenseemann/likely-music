@@ -256,7 +256,7 @@ so aus:
 \end{figure}
 
 Der Server basiert auf den Libraries servant \cite{servant} als Webframework.
-Wie im Abschnitt~\nameref{sec:Backend} zu sehen, besteht das Serverbackend aus
+Wie im Abschnitt~\nameref{sec:backend} zu sehen, besteht das Serverbackend aus
 zwei Dateien Quelltext: In \lstinline[basicstyle=\ttfamily]|Api.hs| wird die
 Struktur der REST-API \cite{wikipedia_rest} definiert, mittels der die
 Webapplikation mit dem Server kommuniziert. Der Server bietet folgende Funktionalität
@@ -391,6 +391,7 @@ passiert in der Webapplikation, die folgendermaßen aussieht:
 \lstinputlisting[language=haskell]{../../lib/Sound/Likely.hs}
 \clearpage
 \subsubsection*{Backend}
+\label{sec:backend}
 \noindent {\bf backend/Api.hs}
 \lstinputlisting[language=haskell]{../../backend/Api.hs}
 \vspace{20pt}
