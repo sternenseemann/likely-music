@@ -2,7 +2,7 @@ name:                likely-music
 version:             0.1.0.0
 -- synopsis:            
 -- description:         
-license:             GPL-3
+license:             AGPL-3
 license-file:        LICENSE
 author:              sternenseemann
 maintainer:          git@lukasepple.de
