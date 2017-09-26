@@ -63,7 +63,8 @@ body {
 }
 
 #sidebar a {
-  padding: 0.75rem;
+  padding-bottom: 0.75rem;
+  padding-top: 0.75rem;
   display: inline-block;
   text-decoration: none;
   color: white;
