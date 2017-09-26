@@ -7,8 +7,10 @@
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{wrapfig}
 
 \lstset{breaklines=true,
+        basicstyle=\footnotesize\ttfamily,
         numbers=left}
 
 \title{likely music}
@@ -188,7 +190,7 @@ großer Graphen ziemlich schnell. Der Code für die Datenstruktur findet
 sich im Abschnitt~\nameref{sec:library}, Zeile 30 bis 43.
 
 Der Interpretationsalgorithmus selbst ist rekursiv \cite{wikipedia_rekursion} gestaltet und findet sich in
-der Funktion \lstinline[basicstyle=\ttfamily]|interpretation|, siehe
+der Funktion \lstinline|interpretation|, siehe
 Abschnitt~\nameref{sec:library}, Zeile 52 bis 60. Diese Funktion benötigt
 einen initialisierten Pseudozufallszahlengenerator
 \cite{random_random_gen,wikipedia_prng}, den
@@ -202,7 +204,7 @@ erhalten. Nun gibt es zwei Möglichkeiten für den weiteren Verlauf:
     bisher generierte Interpretation einfach zurückgegeben, die Funktion
     terminiert.
   \item Wenn es eine oder mehr Kanten vom Knoten aus gibt, wird eine (reelle) Zufallszahl
-    zwischen $0$ und $1$ berechnet und mittels der Hilfsfunktion \lstinline[basicstyle=\ttfamily]|edgeForRoll|
+    zwischen $0$ und $1$ berechnet und mittels der Hilfsfunktion \lstinline|edgeForRoll|
     (siehe Abschnitt~\nameref{sec:library}, Zeile 62 - 67) die
     Kante erhalten, die gemäß des zufälligen Ergebnis als nächstes abgelaufen werden
     soll. Nun ergibt sich das gleiche Problem wie zu Beginn der
@@ -226,7 +228,7 @@ leicht umsetzen lässt. Denn mit Lazy Evaluation wird nur das berechnet, was im
 Moment benötigt wird. Somit werden zum Beispiel nur die ersten vier benötigten
 Noten berechnet und nicht die unendlich vielen die eigentlich noch darauf folgen
 würden -- genau dies wird durch die Funktion
-\lstinline[basicstyle=\ttfamily]|takeNotes| (siehe
+\lstinline|takeNotes| (siehe
 Abschnitt~\nameref{sec:library}, Zeile 79 - 86) realisiert.
 
 Nun können wir probabilistische Musik in Graphen darstellen, diese automatisch
@@ -265,20 +267,20 @@ so aus:
 
 Der Server basiert auf den Libraries servant \cite{servant} als Webframework.
 Wie im Abschnitt~\nameref{sec:backend} zu sehen, besteht das Serverbackend aus
-zwei Dateien Quelltext: In \lstinline[basicstyle=\ttfamily]|Api.hs| wird die
+zwei Dateien Quelltext: In \lstinline|Api.hs| wird die
 Struktur der REST-API \cite{wikipedia_rest} definiert, mittels der die
 Webapplikation mit dem Server kommuniziert. Der Server bietet folgende Funktionalität
 an:
 
 \begin{itemize}
-  \item \lstinline[basicstyle=\ttfamily]|/interpretation/mid| An diesen Endpunkt
+  \item \lstinline|/interpretation/mid| An diesen Endpunkt
     schickt die Webapplikation einen Graphen plus einiger Parameter in Form von JSON
     \cite{json} und erhält eine Interpretation auf Basis des Algorithmus als
     MIDI-Datei zurück.
-  \item \lstinline[basicstyle=\ttfamily]|/interpretation/wav| Gleich wie der
+  \item \lstinline|/interpretation/wav| Gleich wie der
     obige Endpunkt, allerdings wird vorher
-    noch das MIDI mittels eines MIDI-Synthesizers, fluidsynth \cite{fluidsynth},
-    in eine WAV-Datei konvertiert, so dass man es direkt anhören kann.
+    noch das MIDI mittels des MIDI-Synthesizers fluidsynth \cite{fluidsynth}
+    in eine WAV-Datei konvertiert, so dass man die Interpretation direkt anhören kann.
   \item Außerdem liefert der Server die statischen Dateien der Webapplikation, wie das
     nötige HTML, JavaScript und CSS.
 \end{itemize}
@@ -318,26 +320,60 @@ Wenn ein Knoten oder eine Kante geändert wird, wird diese Änderung in eine
 Zustandsvariable
 der Applikation mitübernommen und die Zusatzinformationen der Knoten und
 Kanten, also Notenlänge und Tonhöhe (Knoten) bzw. Wahrscheinlichkeit (Kante),
-von dem*der Benutzer*in abgefragt und ebenfalls abgespeichert. So gelingt es, den
+von dem*der Benutzer*in in einer Einblendung abgefragt und ebenfalls
+abgespeichert. So gelingt es, den
 Grapheditor so zu integrieren, dass der Graph zur Kommunikation mit dem Server
-bereitsteht. Die doppelte Speicherung der reinen Graphdaten kommt daher, dass
+und sonstiger Verarbeitung zur Verfügung steht. Die doppelte Speicherung der
+reinen Graphdaten kommt daher, dass
 vis.js es leider nicht erlaubt, die bereits im Editor vorhandenen Daten
-abzufragen, daher büßt die Architektur der Applikation ein wenig an Eleganz ein.
+abzufragen, daher büßt die Architektur der Applikation leider ein wenig
+an Eleganz ein.
 
 In der Seitenspalte passiert dann alles, was relevant für die Verarbeitung der
 links entstehenden Notation ist. Zum einen kann der Notationsgraph abgespeichert
 oder ein gespeicherter geöffnet werden, zum anderen ist es möglich,
 Interpretationen generieren zu lassen, diese direkt im Browser abzuspielen oder
-als MIDI oder WAV herunterzuladen.
+als MIDI oder WAV herunterzuladen. Die Seitenspalte ist im folgenden abgebildet.
+
+\begin{wrapfigure}{r}{.3\textwidth}
+  \begin{center}
+    \includegraphics[width=.25\textwidth]{screenshots/sidebar}
+  \end{center}
+\end{wrapfigure}
 
 Das Speichern und Öffnen von Notationen basiert auf JSON-Dateien
 \cite{json} in bestimmten Format, die als
-\lstinline[basicstyle=\ttfamily]|<dateiname>.score.json| abgespeichert werden.
+\lstinline|<dateiname>.score.json| abgespeichert werden.
 Eine solche enthält eine Liste aller Knoten plus Zusatzinformationen und eine
 Liste aller Kanten plus Zusatzinformationen. Wie eine solche aussehen kann,
 sieht man im Abschnitt~\nameref{sec:web} (letzte Datei). Genau dieses Format
 wird übrigens auch zur Kommunikation mit dem Server verwendet, da es den Graphen
 verlustlos beschreiben kann.
+
+Der Rest der Applikation kümmert sich vor allem um Interpretation und Export
+dieser. Oben in der Seitenleiste kann man die drei erwähnten Parameter setzen.
+Der Startknoten wird über markieren dessen im Editor und klicken des
+entsprechenden Buttons gesetzt und kann durch Hervorhebung im Graphen auch
+angezeigt werden. Der Startwert kann manuell eingegeben (etwa, wenn man
+sich einen besonderen notiert hat) oder ein zufälliger durch Verwendung des
+Buttons neben dem Feld verwendet werden. Die maximale Interpretationslänge ist
+dann darunter und wird ganz unspektakulär eingegeben.
+
+Darunter befindet sich ein Audioplayer, mit dem erstellte Interpretationen
+direkt im Browser angehört werden können. Wenn man den Aktualisierungsbutton
+links betätigt, nimmt die Applikation alle Parameter sowie den aktuellen Graphen
+und sendet mithilfe der JavaScript Fetch API \cite{fetch_api} den Graphen
+mitsamt der Parameter an den bereits erwähnten Endpunkt
+\lstinline|/interpretation/wav|. Nach diesem Vorgang, der merklich Zeit benötigt,
+da fluidsynth \cite{fluidsynth} erst das WAV generieren muss, wird die
+Audiodatei in den Player geladen und kann direkt angehört werden.
+
+Gleich unter dem Player kann man die Interpretation als MIDI oder WAV
+herunterladen. Dazu wählt man rechts eines der beiden Formate aus und klickt
+links auf „Download“. Intern funktioniert dies genau gleich wie der Player, bloß
+dass die jeweils der Endpunkte für das entsprechende Format verwendet wird und
+die Datei dann direkt heruntergeladen wird statt im Browser weiterverwendet
+wird.
 
 \subsection*{Lizenzierung}
 
@@ -375,8 +411,6 @@ selbstverständlich geworden, Zugang zu Software, die mehrere hundert Euro
 kostet, aber mit Sicherheit nicht. Der Preis von Software, die ein Konzern
 vielleicht auch irgendwann verwahrlosen lässt, ist sicher für viele eine Hürde,
 vielleicht sogar eine Hürde an diesem Wettbewerb teilzunehmen.
-
-\section*{Benutzung}
 
 \section*{Zukünftige Weiterentwicklung}
 
@@ -419,6 +453,18 @@ Diese Änderungen stehen nicht im Konflikt mit dem bisherigen Grundkonzept und -
     langsam) aushalten würde. Daher möchte ich darum bitten, diesen Link nicht
     zu veröffentlichen, sondern, falls etwas in der Art gewünscht sein sollte,
     mit mir Rücksprache zu halten.} von {\it likely music} \url{https://likely.sternen.space}
+\end{itemize}
+
+\section*{Danksagung}
+
+\begin{itemize}
+  \item Meinem Lehrer Bastian Walcher für seine Betreung meines Projekt und derer
+    meiner Mitschüler*innen.
+  \item Lukas G. für sein Korrekturlesen.
+  \item Christine S. für ihr Korrekturlesen.
+  \item kohlrabi dafür, dass er sich mit mir über Musikprogrammierung und
+    -theorie unterhielt und Ideen zu meinem Projekt beisteuerte.
+  \item all dafür, dass er mich in Richtung Musikprogrammierung stieß.
 \end{itemize}
 
 \begin{thebibliography}{9}
@@ -499,6 +545,9 @@ Diese Änderungen stehen nicht im Konflikt mit dem bisherigen Grundkonzept und -
 
 \bibitem{wikipedia_callback}
   \url{https://en.wikipedia.org/wiki/Callback_(computer_programming)}
+
+\bibitem{fetch_api}
+  \url{https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API}
 
 \bibitem{agpl}
   \url{https://www.gnu.org/licenses/agpl-3.0.html}

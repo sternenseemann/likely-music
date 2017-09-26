@@ -1,6 +1,6 @@
 # likely music
 
-![screenshot on 2017-09-05](screenshot.png)
+![screenshot of the application](doc/einreichung/screenshots/start.png)
 
 ## TODO
 
