@@ -1,5 +1,6 @@
 \documentclass[a4paper,twocolumn]{article}
 
+\usepackage[top=1.5cm, bottom=1.5cm]{geometry}
 \usepackage{polyglossia}
 \setmainlanguage{german}
 
@@ -375,6 +376,11 @@ dass die jeweils der Endpunkte für das entsprechende Format verwendet wird und
 die Datei dann direkt heruntergeladen wird statt im Browser weiterverwendet
 wird.
 
+Des weiteren werden der aktuelle Graph und die Parameter regelmäßig mittels
+LocalStorage \cite{localstorage} zwischengespeichert, die beim Öffnen der
+Webapplikation abgefragt wird. So ist gleich der letzte Stand vom letzten mal
+geladen und man kann direkt weiterarbeiten.
+
 \subsection*{Lizenzierung}
 
 Der gesamte Quelltext von {\it likely music} ist unter der
@@ -549,6 +555,9 @@ Diese Änderungen stehen nicht im Konflikt mit dem bisherigen Grundkonzept und -
 \bibitem{fetch_api}
   \url{https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API}
 
+\bibitem{localstorage}
+  \url{https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API}
+
 \bibitem{agpl}
   \url{https://www.gnu.org/licenses/agpl-3.0.html}
 
@@ -560,6 +569,80 @@ Diese Änderungen stehen nicht im Konflikt mit dem bisherigen Grundkonzept und -
 \onecolumn
 
 \section*{Anhang}
+
+\subsection*{Screenshots}
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=.7\textwidth]{screenshots/add-node.png}
+  \end{center}
+  \caption{Hinzufügen eines Knotens}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=.7\textwidth]{screenshots/add-edge-drag.png}
+  \end{center}
+  \caption{Verbinden zweier Knoten mit einer Kante}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=.7\textwidth]{screenshots/add-edge.png}
+  \end{center}
+  \caption{Setzen der Kanteneigenschaften}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=.7\textwidth]{screenshots/starting-node.png}
+  \end{center}
+  \caption{Setzen des Startknoten durch Auswählen des Knotens}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=.7\textwidth]{screenshots/new-seed.png}
+  \end{center}
+  \caption{Auswürfeln eines neuen Startwerts per Knopfdruck}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=.7\textwidth]{screenshots/length.png}
+  \end{center}
+  \caption{Setzen der maximalen Interpretationslänge}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=.7\textwidth]{screenshots/reload-player.png}
+  \end{center}
+  \caption{Laden der Interpretation in den Player}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=.7\textwidth]{screenshots/download-midi.png}
+  \end{center}
+  \caption{Download der Interpretation als MIDI-Datei}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=.7\textwidth]{screenshots/save.png}
+  \end{center}
+  \caption{Speichern der Notation}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[width=.7\textwidth]{screenshots/load.png}
+  \end{center}
+  \caption{Laden einer Notation}
+\end{figure}
+
+\clearpage
+
 \subsection*{Quelltext}
 \subsubsection*{Library}
 \label{sec:library}
