@@ -3,7 +3,7 @@ version:             0.1.0.0
 -- synopsis:            
 -- description:         
 license:             AGPL-3
-license-file:        LICENSE
+license-file:        COPYING
 author:              sternenseemann
 maintainer:          git@lukasepple.de
 -- copyright:           
