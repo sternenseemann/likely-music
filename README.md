@@ -39,3 +39,7 @@ yarn run build:dev
 cd ..
 cabal run likely-music-backend
 ```
+
+## I want the library non AGPL-licensed
+
+Please approach me.
