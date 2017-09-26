@@ -64,28 +64,28 @@ function standard_rests(dur) {
     if(dur.numerator === 1) {
         switch(dur.denominator) {
             case 1:
-                return '𝄻';
+                return '𝄻 ';
                 break;
             case 2:
-                return '𝄼';
+                return '𝄼 ';
                 break;
             case 4:
-                return '𝄽';
+                return '𝄽 ';
                 break;
             case 8:
-                return '𝄾';
+                return '𝄾 ';
                 break;
             case 16:
-                return '𝄿';
+                return '𝄿 ';
                 break;
             case 32:
-                return '𝅀';
+                return '𝅀 ';
                 break;
             case 64:
-                return '𝅁'
+                return '𝅁 '
                 break;
             case 128:
-                return '𝅂'
+                return '𝅂 '
                 break;
             default:
                 return null;
@@ -100,61 +100,67 @@ function standard_notes(dur) {
     if(dur.numerator === 1) {
         switch(dur.denominator) {
             case 1:
-                return '𝅝';
+                return '𝅝 ';
                 break;
             case 2:
-                return '𝅗𝅥';
+                return '𝅗𝅥 ';
                 break;
             case 4:
-                return '𝅘𝅥';
+                return '𝅘𝅥 ';
                 break;
             case 8:
-                return '𝅘𝅥𝅮';
+                return '𝅘𝅥𝅮 ';
                 break;
             case 16:
-                return '𝅘𝅥𝅯';
+                return '𝅘𝅥𝅯 ';
                 break;
             case 32:
-                return '𝅘𝅥𝅰';
+                return '𝅘𝅥𝅰 ';
                 break;
             case 64:
-                return '𝅘𝅥𝅱'
+                return '𝅘𝅥𝅱 '
                 break;
             case 128:
-                return '𝅘𝅥𝅲'
+                return '𝅘𝅥𝅲 '
                 break;
             default:
                 return null;
                 break;
         }
     } else if(dur.numerator === 2 && dur.denominator === 1) {
-        return '𝅜'
+        return '𝅜 '
     } else {
         return null;
     }
 }
 
-function compute_dot_times(dur, denominator) {
-    let baseLog = (b, x) => Math.log(x) / Math.log(b);
-    let term = (dur.numerator * Math.pow(2, denominator)) / dur.denominator;
-    return baseLog(1.5, term);
+function compute_dot_times(dur, den) {
+    let term = den * ( (2 / den) - (dur.numerator / dur.denominator));
+    return [ den, -Math.log2(term) ];
 }
 
 function musical_symbol(lookup, dur) {
-    const dot = '𝅭𝅭 ';
+    // unicode characters sometimes hide from you!
+    const dot = '𝅭 ';
     let isNat = n => {
-        if (typeof n !== 'number') 
+        if (typeof n !== 'number')
             return false;
         return (n >= 0.0) && (Math.floor(n) === n) && n !== Infinity;
     };
     var standard_symbol = lookup(dur);
-    var dots = [0, 1, 2, 3, 4, 5, 6, 7 ].map(compute_dot_times.bind(dur)).filter(isNat);
+    var bla = [0, 1, 2, 3, 4, 5, 6, 7 ].map(compute_dot_times.bind(this, dur));
+    console.log(bla);
+    var dots = bla.filter(([den, dots]) => isNat(dots));
+    console.log(dots);
+
     if(standard_symbol !== null) {
         return standard_symbol;
     } else if (dots.length !== 0) {
-        for(var i = dots[0]; i > 0; i--) {
-
+        var symbol = lookup(new Rational(1, dots[0][0])) + ' ';
+        for(var i = dots[0][1]; i > 0; i--) {
+            symbol = symbol + dot;
         }
+        return symbol;
     } else {
         return dur.toString();
     }
@@ -181,8 +187,7 @@ class Music {
 
     nodeText() {
         if(this.pitch === 'Rest') {
-            // alignment using a space! #justvisjsthings
-            return ` ${musical_symbol(standard_rests, this.dur)}`;
+            return `${musical_symbol(standard_rests, this.dur)} Rest`;
         } else {
             return `${musical_symbol(standard_notes, this.dur)}   ${displayPitch(this.pitch)}${this.octave}`
         }
@@ -540,6 +545,7 @@ function downloadInterpretation(format) {
             fetchInterpretation(params, format).then(file => {
                 var url = URL.createObjectURL(file);
                 download(url, `export.${format}`);
+                URL.revokeObjectURL(url);
             });
         } catch(e) {
             alert('An error occured while contacting the API: ' + e);
@@ -550,7 +556,12 @@ function downloadInterpretation(format) {
 function reloadPlayer() {
     var params = completeGatherParams();
     if(params !== null) {
+        if(document.getElementById('player').src) {
+            URL.revokeObjectURL(document.getElementById('player').src);
+        }
+
         document.getElementById('player').src = null;
+
         try {
             fetchInterpretation(params, 'wav').then(file => {
                 var url = URL.createObjectURL(file);
