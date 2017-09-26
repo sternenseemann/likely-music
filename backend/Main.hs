@@ -84,8 +84,8 @@ synthWav midi = do
 
 tempFile :: String -> Handler FilePath
 tempFile ext = try 0
-  where maxtries = 100
-        try :: Integer -> Handler FilePath
+  where maxtries = maxBound
+        try :: Int -> Handler FilePath
         try n
           | n < maxtries = do
             progName <- liftIO $ getProgName
@@ -94,7 +94,7 @@ tempFile ext = try 0
             if exists
               then try (n + 1)
               else pure path
-          | otherwise = throwError err500
+          | otherwise = throwError err500 { errBody = "no temp files" }
 app :: Application
 app = serve api server
 
