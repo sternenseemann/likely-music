@@ -24,22 +24,24 @@
       {\LARGE \sf likely music} \\
       {\large Probabilistische Musiknotation} \\
       Lukas Epple \\
+      {\small \href{mailto:post@lukasepple.de}{post@lukasepple.de}} \\
       \today
     \end{center}
     \begin{abstract}
-    {\it likely music} ist eine Software, um probabilistiche Musik zu notieren und abzupsielen.
-    Probabilistische Musik heißt in diesem Falle, dass die Interpretation der
+    {\it likely music} ist eine Software, um probabilistische Musik zu notieren
+      und abzuspielen.
+    Probabilistische Musik bedeutet in diesem Falle, dass die Interpretation der
     vorliegenden Notation deutlich freier ist als bei herkömmlicher Musik und
-    auch die Reihenfolge der Noten betrifft. Um dies zu erreichen wird ein eigenes Modell
-    von Musiknotation verwendet. An Stelle der Lineare Reihenfolge von Noten
-    bzw. Akkorden tritt ein Graph, in dem die Noten (bzw. Akkorde) die Knoten
-    und die Kanten die möglichen Übergange zwischen diesen darstellen, wobei
-    jede Kante eine gewisse Wahrscheinlichkeit zugeordnet ist. Dieses Modell ist
+    auch die Reihenfolge der Noten betrifft. Um dies zu erreichen, wird ein eigenes Modell
+    von Musiknotation verwendet. Anstelle von linearer Reihenfolge von Noten
+    bzw. Akkorden tritt ein gerichteter Graph, in dem die Noten (bzw. Akkorde) die Knoten
+    und die möglichen Übergange zwischen diesen die Kanten darstellen, wobei
+    jeder Kante eine gewisse Wahrscheinlichkeit zugeordnet ist. Dieses Modell ist
     unter anderem sehr gut von einem Computer zu fassen, wodurch es möglich
-    wird, solche Notationen automatisch zu „interpretieren“ bzw. abzuspielen,
-    indem eine Notenabfolge gemäß der Notation ausgewürfelt wird.
+    ist, solche Notationen automatisch zu „interpretieren“ oder abzuspielen:
+    Eine konkrete Notenabfolge wird gemäß der Notation ausgewürfelt.
 
-    {\it likely music} kann also sowohl probabilistische Noten erstellen und
+    Die Software {\it likely music} kann sowohl probabilistische Noten erstellen und
     editieren, als auch mittels MIDI diese abspielen oder als Audiodateien
     exportieren.
     \end{abstract}
@@ -49,25 +51,25 @@
 \section*{Idee}
 
 Der eigentlichen Idee ging ein mehr oder minder gescheitertes Projekt für diesen
-Wettbewerb vorraus. Im Frühjahr diesen Jahres entschied ich mich dieses, eine
-Demo \cite{wikipedia_demoscene}, abzubrechen, einfach weil ich befürchtete, es nicht bis zur Frist
+Wettbewerb voraus. Im Frühjahr diesen Jahres entschied ich mich, dieses -- eine
+Demo \cite{wikipedia_demoscene} -- abzubrechen, einfach weil ich befürchtete, es nicht bis zur Frist
 fertigstellen zu können. Die Motivation für dieses Projekt speiste sich aus
-meiner Faszination für Demos an sich, denn ich hatte bereits im Vorfeld öfters
-mich mit diesen beschäftigt und beim Ansehen der Einsendung von
-Demo-Wettbewerben ein Bedürfnis entwickelt auch so etwas zu entwickeln. Das neue
+meiner Faszination für Demos an sich, denn ich hatte mich bereits im Vorfeld öfters
+mit diesen beschäftigt und beim Ansehen der Einsendung von
+Demo-Wettbewerben ein Bedürfnis entwickelt auch eine zu entwickeln. Das neue
 Projekt speiste sich aus einer weiteren Faszination von mir, nämlich einer für
-Kunst, die basierend auf Kunst entsteht. Ich erinnere mich oft besonders an
-Kunstinstallationen, die ihr gestaltendes Element durch Zufall oder einen
+Kunst, die durch Zufall entsteht. Ich erinnere mich besonders oft an
+Kunstinstallationen, die ihr gestaltendes Element durch Zufall, einen
 undurchschaubaren oder chaotischen Prozess bezieht. Beim Nachdenken über
 Zwölftonmusik, die -- meiner Meinung nach -- ein wenig jenen Elements hat, kam
-mir die Grundidee -- wie ich mich erinnere -- auf dem Gang zwischen
-zwei Schulstunden für {\it likely music}, nämlich ein Modell, um Musik zu
-beschreiben, die zufällig im Vortrag ist.
+mir die Grundidee für {\it likely music} -- wie ich mich erinnere -- auf dem Gang zwischen
+zwei Schulstunden: Nämlich ein Modell, um Musik zu beschreiben, die zufällig im Vortrag ist.
 
-Das Modell, das ich übertrieben panisch auf ein Stück Notizblock kritzelte,
+Das Modell, das ich aus Angst, es zu vergessen, mehrmals aufschrieb,
 sieht Musik als gerichteten Graphen, wobei die Knoten Musiknoten einer
 bestimmten Länge und die Kanten zwischen ihnen die Wahrscheinlichkeit des
-Wechsel von der einen Note zu anderen. Vorstellen kann man sich es in etwa so:
+Wechsel von der einen Note zu anderen sind. Vorstellen kann man sich es in etwa wie
+in der folgenden Grafik.
 
 \begin{figure}[h]
 \includegraphics[width=.5\textwidth]{example-graph}
@@ -78,7 +80,7 @@ In diesem konkreten Graphen sind die Noten E, F, G und A als Knoten vertreten
 (der Einfachheit halber sind die Notenlängen weggelassen). Beispielsweise vom E
 führen zwei Kanten weg, eine zum F mit dreißigprozentiger Wahrscheinlichkeit und
 eine zum A mit siebzigprozentiger Wahrscheinlichkeit, d. h. nach dem E kommt in
-sieben von zehn Fällen das A und in den drei übrigen das F, analog gilt verhält
+sieben von zehn Fällen das A und in den drei übrigen das F. Analog verhält
 es sich mit den anderen Noten.
 
 Diese Darstellung ist in gewisser Weise auch nur eine ausdrucksstärkere Form
@@ -89,20 +91,25 @@ Graphes könnte so aussehen:
 \includegraphics[width=.5\textwidth]{example-graph-interpretation}
 \end{figure}
 
-Diese Interpretation, die eine Wahrscheinlichkeit von ca. 15\% hat aufzutreten,
-entspricht einer einfachen, linearen Notation wie sie in einem Gesangsbuch
+Diese Interpretation, die eine Wahrscheinlichkeit von ca. 15\% hat,
+entspricht einer einfachen, linearen Notation, wie sie in einem Gesangsbuch
 stehen könnte. Wir sehen also, dass solche probabilistiche Noten (wie unser
 Graph von vorhin) durch ein Verfahren, das ich einfach in einer Erweiterung des
-Begriffs als Interpretieren bezeichen, auf eine lineare Notation reduziert
-werden kann, die mit einem Instrument oder vom Computer gespielt werden kann. Es
-ist sogar nicht nur eine lineare Notation, sondern -- je nach vorgegebenen Graph
+Begriffs als Interpretieren bezeichne, auf eine lineare Notation reduziert
+werden können, die mit einem Instrument oder vom Computer gespielt werden können. Es
+ist sogar nicht nur eine lineare Notation, sondern -- je nach vorgegebenem Graph
 -- eine Vielzahl ihrer möglich. Beispielsweise wäre eine weitere:
 
 \begin{figure}[h]
 \includegraphics[width=.5\textwidth]{example-graph-interpretation2}
 \end{figure}
 
-Ähnlich gibt es noch viele weiter Möglichkeiten. Zu beachten ist bei den beiden
+Ähnlich enthält der ursprüngliche Graph weitere Möglichkeiten von klassischen
+Tonabfolgen. Insofern stellt eine probabilistische Notation eine
+ausdruckstärkere und mächtigere Notation dar, da sie beliebig viele klassische
+fassen kann.
+
+Zu beachten ist bei den beiden
 Beispielinterpretationen noch: Sie sind nach vier Noten abgeschnitten, denn, da
 von jedem Knoten mindestens eine Kante ausgeht, könnte man den Graphen
 potentiell unendlich lang ablaufen und würde somit eine unendlich lange
@@ -116,41 +123,42 @@ erlaubt, probabilistische Notation zu erstellen, zu editieren und abzuspielen.
 
 Gleich zu Beginn war klar, dass Haskell die Programmiersprache der Wahl werden
 sollte. Sie ist die Sprache, die ich in den letzten Jahren am aktivsten
-verwendet habe und mir einiges bietet, statische Typisierung, um Fehler
+verwendet habe und mir einiges bietet: Statische Typisierung, um Fehler
 vorzubeugen, ein expressives Typsystem, das es erlaubt, Daten besser zu
-strukturieren, und funktionale Programmierparadigmen, die mir persönlich sehr
-gut taugen, um mal einige zu nennen.
+strukturieren, und funktionale Programmierparadigmen, die sich für mich sehr
+natürlich anfühlen und das Testen von Programmen erleichtern, um einige Vorzüge zu nennen.
 
 Zunächst konzentrierte ich mich darauf, den Graphen und den
 Interpretationsalgorithmus als Bibliothek zu implementieren. In der ersten
 Iteration dieser Bibliothek, noch {\it probable music} genannt, begann ich auch
 einen eigenen Softwaresynthesizer zu implementieren, der flexibel auf
 verschiedenen Plattformen und zu verschiedenen Zwecken verwendet werden kann.
-Der Synthesizer konnte -- gegeben ein Algorithmus dafür -- jegliche Daten in
-Töne umwandeln, was interessante Möglichkeiten ergab, sich außerhalb des
+Der Synthesizer konnte jegliche Darstellungen von Klängen, Tönen oder Musik dank
+flexibler Architektur in tatsächliche Töne bzw. Audiowellen umwandeln. Dies
+ergab interessante Möglichkeiten, sich außerhalb des
 Zwölftonsystems zu bewegen. Die Tonerzeugung basierte dann auf einer freien
 Monade \cite{free_monad}, die die Instruktionen ›Warten‹ und ›Abspielen‹ kannte.
 Indem man diese Instruktionen für verschiedene Audiosystem, wie SDL \cite{sdl},
-Jack \cite{jack} oder auch Audiodateien wie WAV \cite{wav}, implementierte,
+Jack \cite{jack} oder auch Audiodateien wie WAV \cite{wav} implementierte,
 konnte man verschiedene Plattformen unterstützen. Allerdings gestaltete es sich
-schwierig, einen gut klingenden Synthesizer zu schreiben schwierig, denn die
+schwierig, einen gut klingenden Synthesizer zu schreiben, denn die
 Messlatte ist im Vergleich zu realen Instrumenten hoch. Hinzu kamen noch einige
-Performance-Probleme mit meinem macschinennahem Audio-Code.
+Performance-Probleme mit meinem maschinennahen Audio-Code.
 
 Also entschied ich mich, die Library vor allem auf den Graphen und die
 dazugehörigen Algorithmen zu fokusieren und zur Tonerzeugung eine geeignete
-Abstraktion zu verwenden, die diese zu vereinfachern. Ich habe hierfür MIDI
+Abstraktion zu verwenden, um diese zu vereinfachen. Ich habe hierfür MIDI
 gewählt, eine Technologie, die schon lang in allen Arten von Software und
-Hardware zur Musikproduktion verwendet wird, entschieden. MIDI basiert auf einer
+Hardware zur Musikproduktion verwendet wird. MIDI basiert auf einer
 Abfolge von zeitlich abgestimmten Nachrichten, wie zum Beispiel ›Note C an‹ oder
 ›Note C aus‹. Aufgrund dieser Nachrichten kann man die Erzeugung und das
-Abspielen von Musik zwischen mehreren Programmen aufteilen, außerdem erlaubt es
+Abspielen von Musik zwischen mehreren Programmen aufteilen. Außerdem erlaubt es,
 die bereits existierende Infrastruktur für MIDI-Verarbeitung zu verwenden, die
 sehr beachtlich ist. Für MIDI verwendet {\it likely music} die
 Open-Source-Bibliothek Euterpea\footnote{Ich musste allerdings aufgrund von
 Inkompatibilitäten mit den aktuellen Haskell-Paketen diese selbst beheben
 \cite{euterpea_fork}. Diese Änderung wartet \cite{euterpea_issue} aktuell (Stand
-23.09.2017) darauf vom Hauptentwickler
+23.09.2017) darauf, vom Hauptentwickler
 in den Code von Euterpea übernommen zu werden.}
 \cite{euterpea}, die unter anderem eine kleine Abstraktion über MIDI enthält.
 Sie erlaubt es, in einem internen Format Musik zu
@@ -158,8 +166,8 @@ konstruieren und anschließend als MIDI zu exportieren bzw. an ein anderes
 Programm zur Weiterverarbeitung zu schicken.
 
 Bei der Darstellung des Graphen habe ich mich vor allem darauf konzentriert,
-dass der Interpretationsalgorithmus, also das (zufällige) Ablaufen des Graphen,
-möglichst effizient zu machen. Da es sich um einen gerichten Graphen handelt,
+den Interpretationsalgorithmus, also das (zufällige) Ablaufen des Graphen,
+möglichst effizient zu gestalten. Da es sich um einen gerichten Graphen handelt,
 ist es besonders wichtig zu wissen, wohin man von einem gegebenen Knoten aus
 gelangen kann bzw. welche Kanten von einem Knoten weggehen. So gelangt man in unserem Beispiel
 aus dem vorherigen Kapitel vom Knoten mit dem E zu den Knoten mit F und
@@ -167,27 +175,27 @@ A. Es muss also möglichst effizient sein, die Kanten nachzuschlagen, die von
 einem Knoten {\it wegführen}. Mit der Datenstruktur {\it Map} \cite{map} (im
 deutschen Sprachgebrauch typischerweise {\it assoziative Datenfeld} bzw. {\it
 assoziatives Array}) kann
-man genau das sehr leicht realisieren, indem man die Knoten als Schlüssel und
-eine Liste von Kanten, die vom Schlüssel weggehen, als Elemente verwendet. Wenn
+man genau das sehr leicht realisieren: Man verwendet die Knoten als Schlüssel und
+eine Liste von Kanten, die vom Schlüssel weggehen, als Elemente. Wenn
 der Algorithmus nun einen Knoten nachschlägt, erhält er direkt die Kanten, die
 von diesem Knoten weggehen und somit auch die nächsten möglichen Knoten. Dies
 ist die einzige Information, die in jedem Schritt benötigt wird. Die Operation
 des Nachschlagen hat in einem {\it Map} die Komplexität $O(\log n)$
 \cite{map_lookup}, d. h. die Zeit, die benötigt wird, um ein Element
 nachzuschlagen, steigt mit dem Wachsen der Datenstruktur logarithmisch
-(d. h. weniger starkes Wachstum als linear!), wodurch auch das Interpretieren 
-großer Graphen ziemlich schnell bleibt. Der Code für die Datenstruktur findet
+(d. h. weniger starkes Wachstum als linear!). Damit bleibt auch das Interpretieren
+großer Graphen ziemlich schnell. Der Code für die Datenstruktur findet
 sich im Abschnitt~\nameref{sec:library}, Zeile 30 bis 43.
 
 Der Interpretationsalgorithmus selbst ist rekursiv \cite{wikipedia_rekursion} gestaltet und findet sich in
 der Funktion \lstinline[basicstyle=\ttfamily]|interpretation|, siehe
 Abschnitt~\nameref{sec:library}, Zeile 52 bis 60. Diese Funktion benötigt
-einen intialisierten Pseudozufallszahlengenerator
+einen initialisierten Pseudozufallszahlengenerator
 \cite{random_random_gen,wikipedia_prng}, den
 zu interpretierenden Graphen in der eben besprochenen Datenstruktur und einen
-Startknoten und gibt die resultierende Interpretation im MIDI-Format von
-Euterpea \cite{euterpea} zurück. Zunächst wird der Startknoten im Graphen
-nachgeschlagen, so werden die Kanten bzw. die nächsten möglichen Knoten
+Startknoten. Nach Ablauf der Berechnung gibt die resultierende Interpretation
+im MIDI-Format von Euterpea \cite{euterpea} zurück. Zunächst wird der Startknoten
+im Graphen nachgeschlagen, so werden die Kanten bzw. die nächsten möglichen Knoten
 erhalten. Nun gibt es zwei Möglichkeiten für den weiteren Verlauf:
 \begin{enumerate}
   \item Es gibt keine Kanten, die von diesem Knoten ausgehen. Also wird die
@@ -198,23 +206,23 @@ erhalten. Nun gibt es zwei Möglichkeiten für den weiteren Verlauf:
     (siehe Abschnitt~\nameref{sec:library}, Zeile 62 - 67) die
     Kante erhalten, die gemäß des zufälligen Ergebnis als nächstes abgelaufen werden
     soll. Nun ergibt sich das gleiche Problem wie zu Beginn der
-    Interpretation: Man kennt einen Knoten und will wissen wie es weitergeht. Also
+    Interpretation: Man kennt einen Knoten und will wissen, wie es weitergeht. Also
     wird nach der Ermittlung des zweiten Knotens die MIDI-Nachrichten aus dem
     Startknoten extrahiert und dann der Interpretationsalgorithmus nochmal bzw.
-    rekursiv aufgerufen -- nur mit dem Folgeknoten als Startknoten -- dessen
+    rekursiv aufgerufen -- nur mit dem Folgeknoten als Startknoten. Dessen
     Ergebnis wird an die aktuellen MIDI-Nachrichten angehängt, was jener Aufruf auch
     seinerseits wieder macht. So entsteht rekursiv eine (potentiell unendliche)
     Verkettung von MIDI-Nachrichten, die letztlich die finale Interpretation ergeben.
 \end{enumerate}
 
 Da die meisten Graphen vermutlich vollständig untereinander verbunden sein
-werden wie zum Beispiel der Beispielgraph im ersten Abschnitt, entstehen unendlich
+werden, wie zum Beispiel der Beispielgraph im ersten Abschnitt, entstehen unendlich
 lange Interpretationen. Diese zu erstellen benötigt natürgemäß natürlich auch
 unendlich viel Zeit -- der Interpretationsalgorithmus terminiert also nicht.
 Die einfache Antwort auf dieses Problem ist die Begrenzung der Länge der
 Interpretation auf eine gewisse Anzahl von Noten, was sich dank eines
 Sprachfeatures von Haskell -- Lazy Evaluation \cite{wikipedia_laziness} --
-leicht umsetzen lässt. Denn mit Lazy Evalutation wird nur das berechnet, was im
+leicht umsetzen lässt. Denn mit Lazy Evaluation wird nur das berechnet, was im
 Moment benötigt wird. Somit werden zum Beispiel nur die ersten vier benötigten
 Noten berechnet und nicht die unendlich vielen die eigentlich noch darauf folgen
 würden -- genau dies wird durch die Funktion
@@ -222,20 +230,195 @@ würden -- genau dies wird durch die Funktion
 Abschnitt~\nameref{sec:library}, Zeile 79 - 86) realisiert.
 
 Nun können wir probabilistische Musik in Graphen darstellen, diese automatisch
-interpretieren und dank Euterpea nach MIDI exportieren. Was fehlt ist eine
+interpretieren und dank Euterpea nach MIDI exportieren. Was fehlt, ist eine
 angenehme Benutzerschnittstelle.
 
+Zur Technologie für die Benutzerschnittstelle gab es für mich folgende
+Überlegungen: Zum einen sollte es leicht portabel bzw. auf jedem System laufen
+sowie außerdem einen begrenzten Entwicklungsaufwand mit sich bringen, damit es
+bis zum Einsendeschluss auch fertig sein würde. Ich selbst entwickle meine Software auf
+GNU/Linux, aber zur Abgabe müsste es auf macOS und / oder Windows laufen. Alle
+größeren Frameworks für Graphische Interfaces für GNU/Linux, wie zum Beispiel Qt
+\cite{qt} oder GTK \cite{gtk}, laufen auch auf den anderen großer
+Betriebssystemen. Allerdings bin ich nicht besonders vertraut mit irgendeinem
+dieser Frameworks. Außerdem war ich mir nicht sicher, wie stressfrei die
+Verwendung dieser von Haskell aus sein würde (denn klassischerweise verwendet
+man C oder C++). Also entschied ich mich {\it likely music} als Webapplikation,
+die einfach in gängigen Browsern läuft, zu implementieren. Das hat einige
+Vorteile für mich, unter anderem, dass es leicht zu testen ist, weil die Browser
+eigentlich überall gleich sind, und, dass ich schon einige Erfahrung in
+Webentwicklung hatte.
+
+Allerdings hatte ich die Library schon in Haskell implementiert, in Browsern
+läuft aber nur JavaScript (ohne größeren Aufwand zumindest). Also musste
+ein Programm her, um die Kommunikation zwischen der Library und der
+Webapplikation zu realisieren. Ich entschied mich für eine
+Client-Server-Architektur \cite{wikipedia_client_server}, also einen Server, der
+die Interpretation und den Export von Sounddateien für den Client, also die
+Webapplikation, übernimmt. Der Client wiederum müsste sich ausschließlich um ein
+ansprechendes Interface kümmern. Die ungefähre Gesamtarchitektur sieht also nun
+so aus:
+
+\begin{figure}[h]
+  \includegraphics[width=0.5\textwidth]{architektur}
+\end{figure}
+
+Der Server basiert auf den Libraries servant \cite{servant} als Webframework.
+Wie im Abschnitt~\nameref{sec:backend} zu sehen, besteht das Serverbackend aus
+zwei Dateien Quelltext: In \lstinline[basicstyle=\ttfamily]|Api.hs| wird die
+Struktur der REST-API \cite{wikipedia_rest} definiert, mittels der die
+Webapplikation mit dem Server kommuniziert. Der Server bietet folgende Funktionalität
+an:
+
+\begin{itemize}
+  \item \lstinline[basicstyle=\ttfamily]|/interpretation/mid| An diesen Endpunkt
+    schickt die Webapplikation einen Graphen plus einiger Parameter in Form von JSON
+    \cite{json} und erhält eine Interpretation auf Basis des Algorithmus als
+    MIDI-Datei zurück.
+  \item \lstinline[basicstyle=\ttfamily]|/interpretation/wav| Gleich wie der
+    obige Endpunkt, allerdings wird vorher
+    noch das MIDI mittels eines MIDI-Synthesizers, fluidsynth \cite{fluidsynth},
+    in eine WAV-Datei konvertiert, so dass man es direkt anhören kann.
+  \item Außerdem liefert der Server die statischen Dateien der Webapplikation, wie das
+    nötige HTML, JavaScript und CSS.
+\end{itemize}
+
+Die erwähnten Parameter sind nur folgende drei:
+
+\begin{itemize}
+  \item Der Anfangsknoten der Interpretation im Graphen,
+    den der Algorithmus benötigt (wie oben besprochen).
+  \item Die Länge der Interpretation als die maximale Anzahl an Noten in der
+    Interpretation.
+  \item Der Startwert für den Pseudozufallszahlengenerator
+    \cite{wikipedia_prng}, der für die Interpretation verwendet werden soll.
+    Da derselbe Startwert in die selbe Interpretation resultiert, erlaubt dies,
+    sich interessante Interpretationen zu merken und zum Beispiel zu einer
+    Interpretation noch die MIDI-Version zusätzlich herunterzuladen.
+\end{itemize}
+
+Dies ist auch schon alles, was das Serverbackend tut, denn es ist nur als
+minimaler Aufsatz auf die Library konzipiert. Das meiste für Benutzer*innen relevante
+passiert in der Webapplikation, die folgendermaßen aussieht:
+
+\begin{figure}[h]
+  \includegraphics[width=.5\textwidth]{screenshots/start.png}
+\end{figure}
+
+Den Kern der Applikation bildet der Grapheditor links, der auf der Library
+vis.js\footnote{Eigentlich nur ein Teil von vis.js namens {\it network}
+\cite{visjs_network}, aber
+ich werde vis.js immer der Kürze halber synonym für {\it vis.js network} verwenden.}
+\cite{visjs} basiert. vis.js kümmert sich um einen sehr gut anpassbaren
+Grapheneditoren, in dem der*die Benutzer*in Knoten und Kanten hinzufügen, löschen und
+ändern kann. Da die Library Callbacks \cite{wikipedia_callback} bereitstellt,
+ist es leicht den Rest der Applikation mit dem Editor zu integrieren.
+
+Wenn ein Knoten oder eine Kante geändert wird, wird diese Änderung in eine
+Zustandsvariable
+der Applikation mitübernommen und die Zusatzinformationen der Knoten und
+Kanten, also Notenlänge und Tonhöhe (Knoten) bzw. Wahrscheinlichkeit (Kante),
+von dem*der Benutzer*in abgefragt und ebenfalls abgespeichert. So gelingt es, den
+Grapheditor so zu integrieren, dass der Graph zur Kommunikation mit dem Server
+bereitsteht. Die doppelte Speicherung der reinen Graphdaten kommt daher, dass
+vis.js es leider nicht erlaubt, die bereits im Editor vorhandenen Daten
+abzufragen, daher büßt die Architektur der Applikation ein wenig an Eleganz ein.
+
+In der Seitenspalte passiert dann alles, was relevant für die Verarbeitung der
+links entstehenden Notation ist. Zum einen kann der Notationsgraph abgespeichert
+oder ein gespeicherter geöffnet werden, zum anderen ist es möglich,
+Interpretationen generieren zu lassen, diese direkt im Browser abzuspielen oder
+als MIDI oder WAV herunterzuladen.
+
+Das Speichern und Öffnen von Notationen basiert auf JSON-Dateien
+\cite{json} in bestimmten Format, die als
+\lstinline[basicstyle=\ttfamily]|<dateiname>.score.json| abgespeichert werden.
+Eine solche enthält eine Liste aller Knoten plus Zusatzinformationen und eine
+Liste aller Kanten plus Zusatzinformationen. Wie eine solche aussehen kann,
+sieht man im Abschnitt~\nameref{sec:web} (letzte Datei). Genau dieses Format
+wird übrigens auch zur Kommunikation mit dem Server verwendet, da es den Graphen
+verlustlos beschreiben kann.
+
 \subsection*{Lizenzierung}
+
+Der gesamte Quelltext von {\it likely music} ist unter der
+{\it GNU Affero General Public License Version 3} lizenziert. Die AGPL ist eine
+Freie-Software-Lizenz \cite{gnu_free_software}, das heißt, sie sichert dem*der
+Benutzer*in gegenüber dem Entwickler verschiedene Rechte (typischerweise nennt man
+vier) zu. Diese Rechte haben alle emanzipatorischen Charakter für den Nutzer:
+Das Recht die Software so auszuführen, wie der Nutzer es mag, natürlich
+offensichtlichlerweise. Das Recht, den Quellcode zu erhalten und zu untersuchen
+hilft vor allem dem*der Benutzer*in zu verstehen, was eigentlich auf
+seinem*ihrem Computer vor sich geht, und kann auch der Weiterbildung dienen. Die
+Freiheit, die Software frei und ohne Lizenzgebühren an andere weiterzugeben, ist
+mir besonders wichtig. Aufgrund diesen Umstandes kann freie Software
+unentgeltlich an jede*n weitergegeben werden, was Zugang zu Software unabhängig
+des eigenen Geldbeutels erlaubt -- vorausgesetzt man besitzt einen Computer.
+Diese Freiheit geht sogar noch weiter, dahingehend, dass auch die Modifikation
+ausdrücklich erlaubt (und erwünscht) ist. Somit kann nicht nur jede*r freie
+Software erhalten, sondern auch mitgestalten und verbessern. Auch andere freie
+Software kann profitieren, indem sie von anderen Projekten Code übernimmt. Dank
+der restriktiven Weitergabeklauseln kann aber nie freie Software verwendet oder
+verändert werden, ohne dass sie wieder freie Software wird. Freie Software
+erhält sozusagen ihre eigene Freiheit.
+
+Mir ist dies an dieser Stelle ein besonderes Anliegen, weil ich -- mit
+Sicherheit im Gegensatz zu den allermeisten anderen Wettbewerbteilnehmer*innen
+-- mein Projekt komplett mit freier Software erstellen konnte. Ich war nicht auf
+eine von drei teuren Softwarelösungen großer Konzerne angewiesen, um meinen
+Beitrag anzufertigen, wie das zum Beispiel im Bereich Videoschnitt der Fall ist
+(auch weil es kaum ausgereifte freie Software in dem Bereich gibt).
+
+Insofern sehe ich auch den emanzipatorischen Charakter von freier Software, denn
+Zugang zu Computern ist größtenteils auch dank von Bibliotheken
+selbstverständlich geworden, Zugang zu Software, die mehrere hundert Euro
+kostet, aber mit Sicherheit nicht. Der Preis von Software, die ein Konzern
+vielleicht auch irgendwann verwahrlosen lässt, ist sicher für viele eine Hürde,
+vielleicht sogar eine Hürde an diesem Wettbewerb teilzunehmen.
 
 \section*{Benutzung}
 
 \section*{Zukünftige Weiterentwicklung}
 
+{\it likely music} als fertig zu bezeichnen wäre nicht ganz falsch und nicht
+ganz richtig. Es handelt sich zwar um eine voll funktionsfähige Software, aber
+dennoch ist noch einige Weiterentwicklung, für die ich keine Zeit mehr hatte,
+denkbar. Folgende Gedanken hatte ich
+bisher:
+
+\begin{itemize}
+  \item {\bf Unterstützung für Akkorde im Interface.} Zwar unterstützen Euterpea
+    und die Library beide Akkorde, aber im Frontend gibt es keine Möglichkeit,
+    solche hinzuzufügen, da ich die Euterpea-MIDI-Datenstruktur nicht
+    vollständig in JavaScript nachgebaut habe. Dies zu beheben wäre für die
+    Zukunft auf jeden Fall wünschenswert.
+  \item {\bf Mehrstimmige bzw. parallele probabilistische Musik.} Denkbar wäre
+    es, eine Möglichkeit hinzuzufügen mehrere Startknoten auszuwählen, von denen
+    dann zwei gleichzeitige Pfade durch den Graph ausgingen. Dies scheint mir
+    die interessantes Möglichkeit zu sein, Mehrstimmig für {\it likely music}
+    umzusetzen.
+  \item {\bf Import bereits durchkomponierter Musik.} Indem man die Möglichkeit
+    schafft, bereits in
+    konventionellen Notationsprogrammen erstellte Musik zu importieren, könnte man
+    ein für den*die Benutzer*in angenehme Möglichkeit bieten, konventionell
+    notierter Musik ein probabilistisches Element zu geben bzw. sie
+    probabilistisch umzusetzen.
+\end{itemize}
+
+Diese Änderungen stehen nicht im Konflikt mit dem bisherigen Grundkonzept und -aufbau von
+{\it likely music}, dürften daher ohne größere Probleme umgesetzt werden können.
+
 \section*{Links}
 
 \begin{itemize}
 \item Der gesamte Quelltext \url{https://github.com/sternenseemann/likely-music}
-\item Eine laufende Instanz von {\it likely music} \url{https://likely.sternen.space}
+\item Eine laufende Instanz\footnote{{\it likely music} ist bisher noch nicht
+  auf Performance optimiert worden. Ich glaube nicht, dass genannte Server einen
+    größeren Ansturm vor allem wegen des Exports zu WAV (fluidsynth
+    \cite{fluidsynth} ist ziemlich
+    langsam) aushalten würde. Daher möchte ich darum bitten, diesen Link nicht
+    zu veröffentlichen, sondern, falls etwas in der Art gewünscht sein sollte,
+    mit mir Rücksprache zu halten.} von {\it likely music} \url{https://likely.sternen.space}
 \end{itemize}
 
 \begin{thebibliography}{9}
@@ -286,6 +469,42 @@ angenehme Benutzerschnittstelle.
 
 \bibitem{wikipedia_laziness}
   \url{https://de.wikipedia.org/wiki/Lazy_Evaluation}
+
+\bibitem{wikipedia_client_server}
+  \url{https://en.wikipedia.org/wiki/Client%E2%80%93server_model}
+
+\bibitem{servant}
+  \url{https://hackage.haskell.org/package/servant}
+
+\bibitem{wikipedia_rest}
+  \url{https://de.wikipedia.org/wiki/Representational_State_Transfer}
+
+\bibitem{json}
+  \url{http://json.org/}
+
+\bibitem{qt}
+  \url{https://www.qt.io/}
+
+\bibitem{gtk}
+  \url{https://www.gtk.org/}
+
+\bibitem{fluidsynth}
+  \url{http://www.fluidsynth.org/}
+
+\bibitem{visjs}
+  \url{http://visjs.org/}
+
+\bibitem{visjs_network}
+  \url{visjs.org/docs/network/}
+
+\bibitem{wikipedia_callback}
+  \url{https://en.wikipedia.org/wiki/Callback_(computer_programming)}
+
+\bibitem{agpl}
+  \url{https://www.gnu.org/licenses/agpl-3.0.html}
+
+\bibitem{gnu_free_software}
+  \url{https://www.gnu.org/philosophy/free-sw.de.html}
 \end{thebibliography}
 
 \clearpage
@@ -299,6 +518,7 @@ angenehme Benutzerschnittstelle.
 \lstinputlisting[language=haskell]{../../lib/Sound/Likely.hs}
 \clearpage
 \subsubsection*{Backend}
+\label{sec:backend}
 \noindent {\bf backend/Api.hs}
 \lstinputlisting[language=haskell]{../../backend/Api.hs}
 \vspace{20pt}
@@ -306,6 +526,7 @@ angenehme Benutzerschnittstelle.
 \lstinputlisting[language=haskell]{../../backend/Main.hs}
 \clearpage
 \subsubsection*{Web}
+\label{sec:web}
 \noindent {\bf web/source/index.html}
 \lstinputlisting[language=html]{../../web/source/index.html}
 \clearpage
@@ -314,6 +535,9 @@ angenehme Benutzerschnittstelle.
 \clearpage
 \noindent {\bf web/source/main.js}
 \lstinputlisting{../../web/source/main.js}
+\clearpage
+\noindent {\bf Graph im JSON Format der Webapplikation}
+\lstinputlisting{../../example-graph.json}
 
 \clearpage
 
