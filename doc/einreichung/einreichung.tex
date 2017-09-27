@@ -58,7 +58,7 @@ Wettbewerb voraus. Im Frühjahr diesen Jahres entschied ich mich, dieses -- eine
 Demo \cite{wikipedia_demoscene} -- abzubrechen, einfach weil ich befürchtete, es nicht bis zur Frist
 fertigstellen zu können. Die damalige Motivation für das Projekt speiste sich aus
 meiner Faszination für Demos an sich. Die Begeisterung für das neue
-speiste und speist sich aus einer weiteren Faszination von mir, nämlich einer für
+speiste sich aus einer weiteren Faszination von mir, nämlich einer für
 Kunst, die durch Zufall entsteht. Ich erinnere mich besonders oft an
 Kunstinstallationen, die jeweils ihr gestaltendes Element aus Zufälligem, einen
 undurchschaubaren oder chaotischen Prozess bezieht. Beim Nachdenken über
@@ -267,7 +267,7 @@ Der Server basiert auf den Libraries servant \cite{servant} als Webframework.
 Wie im Abschnitt~\nameref{sec:backend} zu sehen, besteht das Serverbackend aus
 zwei Dateien Quelltext: In \lstinline|Api.hs| wird die
 Struktur der REST-API \cite{wikipedia_rest} definiert, mittels der die
-Webapplikation mit dem Server kommuniziert. Der Server bietet folgende Funktionalität
+Webapplikation mit dem Server kommuniziert. Die API bietet folgende Funktionalität
 an:
 
 \begin{itemize}
@@ -304,6 +304,10 @@ passiert in der Webapplikation, die folgendermaßen aussieht:
 \begin{figure}[h]
   \includegraphics[width=.5\textwidth]{screenshots/start.png}
 \end{figure}
+
+Sie ist komplett in Englisch gehalten und sollte so in allen modernen Browsern
+laufen, getestet habe ich sie mit den aktuellen Versionen von Chrome
+\cite{chrome} und Firefox \cite{firefox}.
 
 Den Kern der Applikation bildet der Graph-Editor links, der auf der Library
 vis.js\footnote{Eigentlich nur ein Teil von vis.js namens {\it network}
@@ -418,7 +422,7 @@ kostet, aber mit Sicherheit nicht. Der Preis von Software, die ein Konzern
 vielleicht auch irgendwann verwahrlosen lässt, ist sicher für viele eine Hürde,
 vielleicht sogar eine Hürde an diesem Wettbewerb teilzunehmen.
 
-\section*{Zukünftige Weiterentwicklung}
+\section*{Ideen für die Zukunft}
 
 {\it likely music} als fertig zu bezeichnen wäre nicht ganz falsch und nicht
 ganz richtig. Es handelt sich zwar um eine voll funktionsfähige Software, aber
@@ -451,7 +455,7 @@ Diese Änderungen stehen nicht im Konflikt mit dem bisherigen Grundkonzept und -
 \section*{Links}
 
 \begin{itemize}
-\item Der gesamte Quelltext \url{https://github.com/sternenseemann/likely-music}
+\item Der gesamte Quelltext als Git-Repository \url{https://github.com/sternenseemann/likely-music}
 \item Eine laufende Instanz\footnote{{\it likely music} ist bisher noch nicht
   auf Performance optimiert worden. Ich glaube nicht, dass genannte Server einen
     größeren Ansturm vor allem wegen des Exports zu WAV (fluidsynth
@@ -461,17 +465,7 @@ Diese Änderungen stehen nicht im Konflikt mit dem bisherigen Grundkonzept und -
     mit mir Rücksprache zu halten.} von {\it likely music} \url{https://likely.sternen.space}
 \end{itemize}
 
-\section*{Danksagung}
-
-\begin{itemize}
-  \item Meinem Lehrer Bastian Walcher für seine Betreung meines Projekt und derer
-    meiner Mitschüler*innen.
-  \item Lukas G. für sein Korrekturlesen.
-  \item Christine S. für ihr Korrekturlesen.
-  \item kohlrabi dafür, dass er sich mit mir über Musikprogrammierung und
-    -theorie unterhielt und Ideen zu meinem Projekt beisteuerte.
-  \item all dafür, dass er mich in Richtung Musikprogrammierung stieß.
-\end{itemize}
+% love _luc, kohlrabi, all, mutti
 
 \begin{thebibliography}{9}
 \bibitem{wikipedia_demoscene}
@@ -551,6 +545,12 @@ Diese Änderungen stehen nicht im Konflikt mit dem bisherigen Grundkonzept und -
 
 \bibitem{wikipedia_callback}
   \url{https://en.wikipedia.org/wiki/Callback_(computer_programming)}
+
+\bibitem{chrome}
+  \url{https://www.google.com/chrome/}
+
+\bibitem{firefox}
+  \url{https://www.mozilla.org/en-US/firefox/}
 
 \bibitem{fetch_api}
   \url{https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API}

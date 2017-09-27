@@ -1,21 +1,10 @@
 {
   "nodes": [
     {
-      "id": "d3c408d5-1ebb-4787-b510-22af5fe7093a",
+      "id": "8639d9e3-570d-47e1-b18b-0389cfd36693",
       "music": {
         "dur": {
-          "numerator": 3,
-          "denominator": 4
-        },
-        "pitch": "Cf",
-        "octave": 1
-      }
-    },
-    {
-      "id": "180159e7-527b-4b8a-b9b6-315dddc154d2",
-      "music": {
-        "dur": {
-          "numerator": 2,
+          "numerator": 1,
           "denominator": 4
         },
         "pitch": "C",
@@ -23,63 +12,137 @@
       }
     },
     {
-      "id": "02e24c99-780e-45da-bd2f-ea600e4d863f",
+      "id": "0073dfd0-1d9c-49ac-b59c-db8282fd7fe2",
       "music": {
         "dur": {
           "numerator": 1,
-          "denominator": 1
+          "denominator": 4
         },
-        "pitch": "Rest",
+        "pitch": "D",
         "octave": 1
       }
     },
     {
-      "id": "b9cd3f9d-134c-4c51-b325-d209b2529bd6",
+      "id": "67f468d4-6d6a-4e78-b003-9dd9ebc21558",
       "music": {
         "dur": {
           "numerator": 1,
-          "denominator": 8
+          "denominator": 4
+        },
+        "pitch": "E",
+        "octave": 1
+      }
+    },
+    {
+      "id": "569ed8c7-f6d1-427a-bf32-e2378f1fc56d",
+      "music": {
+        "dur": {
+          "numerator": 1,
+          "denominator": 4
         },
         "pitch": "F",
+        "octave": 1
+      }
+    },
+    {
+      "id": "e9b032b8-a7bf-4b6b-aab8-f87c03651a1c",
+      "music": {
+        "dur": {
+          "numerator": 1,
+          "denominator": 4
+        },
+        "pitch": "G",
+        "octave": 1
+      }
+    },
+    {
+      "id": "3558118c-0872-49dd-ac60-72c12603e1bd",
+      "music": {
+        "dur": {
+          "numerator": 1,
+          "denominator": 4
+        },
+        "pitch": "A",
+        "octave": 1
+      }
+    },
+    {
+      "id": "6a58ff77-d7f5-439a-b220-a68ae8f70e8a",
+      "music": {
+        "dur": {
+          "numerator": 1,
+          "denominator": 4
+        },
+        "pitch": "B",
         "octave": 1
       }
     }
   ],
   "edges": [
     {
-      "id": "f8d0cb23-00d1-49dd-961a-2114b8a89c1d",
-      "from": "d3c408d5-1ebb-4787-b510-22af5fe7093a",
-      "to": "180159e7-527b-4b8a-b9b6-315dddc154d2",
-      "prob": 1
+      "id": "dbc6dc78-f0b9-47eb-bae1-ab4936c3839c",
+      "from": "3558118c-0872-49dd-ac60-72c12603e1bd",
+      "to": "8639d9e3-570d-47e1-b18b-0389cfd36693",
+      "prob": 0.3
     },
     {
-      "id": "283100d9-42ee-4001-b100-45b8c766cfc5",
-      "from": "b9cd3f9d-134c-4c51-b325-d209b2529bd6",
-      "to": "02e24c99-780e-45da-bd2f-ea600e4d863f",
-      "prob": 0.8
+      "id": "a6e82604-6021-4d72-b85b-c33fb097d549",
+      "from": "e9b032b8-a7bf-4b6b-aab8-f87c03651a1c",
+      "to": "3558118c-0872-49dd-ac60-72c12603e1bd",
+      "prob": 0.7
     },
     {
-      "id": "e6cceb76-40ed-49ac-8925-4534cf0854de",
-      "from": "02e24c99-780e-45da-bd2f-ea600e4d863f",
-      "to": "d3c408d5-1ebb-4787-b510-22af5fe7093a",
-      "prob": 0.2
+      "id": "fceba52d-2381-4760-83bb-893428bfb3ba",
+      "from": "569ed8c7-f6d1-427a-bf32-e2378f1fc56d",
+      "to": "e9b032b8-a7bf-4b6b-aab8-f87c03651a1c",
+      "prob": 0.7
     },
     {
-      "id": "0045bfda-3cde-4691-81c0-7a967be51e02",
-      "from": "02e24c99-780e-45da-bd2f-ea600e4d863f",
-      "to": "180159e7-527b-4b8a-b9b6-315dddc154d2",
-      "prob": 0.8
+      "id": "8f8677c3-1d8b-45b2-8170-9b9dce55af5b",
+      "from": "e9b032b8-a7bf-4b6b-aab8-f87c03651a1c",
+      "to": "8639d9e3-570d-47e1-b18b-0389cfd36693",
+      "prob": 0.3
     },
     {
-      "id": "ec616a31-7fc0-4f27-ae31-79cf0fab224a",
-      "from": "b9cd3f9d-134c-4c51-b325-d209b2529bd6",
-      "to": "180159e7-527b-4b8a-b9b6-315dddc154d2",
-      "prob": 0.2
+      "id": "85e95c65-41fc-447f-be0d-7a573fe49ca8",
+      "from": "67f468d4-6d6a-4e78-b003-9dd9ebc21558",
+      "to": "8639d9e3-570d-47e1-b18b-0389cfd36693",
+      "prob": 0.3
     },
     {
-      "id": "14735fda-b8e5-4567-aa1c-de04cc08ac24",
-      "from": "180159e7-527b-4b8a-b9b6-315dddc154d2",
-      "to": "b9cd3f9d-134c-4c51-b325-d209b2529bd6",
+      "id": "3923f713-5ccd-4d31-9f4a-977376129018",
+      "from": "0073dfd0-1d9c-49ac-b59c-db8282fd7fe2",
+      "to": "67f468d4-6d6a-4e78-b003-9dd9ebc21558",
+      "prob": 0.7
+    },
+    {
+      "id": "ceb83b3d-7fbc-4c8c-9274-be54e3e0694f",
+      "from": "67f468d4-6d6a-4e78-b003-9dd9ebc21558",
+      "to": "569ed8c7-f6d1-427a-bf32-e2378f1fc56d",
+      "prob": 0.7
+    },
+    {
+      "id": "3b157032-e4e3-4972-8602-37bf0d4fe97c",
+      "from": "3558118c-0872-49dd-ac60-72c12603e1bd",
+      "to": "6a58ff77-d7f5-439a-b220-a68ae8f70e8a",
+      "prob": 0.7
+    },
+    {
+      "id": "8e9d7cdd-5bf9-4152-b496-ac9e7e7e13ef",
+      "from": "569ed8c7-f6d1-427a-bf32-e2378f1fc56d",
+      "to": "8639d9e3-570d-47e1-b18b-0389cfd36693",
+      "prob": 0.3
+    },
+    {
+      "id": "92196538-8307-49a6-b086-7569b071de13",
+      "from": "0073dfd0-1d9c-49ac-b59c-db8282fd7fe2",
+      "to": "8639d9e3-570d-47e1-b18b-0389cfd36693",
+      "prob": 0.3
+    },
+    {
+      "id": "14fcf488-3af0-4f6a-95af-7005543cfa04",
+      "from": "8639d9e3-570d-47e1-b18b-0389cfd36693",
+      "to": "0073dfd0-1d9c-49ac-b59c-db8282fd7fe2",
       "prob": 1
     }
   ]
