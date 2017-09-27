@@ -364,7 +364,9 @@ und sendet mithilfe der JavaScript Fetch API \cite{fetch_api} den Graphen
 mitsamt der Parameter an den bereits erwähnten Endpunkt
 \lstinline|/interpretation/wav|. Nach diesem Vorgang, der merklich Zeit benötigt,
 da fluidsynth \cite{fluidsynth} erst das WAV generieren muss, wird die
-Audiodatei in den Player geladen und kann direkt angehört werden.
+Audiodatei in den Player geladen\footnote{Dabei muss man ein wenig Geduld haben,
+vor allem, wenn es über das Internet geschieht, da erst das WAV generiert und
+dann noch über das Internet geladen werden muss} und kann direkt angehört werden.
 
 Gleich unter dem Player kann man die Interpretation als MIDI oder WAV
 herunterladen. Dazu wählt man rechts eines der beiden Formate aus und klickt
@@ -592,49 +594,42 @@ Diese Änderungen stehen nicht im Konflikt mit dem bisherigen Grundkonzept und -
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[width=.7\textwidth]{screenshots/starting-node.png}
+  \includegraphics[width=.8\textwidth]{screenshots/starting-node.png}
   \end{center}
-  \caption{Setzen des Startknoten durch Auswählen des Knotens}
+  \caption{Setzen des Startknoten durch Auswählen desselben}
 \end{figure}
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[width=.7\textwidth]{screenshots/new-seed.png}
+    \includegraphics[width=.5\textwidth]{screenshots/new-seed.png}
   \end{center}
   \caption{Auswürfeln eines neuen Startwerts per Knopfdruck}
 \end{figure}
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[width=.7\textwidth]{screenshots/length.png}
-  \end{center}
-  \caption{Setzen der maximalen Interpretationslänge}
-\end{figure}
-
-\begin{figure}[H]
-  \begin{center}
-  \includegraphics[width=.7\textwidth]{screenshots/reload-player.png}
+  \includegraphics[width=.5\textwidth]{screenshots/reload-player.png}
   \end{center}
   \caption{Laden der Interpretation in den Player}
 \end{figure}
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[width=.7\textwidth]{screenshots/download-midi.png}
+  \includegraphics[width=.8\textwidth]{screenshots/download-midi.png}
   \end{center}
   \caption{Download der Interpretation als MIDI-Datei}
 \end{figure}
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[width=.7\textwidth]{screenshots/save.png}
+  \includegraphics[width=.8\textwidth]{screenshots/save.png}
   \end{center}
   \caption{Speichern der Notation}
 \end{figure}
 
 \begin{figure}[H]
   \begin{center}
-  \includegraphics[width=.7\textwidth]{screenshots/load.png}
+  \includegraphics[width=.8\textwidth]{screenshots/load.png}
   \end{center}
   \caption{Laden einer Notation}
 \end{figure}
