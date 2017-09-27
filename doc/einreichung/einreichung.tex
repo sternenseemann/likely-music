@@ -38,10 +38,10 @@
     auch die Reihenfolge der Noten betrifft. Um dies zu erreichen, wird ein eigenes Modell
     von Musiknotation verwendet. Anstelle von linearer Reihenfolge von Noten
     bzw. Akkorden tritt ein gerichteter Graph, in dem die Noten (bzw. Akkorde) die Knoten
-    und die möglichen Übergange zwischen diesen die Kanten darstellen, wobei
-    jeder Kante eine gewisse Wahrscheinlichkeit zugeordnet ist. Dieses Modell ist
+    und die möglichen Übergange zwischen diesen die Kanten darstellen.
+    Jeder Kante ist eine gewisse Wahrscheinlichkeit zugeordnet. Dieses Modell ist
     unter anderem sehr gut von einem Computer zu fassen, wodurch es möglich
-    ist, solche Notationen automatisch zu „interpretieren“ oder abzuspielen:
+    wird, solche Notationen automatisch zu „interpretieren“ oder abzuspielen:
     Eine konkrete Notenabfolge wird gemäß der Notation ausgewürfelt.
 
     Die Software {\it likely music} kann sowohl probabilistische Noten erstellen und
@@ -56,19 +56,17 @@
 Der eigentlichen Idee ging ein mehr oder minder gescheitertes Projekt für diesen
 Wettbewerb voraus. Im Frühjahr diesen Jahres entschied ich mich, dieses -- eine
 Demo \cite{wikipedia_demoscene} -- abzubrechen, einfach weil ich befürchtete, es nicht bis zur Frist
-fertigstellen zu können. Die Motivation für dieses Projekt speiste sich aus
-meiner Faszination für Demos an sich, denn ich hatte mich bereits im Vorfeld öfters
-mit diesen beschäftigt und beim Ansehen der Einsendung von
-Demo-Wettbewerben ein Bedürfnis entwickelt auch eine zu entwickeln. Das neue
-Projekt speiste sich aus einer weiteren Faszination von mir, nämlich einer für
+fertigstellen zu können. Die damalige Motivation für das Projekt speiste sich aus
+meiner Faszination für Demos an sich. Die Begeisterung für das neue
+speiste und speist sich aus einer weiteren Faszination von mir, nämlich einer für
 Kunst, die durch Zufall entsteht. Ich erinnere mich besonders oft an
-Kunstinstallationen, die ihr gestaltendes Element durch Zufall, einen
+Kunstinstallationen, die jeweils ihr gestaltendes Element aus Zufälligem, einen
 undurchschaubaren oder chaotischen Prozess bezieht. Beim Nachdenken über
-Zwölftonmusik, die -- meiner Meinung nach -- ein wenig jenen Elements hat, kam
-mir die Grundidee für {\it likely music} -- wie ich mich erinnere -- auf dem Gang zwischen
+Zwölftonmusik, die -- aus meiner Perspektive -- ein wenig jenen Elements hat, kam
+mir die Grundidee für {\it likely music} auf dem Gang zwischen
 zwei Schulstunden: Nämlich ein Modell, um Musik zu beschreiben, die zufällig im Vortrag ist.
 
-Das Modell, das ich aus Angst, es zu vergessen, mehrmals aufschrieb,
+Das Modell, das ich aus Angst es zu vergessen, mehrmals aufschrieb,
 sieht Musik als gerichteten Graphen, wobei die Knoten Musiknoten einer
 bestimmten Länge und die Kanten zwischen ihnen die Wahrscheinlichkeit des
 Wechsel von der einen Note zu anderen sind. Vorstellen kann man sich es in etwa wie
@@ -88,7 +86,7 @@ es sich mit den anderen Noten.
 
 Diese Darstellung ist in gewisser Weise auch nur eine ausdrucksstärkere Form
 einer normalen Notation, denn ein Weg durch den obigen
-Graphes könnte so aussehen:
+Graphen könnte so aussehen:
 
 \begin{figure}[h]
 \includegraphics[width=.5\textwidth]{example-graph-interpretation}
@@ -96,7 +94,7 @@ Graphes könnte so aussehen:
 
 Diese Interpretation, die eine Wahrscheinlichkeit von ca. 15\% hat,
 entspricht einer einfachen, linearen Notation, wie sie in einem Gesangsbuch
-stehen könnte. Wir sehen also, dass solche probabilistiche Noten (wie unser
+stehen könnte. Wir sehen also, dass solche probabilistische Noten (wie unser
 Graph von vorhin) durch ein Verfahren, das ich einfach in einer Erweiterung des
 Begriffs als Interpretieren bezeichne, auf eine lineare Notation reduziert
 werden können, die mit einem Instrument oder vom Computer gespielt werden können. Es
@@ -129,7 +127,7 @@ sollte. Sie ist die Sprache, die ich in den letzten Jahren am aktivsten
 verwendet habe und mir einiges bietet: Statische Typisierung, um Fehler
 vorzubeugen, ein expressives Typsystem, das es erlaubt, Daten besser zu
 strukturieren, und funktionale Programmierparadigmen, die sich für mich sehr
-natürlich anfühlen und das Testen von Programmen erleichtern, um einige Vorzüge zu nennen.
+natürlich anfühlen und das Testen von Programmen erleichtern.
 
 Zunächst konzentrierte ich mich darauf, den Graphen und den
 Interpretationsalgorithmus als Bibliothek zu implementieren. In der ersten
@@ -176,14 +174,13 @@ gelangen kann bzw. welche Kanten von einem Knoten weggehen. So gelangt man in un
 aus dem vorherigen Kapitel vom Knoten mit dem E zu den Knoten mit F und
 A. Es muss also möglichst effizient sein, die Kanten nachzuschlagen, die von
 einem Knoten {\it wegführen}. Mit der Datenstruktur {\it Map} \cite{map} (im
-deutschen Sprachgebrauch typischerweise {\it assoziative Datenfeld} bzw. {\it
-assoziatives Array}) kann
-man genau das sehr leicht realisieren: Man verwendet die Knoten als Schlüssel und
+deutschen Sprachgebrauch typischerweise {\it assoziative Datenfeld}) kann
+genau das sehr leicht realisiert werden: Man verwendet die Knoten als Schlüssel und
 eine Liste von Kanten, die vom Schlüssel weggehen, als Elemente. Wenn
 der Algorithmus nun einen Knoten nachschlägt, erhält er direkt die Kanten, die
 von diesem Knoten weggehen und somit auch die nächsten möglichen Knoten. Dies
 ist die einzige Information, die in jedem Schritt benötigt wird. Die Operation
-des Nachschlagen hat in einem {\it Map} die Komplexität $O(\log n)$
+des Nachschlagens hat in einem {\it Map} die Komplexität $O(\log n)$
 \cite{map_lookup}, d. h. die Zeit, die benötigt wird, um ein Element
 nachzuschlagen, steigt mit dem Wachsen der Datenstruktur logarithmisch
 (d. h. weniger starkes Wachstum als linear!). Damit bleibt auch das Interpretieren
@@ -207,7 +204,7 @@ erhalten. Nun gibt es zwei Möglichkeiten für den weiteren Verlauf:
   \item Wenn es eine oder mehr Kanten vom Knoten aus gibt, wird eine (reelle) Zufallszahl
     zwischen $0$ und $1$ berechnet und mittels der Hilfsfunktion \lstinline|edgeForRoll|
     (siehe Abschnitt~\nameref{sec:library}, Zeile 62 - 67) die
-    Kante erhalten, die gemäß des zufälligen Ergebnis als nächstes abgelaufen werden
+    Kante erhalten, die gemäß des zufälligen Ergebnisses als nächstes abgelaufen werden
     soll. Nun ergibt sich das gleiche Problem wie zu Beginn der
     Interpretation: Man kennt einen Knoten und will wissen, wie es weitergeht. Also
     wird nach der Ermittlung des zweiten Knotens die MIDI-Nachrichten aus dem
@@ -220,14 +217,14 @@ erhalten. Nun gibt es zwei Möglichkeiten für den weiteren Verlauf:
 
 Da die meisten Graphen vermutlich vollständig untereinander verbunden sein
 werden, wie zum Beispiel der Beispielgraph im ersten Abschnitt, entstehen unendlich
-lange Interpretationen. Diese zu erstellen benötigt natürgemäß natürlich auch
+lange Interpretationen. Diese zu erstellen benötigt naturgemäß auch
 unendlich viel Zeit -- der Interpretationsalgorithmus terminiert also nicht.
 Die einfache Antwort auf dieses Problem ist die Begrenzung der Länge der
 Interpretation auf eine gewisse Anzahl von Noten, was sich dank eines
 Sprachfeatures von Haskell -- Lazy Evaluation \cite{wikipedia_laziness} --
 leicht umsetzen lässt. Denn mit Lazy Evaluation wird nur das berechnet, was im
 Moment benötigt wird. Somit werden zum Beispiel nur die ersten vier benötigten
-Noten berechnet und nicht die unendlich vielen die eigentlich noch darauf folgen
+Noten berechnet und nicht die unendlich vielen, die eigentlich noch darauf folgen
 würden -- genau dies wird durch die Funktion
 \lstinline|takeNotes| (siehe
 Abschnitt~\nameref{sec:library}, Zeile 79 - 86) realisiert.
@@ -238,22 +235,22 @@ angenehme Benutzerschnittstelle.
 
 Zur Technologie für die Benutzerschnittstelle gab es für mich folgende
 Überlegungen: Zum einen sollte es leicht portabel bzw. auf jedem System laufen
-sowie außerdem einen begrenzten Entwicklungsaufwand mit sich bringen, damit es
-bis zum Einsendeschluss auch fertig sein würde. Ich selbst entwickle meine Software auf
+sowie außerdem einen begrenzten Entwicklungsaufwand mit sich bringen.
+Ich selbst entwickle meine Software auf
 GNU/Linux, aber zur Abgabe müsste es auf macOS und / oder Windows laufen. Alle
 größeren Frameworks für Graphische Interfaces für GNU/Linux, wie zum Beispiel Qt
-\cite{qt} oder GTK \cite{gtk}, laufen auch auf den anderen großer
+\cite{qt} oder GTK \cite{gtk}, laufen auch auf den anderen großen
 Betriebssystemen. Allerdings bin ich nicht besonders vertraut mit irgendeinem
 dieser Frameworks. Außerdem war ich mir nicht sicher, wie stressfrei die
 Verwendung dieser von Haskell aus sein würde (denn klassischerweise verwendet
-man C oder C++). Also entschied ich mich {\it likely music} als Webapplikation,
+man C oder C++). Also entschied ich mich, {\it likely music} als Webapplikation,
 die einfach in gängigen Browsern läuft, zu implementieren. Das hat einige
 Vorteile für mich, unter anderem, dass es leicht zu testen ist, weil die Browser
 eigentlich überall gleich sind, und, dass ich schon einige Erfahrung in
 Webentwicklung hatte.
 
-Allerdings hatte ich die Library schon in Haskell implementiert, in Browsern
-läuft aber nur JavaScript (ohne größeren Aufwand zumindest). Also musste
+Ich hatte die Library allerdings in Haskell implementiert, in Browsern
+läuft jedoch nur JavaScript (ohne größeren Aufwand zumindest). Also musste
 ein Programm her, um die Kommunikation zwischen der Library und der
 Webapplikation zu realisieren. Ich entschied mich für eine
 Client-Server-Architektur \cite{wikipedia_client_server}, also einen Server, der
@@ -295,7 +292,7 @@ Die erwähnten Parameter sind nur folgende drei:
     Interpretation.
   \item Der Startwert für den Pseudozufallszahlengenerator
     \cite{wikipedia_prng}, der für die Interpretation verwendet werden soll.
-    Da derselbe Startwert in die selbe Interpretation resultiert, erlaubt dies,
+    Da derselbe Startwert in dieselbe Interpretation resultiert, erlaubt dies,
     sich interessante Interpretationen zu merken und zum Beispiel zu einer
     Interpretation noch die MIDI-Version zusätzlich herunterzuladen.
 \end{itemize}
@@ -308,14 +305,14 @@ passiert in der Webapplikation, die folgendermaßen aussieht:
   \includegraphics[width=.5\textwidth]{screenshots/start.png}
 \end{figure}
 
-Den Kern der Applikation bildet der Grapheditor links, der auf der Library
+Den Kern der Applikation bildet der Graph-Editor links, der auf der Library
 vis.js\footnote{Eigentlich nur ein Teil von vis.js namens {\it network}
 \cite{visjs_network}, aber
 ich werde vis.js immer der Kürze halber synonym für {\it vis.js network} verwenden.}
 \cite{visjs} basiert. vis.js kümmert sich um einen sehr gut anpassbaren
-Grapheneditoren, in dem der*die Benutzer*in Knoten und Kanten hinzufügen, löschen und
+Graph-Editor, in dem der*die Benutzer*in Knoten und Kanten hinzufügen, löschen und
 ändern kann. Da die Library Callbacks \cite{wikipedia_callback} bereitstellt,
-ist es leicht den Rest der Applikation mit dem Editor zu integrieren.
+ist es leicht, den Rest der Applikation mit dem Editor zu integrieren.
 
 Wenn ein Knoten oder eine Kante geändert wird, wird diese Änderung in eine
 Zustandsvariable
@@ -323,18 +320,18 @@ der Applikation mitübernommen und die Zusatzinformationen der Knoten und
 Kanten, also Notenlänge und Tonhöhe (Knoten) bzw. Wahrscheinlichkeit (Kante),
 von dem*der Benutzer*in in einer Einblendung abgefragt und ebenfalls
 abgespeichert. So gelingt es, den
-Grapheditor so zu integrieren, dass der Graph zur Kommunikation mit dem Server
+Graph-Editor so zu integrieren, dass der Graph zur Kommunikation mit dem Server
 und sonstiger Verarbeitung zur Verfügung steht. Die doppelte Speicherung der
 reinen Graphdaten kommt daher, dass
 vis.js es leider nicht erlaubt, die bereits im Editor vorhandenen Daten
-abzufragen, daher büßt die Architektur der Applikation leider ein wenig
+abzufragen. Daher büßt die Architektur der Applikation leider ein wenig
 an Eleganz ein.
 
 In der Seitenspalte passiert dann alles, was relevant für die Verarbeitung der
 links entstehenden Notation ist. Zum einen kann der Notationsgraph abgespeichert
 oder ein gespeicherter geöffnet werden, zum anderen ist es möglich,
 Interpretationen generieren zu lassen, diese direkt im Browser abzuspielen oder
-als MIDI oder WAV herunterzuladen. Die Seitenspalte ist im folgenden abgebildet.
+als MIDI oder WAV herunterzuladen. Die Seitenspalte ist im Folgenden abgebildet.
 
 \begin{wrapfigure}{r}{.3\textwidth}
   \begin{center}
@@ -343,7 +340,7 @@ als MIDI oder WAV herunterzuladen. Die Seitenspalte ist im folgenden abgebildet.
 \end{wrapfigure}
 
 Das Speichern und Öffnen von Notationen basiert auf JSON-Dateien
-\cite{json} in bestimmten Format, die als
+\cite{json} in bestimmtem Format, die als
 \lstinline|<dateiname>.score.json| abgespeichert werden.
 Eine solche enthält eine Liste aller Knoten plus Zusatzinformationen und eine
 Liste aller Kanten plus Zusatzinformationen. Wie eine solche aussehen kann,
@@ -353,11 +350,11 @@ verlustlos beschreiben kann.
 
 Der Rest der Applikation kümmert sich vor allem um Interpretation und Export
 dieser. Oben in der Seitenleiste kann man die drei erwähnten Parameter setzen.
-Der Startknoten wird über markieren dessen im Editor und klicken des
+Der Startknoten wird über Markieren desselben im Editor und klicken des
 entsprechenden Buttons gesetzt und kann durch Hervorhebung im Graphen auch
 angezeigt werden. Der Startwert kann manuell eingegeben (etwa, wenn man
-sich einen besonderen notiert hat) oder ein zufälliger durch Verwendung des
-Buttons neben dem Feld verwendet werden. Die maximale Interpretationslänge ist
+sich einen besonderen notiert hat) oder ein zufälliger durch Betätigung des
+Buttons neben dem Feld generiert werden. Die maximale Interpretationslänge ist
 dann darunter und wird ganz unspektakulär eingegeben.
 
 Darunter befindet sich ein Audioplayer, mit dem erstellte Interpretationen
@@ -372,25 +369,26 @@ Audiodatei in den Player geladen und kann direkt angehört werden.
 Gleich unter dem Player kann man die Interpretation als MIDI oder WAV
 herunterladen. Dazu wählt man rechts eines der beiden Formate aus und klickt
 links auf „Download“. Intern funktioniert dies genau gleich wie der Player, bloß
-dass die jeweils der Endpunkte für das entsprechende Format verwendet wird und
+dass jeweils der Endpunkte für das entsprechende Format verwendet und
 die Datei dann direkt heruntergeladen wird statt im Browser weiterverwendet
 wird.
 
 Des weiteren werden der aktuelle Graph und die Parameter regelmäßig mittels
 LocalStorage \cite{localstorage} zwischengespeichert, die beim Öffnen der
-Webapplikation abgefragt wird. So ist gleich der letzte Stand vom letzten mal
+Webapplikation abgefragt wird. So ist gleich der letzte Stand vom letzten Mal
 geladen und man kann direkt weiterarbeiten.
 
 \subsection*{Lizenzierung}
 
 Der gesamte Quelltext von {\it likely music} ist unter der
-{\it GNU Affero General Public License Version 3} lizenziert. Die AGPL ist eine
+{\it GNU Affero General Public License Version 3}, deren Text sich im Anhang
+im Abschnitt~\nameref{sec:license} findet, lizenziert. Die AGPL ist eine
 Freie-Software-Lizenz \cite{gnu_free_software}, das heißt, sie sichert dem*der
 Benutzer*in gegenüber dem Entwickler verschiedene Rechte (typischerweise nennt man
 vier) zu. Diese Rechte haben alle emanzipatorischen Charakter für den Nutzer:
 Das Recht die Software so auszuführen, wie der Nutzer es mag, natürlich
-offensichtlichlerweise. Das Recht, den Quellcode zu erhalten und zu untersuchen
-hilft vor allem dem*der Benutzer*in zu verstehen, was eigentlich auf
+offensichtlichlerweise. Das Recht, den Quellcode zu erhalten und zu untersuchen.
+Das hilft vor allem dem*der Benutzer*in zu verstehen, was eigentlich auf
 seinem*ihrem Computer vor sich geht, und kann auch der Weiterbildung dienen. Die
 Freiheit, die Software frei und ohne Lizenzgebühren an andere weiterzugeben, ist
 mir besonders wichtig. Aufgrund diesen Umstandes kann freie Software
@@ -412,7 +410,7 @@ Beitrag anzufertigen, wie das zum Beispiel im Bereich Videoschnitt der Fall ist
 (auch weil es kaum ausgereifte freie Software in dem Bereich gibt).
 
 Insofern sehe ich auch den emanzipatorischen Charakter von freier Software, denn
-Zugang zu Computern ist größtenteils auch dank von Bibliotheken
+Zugang zu Computern ist größtenteils auch dank von öffentlichen Bibliotheken
 selbstverständlich geworden, Zugang zu Software, die mehrere hundert Euro
 kostet, aber mit Sicherheit nicht. Der Preis von Software, die ein Konzern
 vielleicht auch irgendwann verwahrlosen lässt, ist sicher für viele eine Hürde,
@@ -435,8 +433,8 @@ bisher:
   \item {\bf Mehrstimmige bzw. parallele probabilistische Musik.} Denkbar wäre
     es, eine Möglichkeit hinzuzufügen mehrere Startknoten auszuwählen, von denen
     dann zwei gleichzeitige Pfade durch den Graph ausgingen. Dies scheint mir
-    die interessantes Möglichkeit zu sein, Mehrstimmig für {\it likely music}
-    umzusetzen.
+    die interessantes Möglichkeit zu sein, Mehrstimmigkeit für {\it likely music}
+    zu implementieren.
   \item {\bf Import bereits durchkomponierter Musik.} Indem man die Möglichkeit
     schafft, bereits in
     konventionellen Notationsprogrammen erstellte Musik zu importieren, könnte man
@@ -674,6 +672,7 @@ Diese Änderungen stehen nicht im Konflikt mit dem bisherigen Grundkonzept und -
 \clearpage
 
 \subsection*{Lizenz}
+\label{sec:license}
 
 \renewcommand{\abstractname}{Preamble}
 \begin{abstract}
