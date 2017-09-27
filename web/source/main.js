@@ -148,10 +148,8 @@ function musical_symbol(lookup, dur) {
         return (n >= 0.0) && (Math.floor(n) === n) && n !== Infinity;
     };
     var standard_symbol = lookup(dur);
-    var bla = [0, 1, 2, 3, 4, 5, 6, 7 ].map(compute_dot_times.bind(this, dur));
-    console.log(bla);
-    var dots = bla.filter(([den, dots]) => isNat(dots));
-    console.log(dots);
+    var dots = [0, 1, 2, 3, 4, 5, 6, 7 ].map(compute_dot_times.bind(this, dur))
+        .filter(([den, dots]) => isNat(dots));
 
     if(standard_symbol !== null) {
         return standard_symbol;
