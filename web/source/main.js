@@ -21,34 +21,24 @@ import { Map } from 'immutable';
 
 const valid_pitches = [
     'Rest',
-    'Cff', 'Cf', 'C',
-    'Dff', 'Cs', 'Df',
-    'Css', 'D', 'Eff',
-    'Ds', 'Ef', 'Fff',
-    'Dss', 'E', 'Ff',
-    'Es', 'F', 'Gff',
-    'Ess', 'Fs', 'Gf',
-    'Fss', 'G', 'Aff',
-    'Gs', 'Af', 'Gss',
-    'A', 'Bff', 'As',
-    'Bf', 'Ass', 'B',
-    'Bs', 'Bss'
+    'Cf', 'C', 'Cs',
+    'Df', 'D', 'Ds',
+    'Ef', 'E', 'Es',
+    'Ff', 'F', 'Fs',
+    'Gf', 'G', 'Gs',
+    'Af', 'A', 'As',
+    'Bf','B', 'Bs'
 ];
 
 const display_pitches = [
     'Rest',
-    'C♯♯', 'C♯', 'C',
-    'D♯♯', 'C♭', 'D♯',
-    'C𝄫', 'D', 'E♯♯',
-    'D♭', 'E♯', 'F♯♯',
-    'D𝄫', 'E', 'F♯',
-    'E♭', 'F', 'Gff',
-    'E𝄫', 'F♭', 'G♯',
-    'F𝄫', 'G', 'A♯♯',
-    'G♭', 'A♯', 'G𝄫',
-    'A', 'B♯♯', 'A♭',
-    'B♯', 'A𝄫', 'B',
-    'B♭', 'B𝄫'
+    'C♯', 'C', 'C♭',
+    'D♯', 'D', 'D♭',
+    'E♯', 'E', 'E♭',
+    'F♯', 'F', 'F♭',
+    'G♯', 'G', 'G♭',
+    'A♯', 'A', 'A♭',
+    'B♯', 'B', 'B♭'
 ];
 
 function displayPitch(pitch) {
