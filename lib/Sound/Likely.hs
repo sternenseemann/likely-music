@@ -71,17 +71,19 @@ interpretation gen graph n = (nMusic n) :+:
   recurse (fromMaybe S.empty (M.lookup n (unGraph graph)))
   where (prob, gen') = randomR (0.0, 1.0) gen
         recurse edges =
-          if S.null edges
-            then emptyMusic
-            else interpretation gen' graph
-                 . eTo . edgeForRoll prob $ edges
+          case edgeForRoll prob edges of
+            Nothing -> emptyMusic
+            Just nextEdge ->
+              interpretation gen' graph . eTo $ nextEdge
 
-edgeForRoll :: Probability -> S.Set Edge -> Edge
+edgeForRoll :: Probability -> S.Set Edge -> Maybe Edge
 edgeForRoll prob set =
-  let curr = S.elemAt 0 set
-    in if prob <= eProb curr
-         then curr
-         else edgeForRoll (prob - eProb curr) (S.delete curr set)
+  if S.null set
+    then Nothing
+    else let curr = S.elemAt 0 set
+           in if prob <= eProb curr
+                then Just curr
+                else edgeForRoll (prob - eProb curr) (S.delete curr set)
 
 emptyMusic :: Music a
 emptyMusic = Prim (Rest 0)
