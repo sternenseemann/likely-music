@@ -28,17 +28,18 @@
 ## Setup
 
 ```
-cabal sandbox init
-cabal install --only-dependencies
-cabal build
+cabal new-build
 
 cd web
 yarn install
 yarn run build:dev
 
 cd ..
-cabal run likely-music-backend
+cabal new-run likely-music-backend
 ```
+
+Note that [Euterpea](https://github.com/Euterpea/Euterpea2) (the library used for Midi) breaks relatively frequently,
+if you run into any issues in that regard, open an issue in their repository and/or feel free to message me.
 
 ## I want the library non AGPL-licensed
 
