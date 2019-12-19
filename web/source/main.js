@@ -218,7 +218,7 @@ class Rational {
     }
 }
 
-function collectGraphData(nodeDate, edgeData) {
+function collectGraphData(nodeData, edgeData) {
     return {
         nodes: [... nodeData.values()].map(x => ({
             id: x.nodeData.id,
