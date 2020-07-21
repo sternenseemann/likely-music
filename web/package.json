@@ -1,17 +1,17 @@
 {
+  "name": "likely-music-frontend",
+  "version": "0.1.0",
+  "license": "AGPL-3.0-only",
   "scripts": {
-    "build:dev": "mkdir -p dist; cp -R node_modules/vis/dist/{vis.min.css,img} dist; cp source/custom.css dist; cp source/index.html dist; browserify source/main.js -t babelify -d -o dist/main.js",
-    "build:prod": "mkdir -p dist; cp -R node_modules/vis/dist/{vis.min.css,img} dist; cp source/custom.css dist; cp source/index.html dist; cross-env NODE_ENV=production browserify source/main.js -t babelify | uglifyjs -c -m > dist/main.js"
+    "build:assets": "mkdir -p dist && cp -R node_modules/vis/dist/{vis.min.css,img} dist && cp source/custom.css dist && cp source/index.html dist;",
+    "build:dev": "browserify source/main.js -t babelify -d -o dist/main.js",
+    "build:prod": "cross-env NODE_ENV=production browserify source/main.js -t babelify | uglifyjs -c -m > dist/main.js"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
     "cross-env": "^5.0.5",
-    "eslint": "^4.5.0",
-    "eslint-config-airbnb-base": "^11.3.2",
-    "eslint-plugin-import": "^2.7.0",
     "uglify-js": "^3.0.27"
   },
   "dependencies": {

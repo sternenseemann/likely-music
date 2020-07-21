@@ -31,7 +31,8 @@
 cabal new-build
 
 cd web
-yarn install
+yarn install --pure-lockfile
+yarn run build:assets
 yarn run build:dev
 
 cd ..
