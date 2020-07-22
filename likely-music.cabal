@@ -42,6 +42,7 @@ executable likely-music-backend
                      , servant
                      , servant-server
                      , wai
+                     , wai-app-static
                      , warp
                      , HCodecs
                      , random

@@ -23,12 +23,14 @@ import Api
 import Codec.Midi (buildMidi)
 import Codec.ByteString.Builder
 import Control.Monad.IO.Class
+import Data.Maybe (fromMaybe, fromJust)
 import Data.ByteString.Lazy (ByteString ())
 import qualified Data.ByteString.Lazy as B
 import Euterpea hiding (app)
 import GHC.IO.Handle
 import Network.Wai
 import Network.Wai.Handler.Warp
+import Network.Wai.Application.Static
 import Servant
 import Sound.Likely
 import System.Directory
@@ -38,6 +40,7 @@ import System.FilePath.Posix
 import System.IO
 import System.Process
 import System.Random
+import WaiAppStatic.Types (toPiece)
 
 api :: Proxy LikelyApi
 api = Proxy
@@ -45,8 +48,12 @@ api = Proxy
 midiString :: ToMusic1 a => Music a -> ByteString
 midiString = toLazyByteString . buildMidi . toMidi . perform
 
-server :: Server LikelyApi
-server = genInterpretation :<|> randomSeed :<|> serveDirectoryWebApp "web/dist"
+server :: String -> Server LikelyApi
+server distDir = genInterpretation :<|> randomSeed
+  :<|> serveDirectoryWith serverSettings
+  where serverSettings = (defaultWebAppSettings distDir)
+                           { ssIndices = [ fromJust (toPiece "index.html") ]
+                           , ssRedirectToIndex = True }
 
 randomSeed :: Handler Int
 randomSeed = liftIO newStdGen >>= return . fst . random
@@ -62,18 +69,24 @@ genInterpretation Wav g = genInterpretation Midi g >>= synthWav
 
 synthWav :: ByteString -> Handler ByteString
 synthWav midi = do
-  inName <- tempFile "mid"
-  liftIO $ B.writeFile inName midi
+  inName  <- tempFile "mid"
   outName <- tempFile "wav"
+  liftIO $ B.writeFile inName midi
+
+  synth <- liftIO $ lookupEnv "LIKELY_MUSIC_SYNTH"
+  let synthProc =
+        case synth of
+          Just synth -> proc synth [ inName, outName ]
+          -- if env var is missing use old behavior
+          Nothing -> proc "fluidsynth"
+                       [ "-a", "file"
+                       , "-F", outName
+                       , "-i"
+                       , "/usr/share/soundfonts/FluidR3_GM.sf2"
+                       , inName ]
+
   (_, _, _, ph) <- liftIO $
-    createProcess_ "fluidsynth"
-      (proc "fluidsynth"
-        [ "-a", "file"
-        , "-F", outName
-        , "-i"
-        , "/usr/share/soundfonts/FluidR3_GM.sf2"
-        , inName ])
-        { std_in = CreatePipe }
+    createProcess_ "synthWav synthesizer" synthProc { std_in = CreatePipe }
   code <- liftIO $ waitForProcess ph
   case code of
     ExitFailure _ -> throwError err500 { errBody = "fluidsynth failed" }
@@ -95,8 +108,11 @@ tempFile ext = try 0
               then try (n + 1)
               else pure path
           | otherwise = throwError err500 { errBody = "no temp files" }
-app :: Application
-app = serve api server
+app :: String -> Application
+app distDir = serve api (server distDir)
 
 main :: IO ()
-main = newStdGen >> run 8081 app
+main = do
+  newStdGen
+  distDir <- lookupEnv "LIKELY_MUSIC_FRONTEND"
+  run 8081 $ app (fromMaybe "web/dist" distDir)

@@ -1,6 +1,6 @@
 { mkDerivation, aeson, base, bytestring, containers, directory
 , Euterpea, filepath, HCodecs, PortMidi, process, random, servant
-, servant-server, stdenv, text, wai, warp
+, servant-server, stdenv, text, wai, wai-app-static, warp
 }:
 mkDerivation {
   pname = "likely-music";
@@ -13,7 +13,8 @@ mkDerivation {
   ];
   executableHaskellDepends = [
     aeson base bytestring containers directory Euterpea filepath
-    HCodecs process random servant servant-server text wai warp
+    HCodecs process random servant servant-server text wai
+    wai-app-static warp
   ];
   license = stdenv.lib.licenses.agpl3;
 }
