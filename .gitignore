@@ -27,6 +27,7 @@ cabal.project.local
 # yarn / js
 web/dist
 web/node_modules
+web/tmp.js
 
 # tex
 *.aux
