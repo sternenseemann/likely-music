@@ -15,7 +15,7 @@
 //  You should have received a copy of the GNU Affero General Public License
 //  along with likely music. If not, see <http://www.gnu.org/licenses/>.
 
-import vis from 'vis';
+import { Network } from 'vis-network';
 import { Map } from 'immutable';
 // types / internals
 
@@ -236,16 +236,16 @@ function collectGraphData(nodeData, edgeData) {
 function importGraphData(g) {
     nodeData = new Map();
     edgeData = new Map();
-    var nodeSet = new vis.DataSet({});
-    var edgeSet = new vis.DataSet({});
-    for(let node of g.nodes) {
+
+    var nodeArr = g.nodes.map(function (node) {
         var music = Music.fromObject(node.music);
         var data = { id: node.id, label: music.nodeText() };
         nodeData = nodeData.set(node.id, { nodeData: data, music: node.music });
-        nodeSet.add(data);
-    }
 
-    for(let edge of g.edges) {
+        return data;
+    });
+
+    var edgeArr = g.edges.map(function (edge) {
         var data = {
             id: edge.id,
             from: edge.from,
@@ -253,10 +253,11 @@ function importGraphData(g) {
             label: `${edge.prob * 100}%`
         };
         edgeData = edgeData.set(edge.id, { edgeData: data, prob: edge.prob });
-        edgeSet.add(data);
-    }
 
-    network.setData({ nodes: nodeSet, edges: edgeSet });
+        return data;
+    });
+
+    network.setData({ nodes: nodeArr, edges: edgeArr });
 }
 
 // helper
@@ -624,7 +625,7 @@ function init() {
         }
     };
 
-    network = new vis.Network(container, {}, options);
+    network = new Network(container, {}, options);
 
     try {
         const score = localStorage.getItem('score');

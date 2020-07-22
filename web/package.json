@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "license": "AGPL-3.0-only",
   "scripts": {
-    "build:assets": "mkdir -p dist && cp -R node_modules/vis/dist/{vis.min.css,img} dist && cp source/custom.css dist && cp source/index.html dist;",
+    "build:assets": "mkdir -p dist && cp node_modules/vis-network/dist/dist/vis-network.min.css dist/ && cp -R node_modules/vis-network/dist/img dist/ && cp source/custom.css dist && cp source/index.html dist",
     "build:dev": "browserify source/main.js -t babelify -d -o dist/main.js",
     "build:prod": "env NODE_ENV=production browserify source/main.js -t babelify -o tmp.js && env NODE_ENV=production uglifyjs -c -m -o dist/main.js tmp.js && rm tmp.js"
   },
@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "immutable": "^3.8.1",
-    "vis": "^4.20.1"
+    "vis-data": "^6.6.1",
+    "vis-network": "^7.10.0"
   }
 }

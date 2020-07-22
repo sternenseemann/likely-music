@@ -5,7 +5,7 @@
 let
   target = if production then "prod" else "dev";
   pkgInfo = stdenv.lib.importJSON ./package.json;
-  src = ./.;
+  src = yarn2nix-lib.removePrefixes [ "node_modules" "dist" ] ./.;
 #  yarn2nixSrc = /home/lukas/src/nix/yarn2nix;
   yarn2nixSrc = fetchFromGitHub {
     owner  = "sternenseemann";
@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     substituteInPlace ./package.json \
       --replace node_modules "${node_modules}"
   '';
+
+  NODE_PATH = "${node_modules}";
 
   buildPhase = ''
     # temporary $HOME for yarn config
