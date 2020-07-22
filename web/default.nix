@@ -1,5 +1,4 @@
-{ stdenv, fetchFromGitHub, callPackage
-, bash, yarn
+{ stdenv, fetchFromGitHub, callPackage, yarn
 , production ? true }:
 
 let
@@ -26,6 +25,7 @@ let
     inherit (pkgInfo) name;
     dependencies = calledTemplate.nodeBuildInputs;
   };
+  yarnFlags = stdenv.lib.escapeShellArgs [ "--offline" "--frozen-lockfile" ];
 
 in
 
@@ -43,21 +43,16 @@ stdenv.mkDerivation rec {
       --replace node_modules "${node_modules}"
   '';
 
+  # make sure vis-network find vis-data
   NODE_PATH = "${node_modules}";
 
   buildPhase = ''
-    # temporary $HOME for yarn config
-    export HOME=$(pwd)/yarn_home
-    mkdir -p $HOME
-    yarn config --offline set script-shell "${bash}/bin/bash"
-
-    # binaries of deps.nix
-    export PATH="${node_modules}/.bin:$PATH"
-
     # browserify won't look in NODE_PATH for modules
+    # due to the symlink yarn will also add node_modules/.bin
+    # to PATH, so we don't have to do it
     ln -s ${node_modules} node_modules
-    yarn run --offline build:assets
-    yarn run --offline build:${target}
+    yarn ${yarnFlags} run build:assets
+    yarn ${yarnFlags} run build:${target}
   '';
 
   installPhase = ''
