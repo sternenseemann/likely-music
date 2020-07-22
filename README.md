@@ -75,6 +75,7 @@ cd /path/to/likely-music
 
 cd web
 yarn install --pure-lockfile
+yarn run build:assets
 yarn run build:prod
 
 # optionally if you want to avoid relative path problems
