@@ -9,18 +9,14 @@ let
   yarn2nixSrc = fetchFromGitHub {
     owner  = "sternenseemann";
     repo   = "yarn2nix";
-    rev    = "ea1f8f972a15ce2134bd113ee167d520d347be09";
-    sha256 = "0lqi9wlbhwvhqi4lqagirg08q1zpxa55rc13ajypjgqrmfcr9aaq";
+    rev    = "b0825bbe4b40f39763d53ba0044431a44b5f25cf";
+    sha256 = "1q8wc5rnb00xwzcqsgb6wfkmymipf2bv1g2i33l5wyadp0hd18cp";
   };
   yarn2nix = import yarn2nixSrc { };
-  yarn2nix-lib = callPackage (yarn2nixSrc + /nix-lib) {
-    inherit yarn2nix;
-  };
-  deps = yarn2nix-lib.buildCallDeps { yarnLock = ./yarn.lock; };
-  template = yarn2nix-lib.buildTemplate { packageJson = ./package.json; };
-  calledTemplate =
-    yarn2nix-lib.callTemplate template
-      (yarn2nix-lib.buildNodeDeps deps);
+  yarn2nix-lib = yarn2nix.nixLib;
+  deps = yarn2nix-lib.callYarnLock ./yarn.lock { };
+  template = yarn2nix-lib.callPackageJson ./package.json { };
+  calledTemplate = template (yarn2nix-lib.buildNodeDeps deps);
   node_modules = yarn2nix-lib.linkNodeDeps {
     inherit (pkgInfo) name;
     dependencies = calledTemplate.nodeBuildInputs;
