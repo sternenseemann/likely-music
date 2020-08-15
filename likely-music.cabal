@@ -1,5 +1,5 @@
 name:                likely-music
-version:             0.1.0.0
+version:             0.1.1
 -- synopsis:            
 -- description:         
 license:             AGPL-3
@@ -9,8 +9,7 @@ maintainer:          git@lukasepple.de
 -- copyright:           
 category:            Sound
 build-type:          Simple
-extra-source-files:  ChangeLog.md
-                   , README.md
+extra-source-files:  README.md
 cabal-version:       >=1.10
 
 library

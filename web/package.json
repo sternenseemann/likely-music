@@ -1,6 +1,6 @@
 {
   "name": "likely-music-frontend",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "AGPL-3.0-only",
   "scripts": {
     "build:assets": "mkdir -p dist && cp node_modules/vis-network/dist/dist/vis-network.min.css dist/ && cp -R node_modules/vis-network/dist/img dist/ && cp source/custom.css dist && cp source/index.html dist",

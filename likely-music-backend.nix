@@ -4,7 +4,7 @@
 }:
 mkDerivation {
   pname = "likely-music";
-  version = "0.1.0.0";
+  version = "0.1.1";
   src = ./.;
   isLibrary = true;
   isExecutable = true;

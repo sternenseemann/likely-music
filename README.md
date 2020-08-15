@@ -8,13 +8,13 @@ experimental application for probabilistic music composition
 
 likely music is a project I built in 11th/12th grade during my so called “P-Seminar” (a career orienting course at German (high) schools). For my particular one we were tasked to create an entry for the crossmedia competition (“crossmedia Wettbewerb”), a Bavarian multimedia competition targeted at students. Entries may range from original music videos to games — or in my case software.
 
-The initial idea for likely music was to generate random music along some kind of guideline in order to prevent it from sounding absolutely horrible. <!-- [^1] --> Such a guideline would then become a kind of notation in its own right (a meta-notation if you will). Leaving things up to the (usually) person playing a piece of music is not at all unheard of in music — which is why you also call a musical performance an interpretation. By leaving it up to interpretation which note comes next this (within preset boundaries) this concept is taken to the extreme.
+The initial idea for likely music was to generate random music along some kind of guideline in order to prevent it from sounding absolutely horrible. Such a guideline would then become a kind of notation in its own right (a meta-notation if you will). Leaving things up to the (usually) person playing a piece of music is not at all unheard of in music — which is why you also call a musical performance an interpretation. By leaving it up to interpretation which note comes next this (within preset boundaries) this concept is taken to the extreme.
 
 The concept for likely music's notation is the following: We use a directed graph to represent *possible* successions of notes that could make up the piece of music when it's played. Each node contains classical notation (in likely music it is limited to single notes to simplify frontend implementation). Each edge represents a possible succession of two nodes and has a probability associated with it. Such a graph-based notation could look like the following.
 
 ![example graph made up of the notes E, F, G, A connected using one to two edges from every node with varying probabilities](doc/einreichung/example-graph.png)
 
-When interpreting such a graph you then pick a starting note, play its note(s) and then pick an edge from the node factoring in its probability to get a new node and repeat this cycle. Since such graphs can be cyclical you can get infinite, randomly varied music this way. If you limit the length of such an interpretation to 4 and start at the E you could get one of the below actual successions from the above graph — or different ones of course. 
+When interpreting such a graph you then pick a starting note, play its note(s) and then pick an edge from the node factoring in its probability to get a new node and repeat this cycle. Since such graphs can be cyclical you can get infinite, randomly varied music this way. If you limit the length of such an interpretation to 4 and start at the E you could get one of the below actual successions from the above graph — or different ones of course.
 
 ![Interpretation of above graph with succession E, F, G, A](doc/einreichung/example-graph-interpretation.png)
 
@@ -40,8 +40,6 @@ Representation of graphs and generating interpretations of them is implemented i
 A more detailed documentation of the inner workings and the concept of likely music can also be found in the [German documentation](doc/einreichung/einreichung.pdf) I compiled for the entry of the competition. I think the code is fairly readable as well, especially `Sound.Likely` which isn't that big anyways and probably the most interesting piece of this software. 
 
 The project was completed in about a month during my summer holidays of 2017 with a prior experiment called `probable-music` which I rewrote into likely music. Of course completed is relative — I had plenty more ideas for improvement, but this being a competition entry and a experimental implementation of an obscure concept you have to draw the line somewhere. Unfortunately my entry to crossmedia was never judged. I was informed that the jury didn't really understand my entry or how to use it. This of course was disappointing since I thought I had a good shot at a price back then and I was unsure where I went wrong or if at all. I tried to document the application very thoroughly both in functionality and concept and even submitted a screencast of me using it. My best guess is that the UX wasn't intuitive enough for the judges which were mostly high school teachers (as far as I know). It was especially disappointing since I was later able to show my project to one of the judges in person and they were rather impressed by it. Overall it was a good experience nonetheless even though it ultimately didn't really amount to anything. Building a not perfect, but functional application with an interesting concept in about a month is something I'm pretty happy with.
-
-<!-- [^1]: Although I later wondered whether it might be possible to generate twelve tone music procedurally which wouldn't have required such a human made guideline (except for the twelve-tone technique itself). -->
 
 ## Setup
 
@@ -99,7 +97,7 @@ You can modify were likely music looks for dependencies using environment variab
 
 ## Changelog
 
-* Unreleased:
+* 0.1.1:
     * Pass dependencies to `likely-music-backend` using `LIKELY_MUSIC_FRONTEND` and `LIKELY_MUSIC_SYNTH`
     * Nix-based build system
     * Dependency updates and related build fixes
