@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, callPackage, yarn
+{ stdenv, lib, fetchFromGitHub, callPackage, yarn
 , production ? true }:
 
 let
   target = if production then "prod" else "dev";
-  pkgInfo = stdenv.lib.importJSON ./package.json;
+  pkgInfo = lib.importJSON ./package.json;
   src = yarn2nix-lib.removePrefixes [ "node_modules" "dist" ] ./.;
 #  yarn2nixSrc = /home/lukas/src/nix/yarn2nix;
   yarn2nixSrc = fetchFromGitHub {
@@ -21,7 +21,7 @@ let
     inherit (pkgInfo) name;
     dependencies = calledTemplate.nodeBuildInputs;
   };
-  yarnFlags = stdenv.lib.escapeShellArgs [ "--offline" "--frozen-lockfile" ];
+  yarnFlags = lib.escapeShellArgs [ "--offline" "--frozen-lockfile" ];
 
 in
 

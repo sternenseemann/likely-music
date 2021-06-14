@@ -1,6 +1,6 @@
 { mkDerivation, aeson, base, bytestring, containers, directory
-, Euterpea, filepath, HCodecs, PortMidi, process, random, servant
-, servant-server, stdenv, text, wai, wai-app-static, warp
+, Euterpea, filepath, HCodecs, lib, PortMidi, process, random
+, servant, servant-server, text, wai, wai-app-static, warp
 }:
 mkDerivation {
   pname = "likely-music";
@@ -16,5 +16,5 @@ mkDerivation {
     HCodecs process random servant servant-server text wai
     wai-app-static warp
   ];
-  license = stdenv.lib.licenses.agpl3;
+  license = lib.licenses.agpl3Only;
 }
