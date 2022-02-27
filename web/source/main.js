@@ -466,14 +466,14 @@ function gatherParams() {
     }
 
     var maxhops = document.getElementById('hop-count').value;
-    if(maxhops === "" || Number(maxhops) === NaN) {
+    if(maxhops === "" || isNaN(maxhops)) {
         maxhops = null;
     } else {
         maxhops = Number(maxhops);
     }
 
     var seed = document.getElementById('seed').value;
-    if(seed === "" || Number(seed) === NaN) {
+    if(seed === "" || isNan(seed)) {
         seed = null;
     } else {
         seed = Number(seed);
