@@ -59,7 +59,8 @@ Then you should be able to run `likely-music` from the command line (in the latt
 First make sure you have the following prerequisites installed:
 
 * Functional Haskell environment, i. e. `ghc` and `cabal-install`
-* `yarn`
+* `npm`
+* `esbuild`
 * A MIDI to WAV synthesizer
     * One possibility is fluidsynth:
         * `fluidsynth`
@@ -71,15 +72,13 @@ Then run the following commands:
 ```bash
 cd /path/to/likely-music
 
-cd web
-yarn install --pure-lockfile
-yarn run build:assets
-yarn run build:prod
+pushd web
+make
 
 # optionally if you want to avoid relative path problems
-export LIKELY_MUSIC_FRONTEND=/path/to/web/dist
+export LIKELY_MUSIC_FRONTEND=$(realpath dist)
 
-cd ..
+popd
 cabal v2-build
 cabal v2-run likely-music-backend
 ```
