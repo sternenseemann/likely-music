@@ -97,6 +97,11 @@ You can modify were likely music looks for dependencies using environment variab
 
 ## Changelog
 
+* 0.1.2 (unreleased):
+    * Use `esbuild` instead of `parcel-bundler` for the frontend
+    * Disable use of `babel` in the frontend, consequently a browser with support for
+      EcmaScript2015 is required.
+    * Add NixOS service for running `likely-music` to the repository
 * 0.1.1:
     * Pass dependencies to `likely-music-backend` using `LIKELY_MUSIC_FRONTEND` and `LIKELY_MUSIC_SYNTH`
     * Nix-based build system

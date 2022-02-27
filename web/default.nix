@@ -1,8 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, callPackage, yarn
-, production ? true }:
+{ stdenv, lib, fetchFromGitHub, callPackage, esbuild }:
 
 let
-  target = if production then "prod" else "dev";
   pkgInfo = lib.importJSON ./package.json;
   src = yarn2nix-lib.removePrefixes [ "node_modules" "dist" ] ./.;
 #  yarn2nixSrc = /home/lukas/src/nix/yarn2nix;
@@ -21,7 +19,6 @@ let
     inherit (pkgInfo) name;
     dependencies = calledTemplate.nodeBuildInputs;
   };
-  yarnFlags = lib.escapeShellArgs [ "--offline" "--frozen-lockfile" ];
 
 in
 
@@ -30,30 +27,20 @@ stdenv.mkDerivation rec {
   inherit (pkgInfo) version;
   inherit src;
 
-  buildInputs = [ yarn ];
+  nativeBuildInputs = [ esbuild ];
 
-  phases = [ "unpackPhase" "patchPhase" "buildPhase" "installPhase" ];
+  makeFlags = [
+    "OFFLINE=true"
+  ];
 
-  postPatch = ''
-    substituteInPlace ./package.json \
-      --replace node_modules "${node_modules}"
-  '';
-
-  # make sure vis-network find vis-data
-  NODE_PATH = "${node_modules}";
-
-  buildPhase = ''
-    # browserify won't look in NODE_PATH for modules
-    # due to the symlink yarn will also add node_modules/.bin
-    # to PATH, so we don't have to do it
+  NODE_PATH = node_modules;
+  preBuild = ''
     ln -s ${node_modules} node_modules
-    yarn ${yarnFlags} run build:assets
-    yarn ${yarnFlags} run build:${target}
   '';
 
   installPhase = ''
     mkdir -p $out/share/
-    cp -R dist $out/share/${pname}
+    mv dist $out/share/${pname}
   '';
 
   meta = calledTemplate.meta // {
