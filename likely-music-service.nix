@@ -2,10 +2,6 @@
 
 let
 
-  lpkgs = import ./pkgs.nix {
-    inherit pkgs;
-  };
-
   cfg = config.services.likely-music;
 
 in {
@@ -14,6 +10,10 @@ in {
     virtualHost = lib.mkOption {
       type = lib.types.str;
       default = "localhost";
+    };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = (import ./. { inherit pkgs; }).likely-music;
     };
   };
 
@@ -25,7 +25,7 @@ in {
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${lpkgs.likely-music}/bin/likely-music";
+        ExecStart = "${cfg.package}/bin/likely-music";
 
         PrivateTmp = true;
         TemporaryFileSystem= "/:ro";
