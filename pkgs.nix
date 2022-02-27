@@ -52,4 +52,6 @@ rec {
       ${pkgs.fluidsynth}/bin/fluidsynth -a file -i ${pkgs.soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2 -F "$2" "$1"
     '';
   };
+
+  nixosModule = ./likely-music-service.nix;
 }
