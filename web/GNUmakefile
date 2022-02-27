@@ -2,7 +2,7 @@
 DIST ?= dist
 # Change this to "development" for source maps and non-minifyed code
 NODE_ENV ?= production
-# If true, we don't attempt to fetch dependencies via yarn
+# If true, we don't attempt to fetch dependencies via npm
 OFFLINE ?= false
 
 ifeq ($(NODE_ENV),production)
@@ -26,7 +26,7 @@ $(DIST):
 	mkdir -p $@
 
 node_modules:
-	$(OFFLINE) || yarn install --frozen-lockfile --prod
+	$(OFFLINE) || npm install --production --omit=peer --omit=dev
 
 $(DIST)/vis-network.min.css: node_modules $(DIST)
 	$(ESBUILD) node_modules/vis-network/dist/dist/vis-network.min.css --outfile=$@

@@ -1,11 +1,13 @@
-{ pkgs }:
+{ pkgs, napalm }:
 
 rec {
   # likely-music haskellPackage
   likely-music-lib = likely-music-backend;
   likely-music-backend = pkgs.haskellPackages.callPackage ./likely-music-backend.nix { };
 
-  likely-music-frontend = pkgs.callPackage ./web { };
+  likely-music-frontend = pkgs.callPackage ./web {
+    inherit napalm;
+  };
 
   # executable wrapper around everything with correct paths
   likely-music = pkgs.runCommand "likely-music" { } ''
