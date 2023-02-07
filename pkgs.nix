@@ -3,27 +3,32 @@
 rec {
   # likely-music haskellPackage
   likely-music-lib = likely-music-backend;
-  likely-music-backend = pkgs.haskell.lib.compose.overrideSrc {
-    # Prevent unnecessary rebuilds
-    src = builtins.path {
-      name = "likely-music-backend-source";
-      path = ./.;
-      filter = path: type:
-        # Exclude paths irrelevant to Haskell compilation
-        builtins.all (prefix: !pkgs.lib.hasPrefix prefix path) [
-          (toString ./default.nix)
-          (toString ./likely-music-backend.nix)
-          (toString ./likely-music-service.nix)
-          (toString ./pkgs.nix)
-          (toString ./README.md)
-          (toString ./web)
-        ]
-        # Apply .gitignore rules
-        && pkgs.nix-gitignore.gitignoreFilter (
-          builtins.readFile ./.gitignore
-        ) ./. path type;
-    };
-  } (pkgs.haskellPackages.callPackage ./likely-music-backend.nix { });
+  likely-music-backend = pkgs.lib.pipe
+    (pkgs.haskellPackages.callPackage ./likely-music-backend.nix { })
+    [
+      (pkgs.haskell.lib.compose.overrideSrc {
+        # Prevent unnecessary rebuilds
+        src = builtins.path {
+          name = "likely-music-backend-source";
+          path = ./.;
+          filter = path: type:
+            # Exclude paths irrelevant to Haskell compilation
+            builtins.all (prefix: !pkgs.lib.hasPrefix prefix path) [
+              (toString ./default.nix)
+              (toString ./likely-music-backend.nix)
+              (toString ./likely-music-service.nix)
+              (toString ./pkgs.nix)
+              (toString ./README.md)
+              (toString ./web)
+            ]
+            # Apply .gitignore rules
+            && pkgs.nix-gitignore.gitignoreFilter (
+              builtins.readFile ./.gitignore
+            ) ./. path type;
+        };
+      })
+      pkgs.haskell.lib.compose.justStaticExecutables
+    ];
 
   likely-music-frontend = pkgs.callPackage ./web { inherit napalm; };
 
