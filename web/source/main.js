@@ -473,7 +473,7 @@ function gatherParams() {
     }
 
     var seed = document.getElementById('seed').value;
-    if(seed === "" || isNan(seed)) {
+    if(seed === "" || isNaN(seed)) {
         seed = null;
     } else {
         seed = Number(seed);
