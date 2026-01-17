@@ -54,7 +54,7 @@ rec {
         echo "$0: missing file parameter(s)" >&2
         exit 1
       fi
-      ${pkgs.fluidsynth}/bin/fluidsynth -a file -i ${pkgs.soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2 -F "$2" "$1"
+      ${pkgs.fluidsynth}/bin/fluidsynth -a file -i -F "$2" ${pkgs.soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2 "$1"
     '';
   };
 
