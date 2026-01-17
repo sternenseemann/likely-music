@@ -26,7 +26,7 @@ $(DIST):
 	mkdir -p $@
 
 node_modules:
-	$(OFFLINE) || npm install --production --omit=peer --omit=dev
+	$(OFFLINE) || npm install --production --omit=dev
 
 $(DIST)/vis-network.min.css: node_modules $(DIST)
 	$(ESBUILD) node_modules/vis-network/dist/dist/vis-network.min.css --outfile=$@
